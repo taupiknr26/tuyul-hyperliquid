@@ -1,0 +1,1338 @@
+{
+  "run_id": "20261011T111526Z",
+  "started_at": "2026-10-11T11:15:28.907+00:00",
+  "exchange": "Hyperliquid",
+  "environment": "testnet",
+  "isolation": {
+    "env": "testnet",
+    "rest_url": "https://api.hyperliquid-testnet.xyz",
+    "ws_url": "wss://api.hyperliquid-testnet.xyz/ws",
+    "operator_env": "testnet"
+  },
+  "account": "0x0d84\u202649ab",
+  "signer_authorized": true,
+  "config": {
+    "symbols": [
+      "BTC"
+    ],
+    "direct_notional_usd": 13,
+    "bot_tp_notional_usd": 13,
+    "bot_leverage": 5,
+    "market_slippage_pct": 1.0,
+    "resting_offset_pct": 3.0,
+    "tp_wait_s": 120,
+    "api_port": 8787,
+    "bot_start_timeout_s": 60,
+    "min_account_value_usdc": 50,
+    "live_hold_s": 25,
+    "live_zone_half": 10,
+    "live_stop_beyond_zone": 10,
+    "live_tp_beyond_zone": [
+      15,
+      35,
+      55,
+      75,
+      100
+    ],
+    "live_est_cost_per_trade_usdc": 0.09
+  },
+  "start": {
+    "account_value_usdc": 197.5456,
+    "taker_fee": 0.00045,
+    "maker_fee": 0.00015,
+    "requests_used": 518,
+    "requests_cap": 15133,
+    "markets": {
+      "BTC": {
+        "instrument": {
+          "coin": "BTC",
+          "asset_id": 3,
+          "sz_decimals": 5,
+          "max_leverage": 40,
+          "dex": "",
+          "is_delisted": false,
+          "only_isolated": false
+        },
+        "bid": 82394.0,
+        "ask": 82395.0,
+        "spread_bps": 0.12,
+        "direct_size": 0.00016,
+        "position": 0.0,
+        "open_orders": 0
+      }
+    }
+  },
+  "suite": "live20",
+  "retry_of": null,
+  "bot_sessions": {
+    "BTC": {
+      "health": {
+        "status": "ok",
+        "health": "HEALTHY",
+        "env": "TESTNET",
+        "version": "1.0.0"
+      },
+      "day": {
+        "utc_date": "2026-10-11",
+        "start_equity": 199.838429,
+        "loss_limit_hit_at": null,
+        "target_hit_at": null,
+        "target_notified": 0,
+        "realized": -0.16233999999999998,
+        "fees": 1.831613,
+        "funding": 0.0
+      },
+      "fixed_size": 0.00085
+    }
+  },
+  "day_budget": {
+    "used_usdc": -1.994,
+    "limit_usdc": -3.9968,
+    "estimated_cost_usdc": 1.8
+  },
+  "counts": {
+    "planned": 20,
+    "executed": 2,
+    "passed": 0,
+    "failed": 2,
+    "blocked": 0,
+    "skipped": 0,
+    "not_run": 18
+  },
+  "cases": [
+    {
+      "id": "LV01",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "failed",
+      "started_at": "2026-10-11T11:15:28.951+00:00",
+      "finished_at": "2026-10-11T11:16:04.039+00:00",
+      "assertions_passed": 14,
+      "assertions_total": 16,
+      "fees_usdc": 0.063031,
+      "realized_pnl_usdc": -0.00085,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [
+        "time from fill to protected: 1.77 s",
+        "expected entry (touch) 82395.0, actual 82395.0, slippage 0.00 bps",
+        "outcome MANUAL, close reason manual, realised -0.00085, fees 0.063031, funding 0.0, net -0.063881"
+      ],
+      "orders": [
+        {
+          "label": "ENTRY",
+          "side": "BUY",
+          "type": "limit/Ioc",
+          "price": 82398.0,
+          "trigger_price": null,
+          "size": 0.00085,
+          "filled_size": 0.00085,
+          "avg_price": 82395.0,
+          "final_status": "FILLED",
+          "exchange_status": "filled"
+        },
+        {
+          "label": "SL",
+          "side": "SELL",
+          "type": "trigger/-",
+          "price": 74142.0,
+          "trigger_price": 82380.0,
+          "size": 0.00085,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP1",
+          "side": "SELL",
+          "type": "limit/Gtc",
+          "price": 82414.0,
+          "trigger_price": null,
+          "size": 0.00035,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP2",
+          "side": "SELL",
+          "type": "limit/Gtc",
+          "price": 82434.0,
+          "trigger_price": null,
+          "size": 0.00025,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP3",
+          "side": "SELL",
+          "type": "limit/Gtc",
+          "price": 82454.0,
+          "trigger_price": null,
+          "size": 0.00025,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "CLOSE",
+          "side": "SELL",
+          "type": "limit/Ioc",
+          "price": 81571.0,
+          "trigger_price": null,
+          "size": 0.00085,
+          "filled_size": 0.00085,
+          "avg_price": 82394.0,
+          "final_status": "FILLED",
+          "exchange_status": "filled"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "signal accepted by the bot (parsed and valid)",
+          "passed": true,
+          "expected": "WAITING_PRICE / ENTERING / TRADED",
+          "actual": {
+            "state": "WAITING_PRICE",
+            "reason": null
+          }
+        },
+        {
+          "name": "trade reached PROTECTED",
+          "passed": true,
+          "expected": "PROTECTED",
+          "actual": "PROTECTED"
+        },
+        {
+          "name": "filled size equals the configured size",
+          "passed": true,
+          "expected": 0.00085,
+          "actual": 0.00085
+        },
+        {
+          "name": "entry price is inside the signal zone (with its buffer)",
+          "passed": true,
+          "expected": [
+            82390.0,
+            82399.0
+          ],
+          "actual": 82395.0
+        },
+        {
+          "name": "exchange position matches the trade (direction and size)",
+          "passed": true,
+          "expected": 0.00085,
+          "actual": 0.00085
+        },
+        {
+          "name": "leverage on the exchange is the configured leverage",
+          "passed": true,
+          "expected": 5,
+          "actual": 5.0
+        },
+        {
+          "name": "one reduce-only stop-loss for the full size at the signal's stop price",
+          "passed": true,
+          "expected": {
+            "trigger": 82380.0,
+            "size": 0.00085
+          },
+          "actual": [
+            {
+              "coin": "BTC",
+              "oid": 62417139146,
+              "cloid": "0x4d61919862369aacfb14f368844e5524",
+              "is_buy": false,
+              "price": 74142.0,
+              "size": 0.00085,
+              "orig_size": 0.00085,
+              "reduce_only": true,
+              "is_trigger": true,
+              "trigger_px": 82380.0,
+              "tpsl": "sl",
+              "is_position_tpsl": false,
+              "order_type": "Stop Market",
+              "timestamp": 1791717331103
+            }
+          ]
+        },
+        {
+          "name": "five take-profit orders rest on the exchange",
+          "passed": false,
+          "expected": 5,
+          "actual": 3
+        },
+        {
+          "name": "every take-profit is reduce-only, on the closing side, with a client id",
+          "passed": true,
+          "expected": true,
+          "actual": [
+            [
+              true,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              true
+            ],
+            [
+              true,
+              false,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "take-profit prices match the signal",
+          "passed": false,
+          "expected": [
+            82414.0,
+            82434.0,
+            82454.0,
+            82474.0,
+            82499.0
+          ],
+          "actual": [
+            82414.0,
+            82434.0,
+            82454.0
+          ]
+        },
+        {
+          "name": "take-profit sizes add up to the position",
+          "passed": true,
+          "expected": 0.00085,
+          "actual": 0.00085
+        },
+        {
+          "name": "close command accepted",
+          "passed": true,
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "trade_id": 3
+          }
+        },
+        {
+          "name": "trade is CLOSED in the bot",
+          "passed": true,
+          "expected": "CLOSED",
+          "actual": "CLOSED"
+        },
+        {
+          "name": "exchange position is flat",
+          "passed": true,
+          "expected": 0.0,
+          "actual": 0.0
+        },
+        {
+          "name": "no orders of the trade are left on the exchange",
+          "passed": true,
+          "expected": [],
+          "actual": []
+        },
+        {
+          "name": "the bot recorded fees and a net result for the trade",
+          "passed": true,
+          "expected": "net P/L set, fees > 0",
+          "actual": {
+            "net_pnl": -0.063881,
+            "fees": 0.063031
+          }
+        }
+      ],
+      "final_state": {
+        "trade_state": "CLOSED",
+        "position": 0.0,
+        "open_orders": 0
+      },
+      "steps": [
+        {
+          "at": "2026-10-11T11:15:29.047+00:00",
+          "action": "book",
+          "latency_ms": 96.0,
+          "bid": 82394.0,
+          "ask": 82395.0,
+          "bid_size": 0.3,
+          "ask_size": 0.00694
+        },
+        {
+          "at": "2026-10-11T11:15:29.048+00:00",
+          "action": "signal built",
+          "plan": {
+            "side": "BUY",
+            "zone": [
+              82390.0,
+              82399.0
+            ],
+            "stop": 82380.0,
+            "take_profits": [
+              82414.0,
+              82434.0,
+              82454.0,
+              82474.0,
+              82499.0
+            ],
+            "touch": 82395.0
+          }
+        },
+        {
+          "at": "2026-10-11T11:15:29.061+00:00",
+          "action": "bot command inject",
+          "latency_ms": 12.2,
+          "request": {
+            "text": "#BTC BUY NOW | BTC buy Zone 82390 - 82399 |  | SL : 82380 |  | TP1 : 82414 | TP2 : 82434 | TP3 : 82454 | TP4 : 82474 | TP5 : 82499 |  | or set your stop loss according to your margin | #Vip_Signals",
+            "channel": "qa"
+          },
+          "response": {
+            "ok": true,
+            "signal_id": 79,
+            "state": "WAITING_PRICE",
+            "reason": null
+          }
+        },
+        {
+          "at": "2026-10-11T11:15:32.658+00:00",
+          "action": "trade protected",
+          "trade": {
+            "id": 3,
+            "coin": "BTC",
+            "side": "BUY",
+            "state": "PROTECTED",
+            "planned_size": 0.00085,
+            "filled_size": 0.00085,
+            "avg_entry": 82395.0,
+            "sl_price": 82380.0,
+            "opened_at": "2026-10-11T11:15:30.509+00:00",
+            "protected_at": "2026-10-11T11:15:32.280+00:00"
+          }
+        },
+        {
+          "at": "2026-10-11T11:15:32.773+00:00",
+          "action": "exchange position",
+          "position": {
+            "coin": "BTC",
+            "szi": 0.00085,
+            "entry_px": 82395.0,
+            "unrealized_pnl": 0.0,
+            "leverage": 5.0,
+            "leverage_type": "cross",
+            "liquidation_px": null,
+            "margin_used": 14.00715,
+            "cum_funding": 0.0
+          }
+        },
+        {
+          "at": "2026-10-11T11:15:32.894+00:00",
+          "action": "exchange open orders",
+          "orders": [
+            {
+              "coin": "BTC",
+              "oid": 62417140669,
+              "cloid": "0x9181bd4bb8487b73b88416e674c3fc9f",
+              "is_buy": false,
+              "price": 82454.0,
+              "size": 0.00025,
+              "orig_size": 0.00025,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791717331962
+            },
+            {
+              "coin": "BTC",
+              "oid": 62417140668,
+              "cloid": "0x1bf2544e458606cb11380d17e5b072d3",
+              "is_buy": false,
+              "price": 82434.0,
+              "size": 0.00025,
+              "orig_size": 0.00025,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791717331962
+            },
+            {
+              "coin": "BTC",
+              "oid": 62417140667,
+              "cloid": "0x5837875e8e0f7f0e23b897bdbf54333e",
+              "is_buy": false,
+              "price": 82414.0,
+              "size": 0.00035,
+              "orig_size": 0.00035,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791717331962
+            },
+            {
+              "coin": "BTC",
+              "oid": 62417139146,
+              "cloid": "0x4d61919862369aacfb14f368844e5524",
+              "is_buy": false,
+              "price": 74142.0,
+              "size": 0.00085,
+              "orig_size": 0.00085,
+              "reduce_only": true,
+              "is_trigger": true,
+              "trigger_px": 82380.0,
+              "tpsl": "sl",
+              "is_position_tpsl": false,
+              "order_type": "Stop Market",
+              "timestamp": 1791717331103
+            }
+          ]
+        },
+        {
+          "at": "2026-10-11T11:15:32.898+00:00",
+          "action": "holding up to 25 s: the market may reach a take-profit or the stop"
+        },
+        {
+          "at": "2026-10-11T11:15:58.493+00:00",
+          "action": "bot command close",
+          "latency_ms": 7.7,
+          "request": {
+            "trade_id": 3
+          },
+          "response": {
+            "ok": true,
+            "trade_id": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "LV02",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "failed",
+      "started_at": "2026-10-11T11:16:04.052+00:00",
+      "finished_at": "2026-10-11T11:16:25.030+00:00",
+      "assertions_passed": 15,
+      "assertions_total": 17,
+      "fees_usdc": 0.063041,
+      "realized_pnl_usdc": -0.0238,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [
+        "time from fill to protected: 1.77 s",
+        "expected entry (touch) 82394.0, actual 82394.0, slippage -0.00 bps",
+        "the stop-loss triggered during the hold at 82422.0 (signal stop 82408.0)",
+        "outcome LOSS_ALL, close reason None, realised -0.0238, fees 0.063041, funding 0.0, net -0.086841"
+      ],
+      "orders": [
+        {
+          "label": "ENTRY",
+          "side": "SELL",
+          "type": "limit/Ioc",
+          "price": 82391.0,
+          "trigger_price": null,
+          "size": 0.00085,
+          "filled_size": 0.00085,
+          "avg_price": 82394.0,
+          "final_status": "FILLED",
+          "exchange_status": "filled"
+        },
+        {
+          "label": "SL",
+          "side": "BUY",
+          "type": "trigger/-",
+          "price": 90649.0,
+          "trigger_price": 82408.0,
+          "size": 0.00085,
+          "filled_size": 0.00085,
+          "avg_price": 82422.0,
+          "final_status": "FILLED",
+          "exchange_status": "open"
+        },
+        {
+          "label": "TP1",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "price": 82373.0,
+          "trigger_price": null,
+          "size": 0.00035,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP2",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "price": 82353.0,
+          "trigger_price": null,
+          "size": 0.00025,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP3",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "price": 82333.0,
+          "trigger_price": null,
+          "size": 0.00025,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "signal accepted by the bot (parsed and valid)",
+          "passed": true,
+          "expected": "WAITING_PRICE / ENTERING / TRADED",
+          "actual": {
+            "state": "WAITING_PRICE",
+            "reason": null
+          }
+        },
+        {
+          "name": "trade reached PROTECTED",
+          "passed": true,
+          "expected": "PROTECTED",
+          "actual": "PROTECTED"
+        },
+        {
+          "name": "filled size equals the configured size",
+          "passed": true,
+          "expected": 0.00085,
+          "actual": 0.00085
+        },
+        {
+          "name": "entry price is inside the signal zone (with its buffer)",
+          "passed": true,
+          "expected": [
+            82388.0,
+            82398.0
+          ],
+          "actual": 82394.0
+        },
+        {
+          "name": "exchange position matches the trade (direction and size)",
+          "passed": true,
+          "expected": -0.00085,
+          "actual": -0.00085
+        },
+        {
+          "name": "leverage on the exchange is the configured leverage",
+          "passed": true,
+          "expected": 5,
+          "actual": 5.0
+        },
+        {
+          "name": "one reduce-only stop-loss for the full size at the signal's stop price",
+          "passed": true,
+          "expected": {
+            "trigger": 82408.0,
+            "size": 0.00085
+          },
+          "actual": [
+            {
+              "coin": "BTC",
+              "oid": 62417171617,
+              "cloid": "0xd623bf80802ee02b2d77da5dff443e4e",
+              "is_buy": true,
+              "price": 90649.0,
+              "size": 0.00085,
+              "orig_size": 0.00085,
+              "reduce_only": true,
+              "is_trigger": true,
+              "trigger_px": 82408.0,
+              "tpsl": "sl",
+              "is_position_tpsl": false,
+              "order_type": "Stop Market",
+              "timestamp": 1791717366257
+            }
+          ]
+        },
+        {
+          "name": "five take-profit orders rest on the exchange",
+          "passed": false,
+          "expected": 5,
+          "actual": 3
+        },
+        {
+          "name": "every take-profit is reduce-only, on the closing side, with a client id",
+          "passed": true,
+          "expected": true,
+          "actual": [
+            [
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              true,
+              true
+            ]
+          ]
+        },
+        {
+          "name": "take-profit prices match the signal",
+          "passed": false,
+          "expected": [
+            82373.0,
+            82353.0,
+            82333.0,
+            82313.0,
+            82288.0
+          ],
+          "actual": [
+            82373.0,
+            82353.0,
+            82333.0
+          ]
+        },
+        {
+          "name": "take-profit sizes add up to the position",
+          "passed": true,
+          "expected": 0.00085,
+          "actual": 0.00085
+        },
+        {
+          "name": "a triggered stop closed the whole position",
+          "passed": true,
+          "expected": "closed",
+          "actual": {
+            "state": "CLOSING",
+            "remaining": 0.0
+          }
+        },
+        {
+          "name": "close command accepted",
+          "passed": true,
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "trade_id": 4
+          }
+        },
+        {
+          "name": "trade is CLOSED in the bot",
+          "passed": true,
+          "expected": "CLOSED",
+          "actual": "CLOSED"
+        },
+        {
+          "name": "exchange position is flat",
+          "passed": true,
+          "expected": 0.0,
+          "actual": 0.0
+        },
+        {
+          "name": "no orders of the trade are left on the exchange",
+          "passed": true,
+          "expected": [],
+          "actual": []
+        },
+        {
+          "name": "the bot recorded fees and a net result for the trade",
+          "passed": true,
+          "expected": "net P/L set, fees > 0",
+          "actual": {
+            "net_pnl": -0.086841,
+            "fees": 0.063041
+          }
+        }
+      ],
+      "final_state": {
+        "trade_state": "CLOSED",
+        "position": 0.0,
+        "open_orders": 0
+      },
+      "steps": [
+        {
+          "at": "2026-10-11T11:16:04.156+00:00",
+          "action": "book",
+          "latency_ms": 103.9,
+          "bid": 82394.0,
+          "ask": 82395.0,
+          "bid_size": 0.3,
+          "ask_size": 0.00609
+        },
+        {
+          "at": "2026-10-11T11:16:04.159+00:00",
+          "action": "signal built",
+          "plan": {
+            "side": "SELL",
+            "zone": [
+              82388.0,
+              82398.0
+            ],
+            "stop": 82408.0,
+            "take_profits": [
+              82373.0,
+              82353.0,
+              82333.0,
+              82313.0,
+              82288.0
+            ],
+            "touch": 82394.0
+          }
+        },
+        {
+          "at": "2026-10-11T11:16:04.174+00:00",
+          "action": "bot command inject",
+          "latency_ms": 14.0,
+          "request": {
+            "text": "#BTC SELL NOW | BTC sell Zone 82388 - 82398 |  | SL : 82408 |  | TP1 : 82373 | TP2 : 82353 | TP3 : 82333 | TP4 : 82313 | TP5 : 82288 |  | or set your stop loss according to your margin | #Vip_Signals",
+            "channel": "qa"
+          },
+          "response": {
+            "ok": true,
+            "signal_id": 80,
+            "state": "WAITING_PRICE",
+            "reason": null
+          }
+        },
+        {
+          "at": "2026-10-11T11:16:07.758+00:00",
+          "action": "trade protected",
+          "trade": {
+            "id": 4,
+            "coin": "BTC",
+            "side": "SELL",
+            "state": "PROTECTED",
+            "planned_size": 0.00085,
+            "filled_size": 0.00085,
+            "avg_entry": 82394.0,
+            "sl_price": 82408.0,
+            "opened_at": "2026-10-11T11:16:05.621+00:00",
+            "protected_at": "2026-10-11T11:16:07.394+00:00"
+          }
+        },
+        {
+          "at": "2026-10-11T11:16:07.876+00:00",
+          "action": "exchange position",
+          "position": {
+            "coin": "BTC",
+            "szi": -0.00085,
+            "entry_px": 82394.0,
+            "unrealized_pnl": 0.0,
+            "leverage": 5.0,
+            "leverage_type": "cross",
+            "liquidation_px": 310803.3533769064,
+            "margin_used": 14.00698,
+            "cum_funding": 0.0
+          }
+        },
+        {
+          "at": "2026-10-11T11:16:08.026+00:00",
+          "action": "exchange open orders",
+          "orders": [
+            {
+              "coin": "BTC",
+              "oid": 62417173142,
+              "cloid": "0xaf981ced5b84c54bab4c2eb73a6d202f",
+              "is_buy": true,
+              "price": 82333.0,
+              "size": 0.00025,
+              "orig_size": 0.00025,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791717367073
+            },
+            {
+              "coin": "BTC",
+              "oid": 62417173141,
+              "cloid": "0x15b28bc33a35fcd5fefb1905fb8bd09c",
+              "is_buy": true,
+              "price": 82353.0,
+              "size": 0.00025,
+              "orig_size": 0.00025,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791717367073
+            },
+            {
+              "coin": "BTC",
+              "oid": 62417173140,
+              "cloid": "0x4f9bcee0e48844a582f3192fa226f109",
+              "is_buy": true,
+              "price": 82373.0,
+              "size": 0.00035,
+              "orig_size": 0.00035,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791717367073
+            },
+            {
+              "coin": "BTC",
+              "oid": 62417171617,
+              "cloid": "0xd623bf80802ee02b2d77da5dff443e4e",
+              "is_buy": true,
+              "price": 90649.0,
+              "size": 0.00085,
+              "orig_size": 0.00085,
+              "reduce_only": true,
+              "is_trigger": true,
+              "trigger_px": 82408.0,
+              "tpsl": "sl",
+              "is_position_tpsl": false,
+              "order_type": "Stop Market",
+              "timestamp": 1791717366257
+            }
+          ]
+        },
+        {
+          "at": "2026-10-11T11:16:08.028+00:00",
+          "action": "holding up to 25 s: the market may reach a take-profit or the stop"
+        },
+        {
+          "at": "2026-10-11T11:16:21.578+00:00",
+          "action": "bot command close",
+          "latency_ms": 1.8,
+          "request": {
+            "trade_id": 4
+          },
+          "response": {
+            "ok": true,
+            "trade_id": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "LV03",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV04",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV05",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV06",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV07",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV08",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV09",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV10",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV11",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV12",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV13",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV14",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV15",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV16",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV17",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV18",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV19",
+      "scenario": "Long through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: long BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "LV20",
+      "scenario": "Short through the live bot",
+      "symbol": "BTC",
+      "layer": "live bot",
+      "title": "Live bot: short BTC from a channel-style signal",
+      "expected": "IOC entry in the zone, full-size reduce-only stop, five reduce-only take-profits, PROTECTED; ends by take-profit, stop or a close command, flat afterwards",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+2026-10-11 11:15:26,970 INFO isolation check: {'env': 'testnet', 'rest_url': 'https://api.hyperliquid-testnet.xyz', 'ws_url': 'wss://api.hyperliquid-testnet.xyz/ws', 'operator_env': 'testnet'}
+2026-10-11 11:15:28,908 INFO preflight: {"account_value_usdc": 197.5456, "taker_fee": 0.00045, "maker_fee": 0.00015, "requests_used": 518, "requests_cap": 15133, "markets": {"BTC": {"instrument": {"coin": "BTC", "asset_id": 3, "sz_decimals": 5, "max_leverage": 40, "dex": "", "is_delisted": false, "only_isolated": false}, "bid": 82394.0, "ask": 82395.0, "spread_bps": 0.12, "direct_size": 0.00016, "position": 0.0, "open_orders": 0}}}
+2026-10-11 11:15:28,951 INFO daily-loss budget: {'used_usdc': -1.994, 'limit_usdc': -3.9968, 'estimated_cost_usdc': 1.8}
+2026-10-11 11:15:28,951 INFO LV01 | START | Live bot: long BTC from a channel-style signal [BTC, live bot]
+2026-10-11 11:15:29,048 INFO LV01 | book | {"latency_ms": 96.0, "bid": 82394.0, "ask": 82395.0, "bid_size": 0.3, "ask_size": 0.00694}
+2026-10-11 11:15:29,048 INFO LV01 | signal built | {"plan": {"side": "BUY", "zone": [82390.0, 82399.0], "stop": 82380.0, "take_profits": [82414.0, 82434.0, 82454.0, 82474.0, 82499.0], "touch": 82395.0}}
+2026-10-11 11:15:29,062 INFO LV01 | bot command inject | {"latency_ms": 12.2, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82390 - 82399 |  | SL : 82380 |  | TP1 : 82414 | TP2 : 82434 | TP3 : 82454 | TP4 : 82474 | TP5 : 82499 |  | or set your stop loss according to your margin | #Vip_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 79, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 11:15:29,063 INFO LV01 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 11:15:32,658 INFO LV01 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 11:15:32,658 INFO LV01 | trade protected | {"trade": {"id": 3, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82395.0, "sl_price": 82380.0, "opened_at": "2026-10-11T11:15:30.509+00:00", "protected_at": "2026-10-11T11:15:32.280+00:00"}}
+2026-10-11 11:15:32,659 INFO LV01 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 11:15:32,659 INFO LV01 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82390.0, 82399.0] actual=82395.0
+2026-10-11 11:15:32,773 INFO LV01 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 11:15:32,773 INFO LV01 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82395.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 14.00715, "cum_funding": 0.0}}
+2026-10-11 11:15:32,773 INFO LV01 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 11:15:32,895 INFO LV01 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62417140669, "cloid": "0x9181bd4bb8487b73b88416e674c3fc9f", "is_buy": false, "price": 82454.0, "size": 0.00025, "orig_size": 0.00025, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791717331962}, {"coin": "BTC", "oid": 62417140668, "cloid": "0x1bf2544e458606cb11380d17e5b072d3", "is_buy": false, "price": 82434.0, "size": 0.00025, "orig_size": 0.00025, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 11:15:32,897 INFO LV01 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 82380.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62417139146, 'cloid': '0x4d61919862369aacfb14f368844e5524', 'is_buy': False, 'price': 74142.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 82380.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791717331103}]
+2026-10-11 11:15:32,897 INFO LV01 | FAIL | five take-profit orders rest on the exchange | expected=5 actual=3
+2026-10-11 11:15:32,898 INFO LV01 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 11:15:32,898 INFO LV01 | FAIL | take-profit prices match the signal | expected=[82414.0, 82434.0, 82454.0, 82474.0, 82499.0] actual=[82414.0, 82434.0, 82454.0]
+2026-10-11 11:15:32,898 INFO LV01 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 11:15:32,898 INFO LV01 | holding up to 25 s: the market may reach a take-profit or the stop | {}
+2026-10-11 11:15:58,494 INFO LV01 | bot command close | {"latency_ms": 7.7, "request": {"trade_id": 3}, "response": {"ok": true, "trade_id": 3}}
+2026-10-11 11:15:58,497 INFO LV01 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 3}
+2026-10-11 11:16:02,740 INFO LV01 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 11:16:04,039 INFO LV01 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 11:16:04,039 INFO LV01 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 11:16:04,039 INFO LV01 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.063881, 'fees': 0.063031}
+2026-10-11 11:16:04,039 INFO LV01 | RESULT FAILED (14/16 assertions passed)
+2026-10-11 11:16:04,052 INFO LV02 | START | Live bot: short BTC from a channel-style signal [BTC, live bot]
+2026-10-11 11:16:04,157 INFO LV02 | book | {"latency_ms": 103.9, "bid": 82394.0, "ask": 82395.0, "bid_size": 0.3, "ask_size": 0.00609}
+2026-10-11 11:16:04,160 INFO LV02 | signal built | {"plan": {"side": "SELL", "zone": [82388.0, 82398.0], "stop": 82408.0, "take_profits": [82373.0, 82353.0, 82333.0, 82313.0, 82288.0], "touch": 82394.0}}
+2026-10-11 11:16:04,174 INFO LV02 | bot command inject | {"latency_ms": 14.0, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82388 - 82398 |  | SL : 82408 |  | TP1 : 82373 | TP2 : 82353 | TP3 : 82333 | TP4 : 82313 | TP5 : 82288 |  | or set your stop loss according to your margin | #Vip_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 80, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 11:16:04,174 INFO LV02 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 11:16:07,752 INFO LV02 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 11:16:07,759 INFO LV02 | trade protected | {"trade": {"id": 4, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82394.0, "sl_price": 82408.0, "opened_at": "2026-10-11T11:16:05.621+00:00", "protected_at": "2026-10-11T11:16:07.394+00:00"}}
+2026-10-11 11:16:07,759 INFO LV02 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 11:16:07,759 INFO LV02 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82388.0, 82398.0] actual=82394.0
+2026-10-11 11:16:07,873 INFO LV02 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 11:16:07,876 INFO LV02 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82394.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 310803.3533769064, "margin_used": 14.00698, "cum_funding": 0.0}}
+2026-10-11 11:16:07,876 INFO LV02 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 11:16:08,026 INFO LV02 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62417173142, "cloid": "0xaf981ced5b84c54bab4c2eb73a6d202f", "is_buy": true, "price": 82333.0, "size": 0.00025, "orig_size": 0.00025, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791717367073}, {"coin": "BTC", "oid": 62417173141, "cloid": "0x15b28bc33a35fcd5fefb1905fb8bd09c", "is_buy": true, "price": 82353.0, "size": 0.00025, "orig_size": 0.00025, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 11:16:08,027 INFO LV02 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 82408.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62417171617, 'cloid': '0xd623bf80802ee02b2d77da5dff443e4e', 'is_buy': True, 'price': 90649.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 82408.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791717366257}]
+2026-10-11 11:16:08,027 INFO LV02 | FAIL | five take-profit orders rest on the exchange | expected=5 actual=3
+2026-10-11 11:16:08,027 INFO LV02 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 11:16:08,028 INFO LV02 | FAIL | take-profit prices match the signal | expected=[82373.0, 82353.0, 82333.0, 82313.0, 82288.0] actual=[82373.0, 82353.0, 82333.0]
+2026-10-11 11:16:08,028 INFO LV02 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 11:16:08,028 INFO LV02 | holding up to 25 s: the market may reach a take-profit or the stop | {}
+2026-10-11 11:16:21,572 INFO LV02 | PASS | a triggered stop closed the whole position | expected=closed actual={'state': 'CLOSING', 'remaining': 0.0}
+2026-10-11 11:16:21,578 INFO LV02 | bot command close | {"latency_ms": 1.8, "request": {"trade_id": 4}, "response": {"ok": true, "trade_id": 4}}
+2026-10-11 11:16:21,578 INFO LV02 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 4}
+2026-10-11 11:16:23,742 INFO LV02 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 11:16:25,030 INFO LV02 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 11:16:25,030 INFO LV02 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 11:16:25,030 INFO LV02 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.086841, 'fees': 0.063041}
+2026-10-11 11:16:25,030 INFO LV02 | RESULT FAILED (15/17 assertions passed)
+2026-10-11 11:16:25,048 INFO LV03 | START | Live bot: long BTC from a channel-style signal [BTC, live bot]
+2026-10-11 11:16:25,145 INFO LV03 | book | {"latency_ms": 96.5, "bid": 82398.0, "ask": 82407.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 11:16:25,146 INFO LV03 | signal built | {"plan": {"side": "BUY", "zone": [82400.0, 82411.0], "stop": 82390.0, "take_profits": [82426.0, 82446.0, 82466.0, 82486.0, 82511.0], "touch": 82407.0}}
+2026-10-11 11:16:25,149 INFO LV03 | bot command inject | {"latency_ms": 3.5, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82400 - 82411 |  | SL : 82390 |  | TP1 : 82426 | TP2 : 82446 | TP3 : 82466 | TP4 : 82486 | TP5 : 82511 |  | or set your stop loss according to your margin | #Vip_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 81, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 11:16:25,150 INFO LV03 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 11:16:28,817 INFO LV03 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 11:16:28,819 INFO LV03 | trade protected | {"trade": {"id": 5, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82407.0, "sl_price": 82390.0, "opened_at": "2026-10-11T11:16:26.588+00:00", "protected_at": "2026-10-11T11:16:28.582+00:00"}}
+2026-10-11 11:16:28,819 INFO LV03 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 11:16:28,819 INFO LV03 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82400.0, 82411.0] actual=82407.0
+2026-10-11 11:16:29,000 INFO LV03 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 11:16:29,000 INFO LV03 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82407.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 14.00919, "cum_funding": 0.0}}
+2026-10-11 11:16:29,000 INFO LV03 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 11:16:29,110 INFO LV03 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62417191846, "cloid": "0x329a33b84a2c997b0c31b31cf818da1b", "is_buy": false, "price": 82466.0, "size": 0.00025, "orig_size": 0.00025, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791717388218}, {"coin": "BTC", "oid": 62417191845, "cloid": "0x3bf702e0ad622aebf202e3d81761d3db", "is_buy": false, "price": 82446.0, "size": 0.00025, "orig_size": 0.00025, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 11:16:29,111 INFO LV03 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 82390.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62417191153, 'cloid': '0x4f82bbd98ba824693d50ece805bc0719', 'is_buy': False, 'price': 74151.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 82390.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791717387243}]
+2026-10-11 11:16:29,111 INFO LV03 | FAIL | five take-profit orders rest on the exchange | expected=5 actual=3
+2026-10-11 11:16:29,111 INFO LV03 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 11:16:29,111 INFO LV03 | FAIL | take-profit prices match the signal | expected=[82426.0, 82446.0, 82466.0, 82486.0, 82511.0] actual=[82426.0, 82446.0, 82466.0]
+2026-10-11 11:16:29,111 INFO LV03 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 11:16:29,111 INFO LV03 | holding up to 25 s: the market may reach a take-profit or the stop | {}

@@ -1,0 +1,1954 @@
+{
+  "run_id": "20261011T102122Z",
+  "started_at": "2026-10-11T10:21:25.071+00:00",
+  "exchange": "Hyperliquid",
+  "environment": "testnet",
+  "isolation": {
+    "env": "testnet",
+    "rest_url": "https://api.hyperliquid-testnet.xyz",
+    "ws_url": "wss://api.hyperliquid-testnet.xyz/ws",
+    "operator_env": "testnet"
+  },
+  "account": "0x0d84\u202649ab",
+  "signer_authorized": true,
+  "config": {
+    "symbols": [
+      "BTC",
+      "ETH",
+      "SOL"
+    ],
+    "direct_notional_usd": 13,
+    "bot_tp_notional_usd": 13,
+    "bot_leverage": 5,
+    "market_slippage_pct": 1.0,
+    "resting_offset_pct": 3.0,
+    "tp_wait_s": 240,
+    "api_port": 8797,
+    "bot_start_timeout_s": 60,
+    "min_account_value_usdc": 50
+  },
+  "start": {
+    "account_value_usdc": 199.046,
+    "taker_fee": 0.00045,
+    "maker_fee": 0.00015,
+    "requests_used": 194,
+    "requests_cap": 12063,
+    "markets": {
+      "BTC": {
+        "instrument": {
+          "coin": "BTC",
+          "asset_id": 3,
+          "sz_decimals": 5,
+          "max_leverage": 40,
+          "dex": "",
+          "is_delisted": false,
+          "only_isolated": false
+        },
+        "bid": 82345.0,
+        "ask": 82346.0,
+        "spread_bps": 0.12,
+        "direct_size": 0.00016,
+        "position": 0.0,
+        "open_orders": 0
+      },
+      "ETH": {
+        "instrument": {
+          "coin": "ETH",
+          "asset_id": 4,
+          "sz_decimals": 4,
+          "max_leverage": 25,
+          "dex": "",
+          "is_delisted": false,
+          "only_isolated": false
+        },
+        "bid": 2491.7,
+        "ask": 2492.0,
+        "spread_bps": 1.2,
+        "direct_size": 0.0053,
+        "position": 0.0,
+        "open_orders": 0
+      },
+      "SOL": {
+        "instrument": {
+          "coin": "SOL",
+          "asset_id": 0,
+          "sz_decimals": 2,
+          "max_leverage": 10,
+          "dex": "",
+          "is_delisted": false,
+          "only_isolated": false
+        },
+        "bid": 109.13,
+        "ask": 109.21,
+        "spread_bps": 7.33,
+        "direct_size": 0.12,
+        "position": 0.0,
+        "open_orders": 0
+      }
+    }
+  },
+  "retry_of": [
+    "TC17",
+    "TC18",
+    "TC20"
+  ],
+  "bot_sessions": {
+    "BTC": {
+      "env_file": "qa/results/retry-20261011/bot-BTC.env",
+      "fixed_size": 0.00085,
+      "settings": {
+        "HL_ENV": "testnet",
+        "HL_SYMBOL_MAP": "{\"BTC\": \"BTC\"}",
+        "HL_MARGIN_MODE": "cross",
+        "TELEGRAM_ENABLED": "false",
+        "TELEGRAM_NOTIFY_ENABLED": "false",
+        "RISK_SIZING_MODE": "fixed",
+        "RISK_FIXED_SIZE": "0.00085",
+        "RISK_LEVERAGE": "5",
+        "RISK_MIN_RR": "0.01",
+        "RISK_MAX_SL_DISTANCE": "4117.275000",
+        "RISK_SL_SLIPPAGE_ALLOWANCE_POINTS": "8.234550",
+        "RISK_MAX_OPEN_TRADES": "3",
+        "RISK_MAX_DAILY_LOSS_PCT": "2.0",
+        "EXEC_BUFFER_ENABLED": "true",
+        "EXEC_BUFFER_VALUE": "16.469100",
+        "EXEC_MAX_SLIPPAGE_POINTS": "123.518250",
+        "EXEC_MIN_TP_GAP_POINTS": "3.293820",
+        "EXEC_TP_CLOSE_PERCENTS": "20,20,20,20,20",
+        "EXEC_SL_RESIZE_ON_TP": "true",
+        "DATA_DIR": "qa/results/retry-20261011/bot/data",
+        "LOG_DIR": "qa/results/retry-20261011/bot/logs",
+        "API_ENABLED": "true",
+        "API_HOST": "127.0.0.1",
+        "API_PORT": "8797"
+      }
+    },
+    "ETH": {
+      "env_file": "qa/results/retry-20261011/bot-ETH.env",
+      "fixed_size": 0.0265,
+      "settings": {
+        "HL_ENV": "testnet",
+        "HL_SYMBOL_MAP": "{\"ETH\": \"ETH\"}",
+        "HL_MARGIN_MODE": "cross",
+        "TELEGRAM_ENABLED": "false",
+        "TELEGRAM_NOTIFY_ENABLED": "false",
+        "RISK_SIZING_MODE": "fixed",
+        "RISK_FIXED_SIZE": "0.0265",
+        "RISK_LEVERAGE": "5",
+        "RISK_MIN_RR": "0.01",
+        "RISK_MAX_SL_DISTANCE": "124.607500",
+        "RISK_SL_SLIPPAGE_ALLOWANCE_POINTS": "0.249215",
+        "RISK_MAX_OPEN_TRADES": "3",
+        "RISK_MAX_DAILY_LOSS_PCT": "2.0",
+        "EXEC_BUFFER_ENABLED": "true",
+        "EXEC_BUFFER_VALUE": "0.498430",
+        "EXEC_MAX_SLIPPAGE_POINTS": "3.738225",
+        "EXEC_MIN_TP_GAP_POINTS": "0.099686",
+        "EXEC_TP_CLOSE_PERCENTS": "20,20,20,20,20",
+        "EXEC_SL_RESIZE_ON_TP": "true",
+        "DATA_DIR": "qa/results/retry-20261011/bot/data",
+        "LOG_DIR": "qa/results/retry-20261011/bot/logs",
+        "API_ENABLED": "true",
+        "API_HOST": "127.0.0.1",
+        "API_PORT": "8797"
+      }
+    }
+  },
+  "finished_at": "2026-10-11T10:28:14.902+00:00",
+  "cleanup": {
+    "clean": true,
+    "positions": {
+      "BTC": 0.0,
+      "ETH": 0.0,
+      "SOL": 0.0
+    },
+    "open_orders": [],
+    "sweep": {
+      "BTC": {
+        "position": 0.0,
+        "open_orders": []
+      },
+      "ETH": {
+        "position": 0.0,
+        "open_orders": []
+      },
+      "SOL": {
+        "position": 0.0,
+        "open_orders": []
+      }
+    }
+  },
+  "end": {
+    "account_value_usdc": 198.9258,
+    "account_value_change_usdc": -0.1203,
+    "requests_used": 234
+  },
+  "read_failures": [
+    {
+      "at": "2026-10-11T10:25:57.275+00:00",
+      "kind": "account",
+      "attempt": 1,
+      "error": "unknown_outcome: ReadTimeout",
+      "after_ms": 5027.6
+    },
+    {
+      "at": "2026-10-11T10:28:00.385+00:00",
+      "kind": "account",
+      "attempt": 1,
+      "error": "unknown_outcome: ReadTimeout",
+      "after_ms": 5014.2
+    }
+  ],
+  "totals": {
+    "fees_usdc": 0.118455,
+    "realized_pnl_usdc": -0.00183
+  },
+  "latency_ms": {
+    "book": {
+      "n": 3,
+      "min": 129.0,
+      "median": 129.9,
+      "p95": 152.9,
+      "max": 152.9
+    },
+    "bot:close": {
+      "n": 2,
+      "min": 4.4,
+      "median": 8.5,
+      "p95": 8.5,
+      "max": 8.5
+    },
+    "bot:inject": {
+      "n": 3,
+      "min": 3.6,
+      "median": 4.6,
+      "p95": 11.8,
+      "max": 11.8
+    },
+    "bot:time_to_protected": {
+      "n": 2,
+      "min": 1901.0,
+      "median": 2038.0,
+      "p95": 2038.0,
+      "max": 2038.0
+    },
+    "cancel": {
+      "n": 2,
+      "min": 860.9,
+      "median": 880.9,
+      "p95": 880.9,
+      "max": 880.9
+    },
+    "cancel_by_oid": {
+      "n": 1,
+      "min": 1023.8,
+      "median": 1023.8,
+      "p95": 1023.8,
+      "max": 1023.8
+    },
+    "place": {
+      "n": 10,
+      "min": 25.7,
+      "median": 845.5,
+      "p95": 1187.1,
+      "max": 1187.1
+    },
+    "read:account": {
+      "n": 12,
+      "min": 107.2,
+      "median": 158.5,
+      "p95": 467.2,
+      "max": 467.2
+    },
+    "read:open_orders": {
+      "n": 16,
+      "min": 107.0,
+      "median": 138.3,
+      "p95": 534.6,
+      "max": 534.6
+    }
+  },
+  "counts": {
+    "planned": 20,
+    "executed": 3,
+    "passed": 1,
+    "failed": 1,
+    "blocked": 1,
+    "skipped": 0,
+    "not_run": 17
+  },
+  "cases": [
+    {
+      "id": "TC01",
+      "scenario": "Market buy",
+      "symbol": "BTC",
+      "layer": "exchange",
+      "title": "Market buy BTC",
+      "expected": "IOC buy at the ask with a slippage cap fills in full; position opens long; then closed",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC02",
+      "scenario": "Market buy",
+      "symbol": "ETH",
+      "layer": "exchange",
+      "title": "Market buy ETH",
+      "expected": "as TC01",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC03",
+      "scenario": "Market buy",
+      "symbol": "SOL",
+      "layer": "exchange",
+      "title": "Market buy SOL",
+      "expected": "as TC01",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC04",
+      "scenario": "Market sell",
+      "symbol": "BTC",
+      "layer": "exchange",
+      "title": "Market sell BTC (open short)",
+      "expected": "IOC sell at the bid with a slippage cap fills in full; position opens short; then closed",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC05",
+      "scenario": "Market sell",
+      "symbol": "ETH",
+      "layer": "exchange",
+      "title": "Market sell ETH (open short)",
+      "expected": "as TC04",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC06",
+      "scenario": "Market sell",
+      "symbol": "SOL",
+      "layer": "exchange",
+      "title": "Market sell SOL (open short)",
+      "expected": "as TC04",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC07",
+      "scenario": "Limit buy",
+      "symbol": "BTC",
+      "layer": "exchange",
+      "title": "Limit buy BTC, resting below the market",
+      "expected": "order rests (open), creates no position, cancels cleanly",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC08",
+      "scenario": "Limit buy",
+      "symbol": "ETH",
+      "layer": "exchange",
+      "title": "Limit buy ETH at the touch",
+      "expected": "fills at the limit or better; position opens; then closed",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC09",
+      "scenario": "Limit buy",
+      "symbol": "SOL",
+      "layer": "exchange",
+      "title": "Limit buy SOL, post-only",
+      "expected": "post-only order rests, creates no position, cancels cleanly",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC10",
+      "scenario": "Limit sell",
+      "symbol": "BTC",
+      "layer": "exchange",
+      "title": "Limit sell BTC at the touch",
+      "expected": "fills at the limit or better; short opens; then closed",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC11",
+      "scenario": "Limit sell",
+      "symbol": "ETH",
+      "layer": "exchange",
+      "title": "Limit sell ETH, resting above the market",
+      "expected": "order rests (open), creates no position, cancels cleanly",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC12",
+      "scenario": "Limit sell",
+      "symbol": "SOL",
+      "layer": "exchange",
+      "title": "Limit sell SOL, post-only",
+      "expected": "post-only order rests, creates no position, cancels cleanly",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC13",
+      "scenario": "Long with TP/SL",
+      "symbol": "BTC",
+      "layer": "bot",
+      "title": "Bot: long BTC from a signal, closed by command",
+      "expected": "IOC entry, one full-size reduce-only stop, five reduce-only take-profits, PROTECTED; close flattens and cancels",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC14",
+      "scenario": "Long with TP/SL",
+      "symbol": "ETH",
+      "layer": "bot",
+      "title": "Bot: long ETH, stop-loss moved, then closed",
+      "expected": "as TC13, and moving the stop changes the exchange order",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC15",
+      "scenario": "Short with TP/SL",
+      "symbol": "SOL",
+      "layer": "bot",
+      "title": "Bot: short SOL from a signal, closed by command",
+      "expected": "as TC13 on the short side",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC16",
+      "scenario": "Short with TP/SL",
+      "symbol": "BTC",
+      "layer": "bot",
+      "title": "Bot: short BTC, closed by the kill switch",
+      "expected": "as TC15; kill flattens, cancels and pauses; resume restores",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC17",
+      "scenario": "Multiple TP / partial close",
+      "symbol": "BTC",
+      "layer": "bot",
+      "title": "Bot: long BTC, take-profit levels close the position in parts",
+      "expected": "a filled level reduces the position, the stop is resized, the rest keeps resting",
+      "status": "blocked",
+      "started_at": "2026-10-11T10:21:43.798+00:00",
+      "finished_at": "2026-10-11T10:25:58.147+00:00",
+      "assertions_passed": 7,
+      "assertions_total": 7,
+      "fees_usdc": 0.062988,
+      "realized_pnl_usdc": -0.0119,
+      "blocked_reason": "the market did not reach the first take-profit (82371.0) within 240 s, so partial closure could not be observed",
+      "error": null,
+      "notes": [
+        "time from fill to protected: 2.04 s",
+        "outcome MANUAL, close reason manual, realised -0.0119, fees 0.062988, funding 0.0, net -0.074888"
+      ],
+      "orders": [
+        {
+          "label": "ENTRY",
+          "side": "BUY",
+          "type": "limit/Ioc",
+          "price": 82367.0,
+          "trigger_price": null,
+          "size": 0.00085,
+          "filled_size": 0.00085,
+          "avg_price": 82346.00000000001,
+          "final_status": "FILLED",
+          "exchange_status": "filled"
+        },
+        {
+          "label": "SL",
+          "side": "SELL",
+          "type": "trigger/-",
+          "price": 73593.0,
+          "trigger_price": 81770.0,
+          "size": 0.00085,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP1",
+          "side": "SELL",
+          "type": "limit/Gtc",
+          "price": 82371.0,
+          "trigger_price": null,
+          "size": 0.00017,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP2",
+          "side": "SELL",
+          "type": "limit/Gtc",
+          "price": 82395.0,
+          "trigger_price": null,
+          "size": 0.00017,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP3",
+          "side": "SELL",
+          "type": "limit/Gtc",
+          "price": 82428.0,
+          "trigger_price": null,
+          "size": 0.00017,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP4",
+          "side": "SELL",
+          "type": "limit/Gtc",
+          "price": 82675.0,
+          "trigger_price": null,
+          "size": 0.00017,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP5",
+          "side": "SELL",
+          "type": "limit/Gtc",
+          "price": 83005.0,
+          "trigger_price": null,
+          "size": 0.00017,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "CLOSE",
+          "side": "SELL",
+          "type": "limit/Ioc",
+          "price": 81515.0,
+          "trigger_price": null,
+          "size": 0.00085,
+          "filled_size": 0.00085,
+          "avg_price": 82332.0,
+          "final_status": "FILLED",
+          "exchange_status": "filled"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "signal accepted by the bot (parsed and valid)",
+          "passed": true,
+          "expected": "WAITING_PRICE / ENTERING / TRADED",
+          "actual": {
+            "state": "WAITING_PRICE",
+            "reason": null
+          }
+        },
+        {
+          "name": "trade reached PROTECTED",
+          "passed": true,
+          "expected": "PROTECTED",
+          "actual": "PROTECTED"
+        },
+        {
+          "name": "close command for the rest accepted",
+          "passed": true,
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "trade_id": 1
+          }
+        },
+        {
+          "name": "trade is CLOSED in the bot",
+          "passed": true,
+          "expected": "CLOSED",
+          "actual": "CLOSED"
+        },
+        {
+          "name": "exchange position is flat",
+          "passed": true,
+          "expected": 0.0,
+          "actual": 0.0
+        },
+        {
+          "name": "no orders of the trade are left on the exchange",
+          "passed": true,
+          "expected": [],
+          "actual": []
+        },
+        {
+          "name": "the bot recorded fees and a net result for the trade",
+          "passed": true,
+          "expected": "net P/L set, fees > 0",
+          "actual": {
+            "net_pnl": -0.074888,
+            "fees": 0.062988
+          }
+        }
+      ],
+      "final_state": {
+        "trade_state": "CLOSED",
+        "position": 0.0,
+        "open_orders": 0
+      },
+      "steps": [
+        {
+          "at": "2026-10-11T10:21:43.952+00:00",
+          "action": "book",
+          "latency_ms": 152.9,
+          "bid": 82345.0,
+          "ask": 82346.0,
+          "bid_size": 0.00794,
+          "ask_size": 0.3
+        },
+        {
+          "at": "2026-10-11T10:21:43.952+00:00",
+          "action": "signal built",
+          "plan": {
+            "side": "BUY",
+            "zone": [
+              82329.0,
+              82363.0
+            ],
+            "stop": 81770.0,
+            "take_profits": [
+              82371.0,
+              82395.0,
+              82428.0,
+              82675.0,
+              83005.0
+            ],
+            "touch": 82346.0
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:43.957+00:00",
+          "action": "bot command inject",
+          "latency_ms": 4.6,
+          "request": {
+            "text": "#BTC BUY NOW | BTC buy Zone 82329 - 82363 |  | SL : 81770 |  | TP1 : 82371 | TP2 : 82395 | TP3 : 82428 | TP4 : 82675 | TP5 : 83005 | #QA_Signals",
+            "channel": "qa"
+          },
+          "response": {
+            "ok": true,
+            "signal_id": 1,
+            "state": "WAITING_PRICE",
+            "reason": null
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:47.642+00:00",
+          "action": "trade protected",
+          "trade": {
+            "id": 1,
+            "coin": "BTC",
+            "side": "BUY",
+            "state": "PROTECTED",
+            "planned_size": 0.00085,
+            "filled_size": 0.00085,
+            "avg_entry": 82346.00000000001,
+            "sl_price": 81770.0,
+            "opened_at": "2026-10-11T10:21:45.539+00:00",
+            "protected_at": "2026-10-11T10:21:47.577+00:00"
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:47.643+00:00",
+          "action": "waiting up to 240 s for the market to reach a take-profit level"
+        },
+        {
+          "at": "2026-10-11T10:25:47.678+00:00",
+          "action": "bot command close",
+          "latency_ms": 8.5,
+          "request": {
+            "trade_id": 1
+          },
+          "response": {
+            "ok": true,
+            "trade_id": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC18",
+      "scenario": "Multiple TP / partial close",
+      "symbol": "ETH",
+      "layer": "bot",
+      "title": "Bot: short ETH, take-profit levels close the position in parts",
+      "expected": "as TC17 on the short side",
+      "status": "passed",
+      "started_at": "2026-10-11T10:26:05.781+00:00",
+      "finished_at": "2026-10-11T10:28:06.806+00:00",
+      "assertions_passed": 15,
+      "assertions_total": 15,
+      "fees_usdc": 0.055467,
+      "realized_pnl_usdc": 0.01007,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [
+        "time from fill to protected: 1.90 s",
+        "outcome MANUAL, close reason manual, realised 0.01007, fees 0.055467, funding 0.0, net -0.045397"
+      ],
+      "orders": [
+        {
+          "label": "ENTRY",
+          "side": "SELL",
+          "type": "limit/Ioc",
+          "price": 2491.4,
+          "trigger_price": null,
+          "size": 0.0265,
+          "filled_size": 0.0265,
+          "avg_price": 2492.0,
+          "final_status": "FILLED",
+          "exchange_status": "filled"
+        },
+        {
+          "label": "SL",
+          "side": "BUY",
+          "type": "trigger/-",
+          "price": 2760.4,
+          "trigger_price": 2509.4,
+          "size": 0.0212,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP1",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "price": 2491.3,
+          "trigger_price": null,
+          "size": 0.0053,
+          "filled_size": 0.0053,
+          "avg_price": 2491.3,
+          "final_status": "FILLED",
+          "exchange_status": "open"
+        },
+        {
+          "label": "TP2",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "price": 2490.5,
+          "trigger_price": null,
+          "size": 0.0053,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP3",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "price": 2489.5,
+          "trigger_price": null,
+          "size": 0.0053,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP4",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "price": 2482.0,
+          "trigger_price": null,
+          "size": 0.0053,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "TP5",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "price": 2472.1,
+          "trigger_price": null,
+          "size": 0.0053,
+          "filled_size": 0.0,
+          "avg_price": null,
+          "final_status": "CANCELED",
+          "exchange_status": "reduceOnlyCanceled"
+        },
+        {
+          "label": "CLOSE",
+          "side": "BUY",
+          "type": "limit/Ioc",
+          "price": 2516.6,
+          "trigger_price": null,
+          "size": 0.0212,
+          "filled_size": 0.0212,
+          "avg_price": 2491.7,
+          "final_status": "FILLED",
+          "exchange_status": "filled"
+        }
+      ],
+      "assertions": [
+        {
+          "name": "signal accepted by the bot (parsed and valid)",
+          "passed": true,
+          "expected": "WAITING_PRICE / ENTERING / TRADED",
+          "actual": {
+            "state": "WAITING_PRICE",
+            "reason": null
+          }
+        },
+        {
+          "name": "trade reached PROTECTED",
+          "passed": true,
+          "expected": "PROTECTED",
+          "actual": "PROTECTED"
+        },
+        {
+          "name": "at least one take-profit level filled",
+          "passed": true,
+          "expected": ">= 1",
+          "actual": 1
+        },
+        {
+          "name": "trade moved to REDUCING",
+          "passed": true,
+          "expected": "REDUCING",
+          "actual": "REDUCING"
+        },
+        {
+          "name": "remaining size is the filled size minus what the take-profits closed",
+          "passed": true,
+          "expected": 0.0212,
+          "actual": 0.0212
+        },
+        {
+          "name": "exchange position shrank to the remaining size",
+          "passed": true,
+          "expected": 0.0212,
+          "actual": 0.0212
+        },
+        {
+          "name": "stop-loss was resized to the remaining position",
+          "passed": true,
+          "expected": 0.0212,
+          "actual": [
+            0.0212
+          ]
+        },
+        {
+          "name": "the unfilled take-profit levels still rest",
+          "passed": true,
+          "expected": 4,
+          "actual": 4
+        },
+        {
+          "name": "no more take-profit size rests than the position holds",
+          "passed": true,
+          "expected": "<= 0.0212",
+          "actual": 0.0212
+        },
+        {
+          "name": "close command for the rest accepted",
+          "passed": true,
+          "expected": true,
+          "actual": {
+            "ok": true,
+            "trade_id": 2
+          }
+        },
+        {
+          "name": "trade is CLOSED in the bot",
+          "passed": true,
+          "expected": "CLOSED",
+          "actual": "CLOSED"
+        },
+        {
+          "name": "exchange position is flat",
+          "passed": true,
+          "expected": 0.0,
+          "actual": 0.0
+        },
+        {
+          "name": "no orders of the trade are left on the exchange",
+          "passed": true,
+          "expected": [],
+          "actual": []
+        },
+        {
+          "name": "the bot recorded fees and a net result for the trade",
+          "passed": true,
+          "expected": "net P/L set, fees > 0",
+          "actual": {
+            "net_pnl": -0.045397,
+            "fees": 0.055467
+          }
+        },
+        {
+          "name": "outcome records a partial win or better",
+          "passed": true,
+          "expected": "a closed outcome",
+          "actual": "MANUAL"
+        }
+      ],
+      "final_state": {
+        "trade_state": "CLOSED",
+        "position": 0.0,
+        "open_orders": 0
+      },
+      "steps": [
+        {
+          "at": "2026-10-11T10:26:05.911+00:00",
+          "action": "book",
+          "latency_ms": 129.0,
+          "bid": 2492.0,
+          "ask": 2492.3,
+          "bid_size": 5.5254,
+          "ask_size": 5.0
+        },
+        {
+          "at": "2026-10-11T10:26:05.911+00:00",
+          "action": "signal built",
+          "plan": {
+            "side": "SELL",
+            "zone": [
+              2491.5,
+              2492.5
+            ],
+            "stop": 2509.4,
+            "take_profits": [
+              2491.3,
+              2490.5,
+              2489.5,
+              2482.0,
+              2472.1
+            ],
+            "touch": 2492.0
+          }
+        },
+        {
+          "at": "2026-10-11T10:26:05.915+00:00",
+          "action": "bot command inject",
+          "latency_ms": 3.6,
+          "request": {
+            "text": "#ETH SELL NOW | ETH sell Zone 2491.5 - 2492.5 |  | SL : 2509.4 |  | TP1 : 2491.3 | TP2 : 2490.5 | TP3 : 2489.5 | TP4 : 2482 | TP5 : 2472.1 | #QA_Signals",
+            "channel": "qa"
+          },
+          "response": {
+            "ok": true,
+            "signal_id": 2,
+            "state": "WAITING_PRICE",
+            "reason": null
+          }
+        },
+        {
+          "at": "2026-10-11T10:26:09.481+00:00",
+          "action": "trade protected",
+          "trade": {
+            "id": 2,
+            "coin": "ETH",
+            "side": "SELL",
+            "state": "PROTECTED",
+            "planned_size": 0.0265,
+            "filled_size": 0.0265,
+            "avg_entry": 2492.0,
+            "sl_price": 2509.4,
+            "opened_at": "2026-10-11T10:26:07.251+00:00",
+            "protected_at": "2026-10-11T10:26:09.152+00:00"
+          }
+        },
+        {
+          "at": "2026-10-11T10:26:09.481+00:00",
+          "action": "waiting up to 240 s for the market to reach a take-profit level"
+        },
+        {
+          "at": "2026-10-11T10:27:55.367+00:00",
+          "action": "take-profit filled",
+          "legs": [
+            1
+          ],
+          "closed": 0.0053,
+          "trade_state": "REDUCING",
+          "remaining": 0.0212
+        },
+        {
+          "at": "2026-10-11T10:28:01.583+00:00",
+          "action": "exchange after the partial close",
+          "position": -0.0212,
+          "orders": [
+            {
+              "coin": "ETH",
+              "oid": 62414510239,
+              "cloid": "0x4d61919862369aacfb14f368844e5524",
+              "is_buy": true,
+              "price": 2760.4,
+              "size": 0.0212,
+              "orig_size": 0.0212,
+              "reduce_only": true,
+              "is_trigger": true,
+              "trigger_px": 2509.4,
+              "tpsl": "sl",
+              "is_position_tpsl": false,
+              "order_type": "Stop Market",
+              "timestamp": 1791714473144
+            },
+            {
+              "coin": "ETH",
+              "oid": 62414410649,
+              "cloid": "0x0aa313d30db366ca3c7387ece2fae651",
+              "is_buy": true,
+              "price": 2472.1,
+              "size": 0.0053,
+              "orig_size": 0.0053,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791714368678
+            },
+            {
+              "coin": "ETH",
+              "oid": 62414410648,
+              "cloid": "0xedf31a2aaf9a116b366f35ca26cb6d47",
+              "is_buy": true,
+              "price": 2482.0,
+              "size": 0.0053,
+              "orig_size": 0.0053,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791714368678
+            },
+            {
+              "coin": "ETH",
+              "oid": 62414410647,
+              "cloid": "0x9181bd4bb8487b73b88416e674c3fc9f",
+              "is_buy": true,
+              "price": 2489.5,
+              "size": 0.0053,
+              "orig_size": 0.0053,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791714368678
+            },
+            {
+              "coin": "ETH",
+              "oid": 62414410646,
+              "cloid": "0x1bf2544e458606cb11380d17e5b072d3",
+              "is_buy": true,
+              "price": 2490.5,
+              "size": 0.0053,
+              "orig_size": 0.0053,
+              "reduce_only": true,
+              "is_trigger": false,
+              "trigger_px": null,
+              "tpsl": null,
+              "is_position_tpsl": false,
+              "order_type": "Limit",
+              "timestamp": 1791714368678
+            }
+          ]
+        },
+        {
+          "at": "2026-10-11T10:28:01.608+00:00",
+          "action": "bot command close",
+          "latency_ms": 4.4,
+          "request": {
+            "trade_id": 2
+          },
+          "response": {
+            "ok": true,
+            "trade_id": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC19",
+      "scenario": "Cancel and replace",
+      "symbol": "BTC",
+      "layer": "exchange",
+      "title": "Modify in place, cancel, and replace a resting order",
+      "expected": "modify keeps the client id with the new price; cancel is final; the replacement rests alone",
+      "status": "not_run",
+      "started_at": null,
+      "finished_at": null,
+      "assertions_passed": 0,
+      "assertions_total": 0,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [],
+      "orders": [],
+      "assertions": [],
+      "final_state": {},
+      "steps": []
+    },
+    {
+      "id": "TC20",
+      "scenario": "Invalid parameters",
+      "symbol": "ETH",
+      "layer": "exchange+bot",
+      "title": "Rejected orders: nine exchange subtests and one application subtest",
+      "expected": "every invalid order is rejected and none becomes a position",
+      "status": "failed",
+      "started_at": "2026-10-11T10:21:25.075+00:00",
+      "finished_at": "2026-10-11T10:28:10.894+00:00",
+      "assertions_passed": 12,
+      "assertions_total": 13,
+      "fees_usdc": 0.0,
+      "realized_pnl_usdc": 0.0,
+      "blocked_reason": null,
+      "error": null,
+      "notes": [
+        "i. second order with the same client id: ACCEPTED by the exchange as resting; cancelled in cleanup",
+        "i. order 62414156450 could not be cancelled by its client id after the duplicate was cancelled; removed by order id"
+      ],
+      "orders": [
+        {
+          "label": "a. order value below the 10 USDC minimum",
+          "cloid": "0x799928d8ff3b0ca3ce7d2b033f0a3bc3",
+          "coin": "ETH",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "size": 0.0017,
+          "price": 2416.9,
+          "reduce_only": false,
+          "oid": null,
+          "immediate_status": "error",
+          "filled_size": null,
+          "avg_price": null,
+          "error": {
+            "error_class": "local_bug",
+            "text": "local_bug: Order must have minimum value of $10. asset=4"
+          }
+        },
+        {
+          "label": "b. reduce-only sell with no position",
+          "cloid": "0x8b8c4bc2991977e0bad948f5f909a839",
+          "coin": "ETH",
+          "side": "SELL",
+          "type": "limit/Ioc",
+          "size": 0.0054,
+          "price": 2466.7,
+          "reduce_only": true,
+          "oid": null,
+          "immediate_status": "error",
+          "filled_size": null,
+          "avg_price": null,
+          "error": {
+            "error_class": "reduce_only",
+            "text": "reduce_only: Reduce only order would increase position. asset=4"
+          }
+        },
+        {
+          "label": "c. price off the tick grid",
+          "cloid": "0xad5ffa688fa86fb18e3369ff1bd16627",
+          "coin": "ETH",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "size": 0.0054,
+          "price": 2416.937,
+          "reduce_only": false,
+          "oid": null,
+          "immediate_status": "error",
+          "filled_size": null,
+          "avg_price": null,
+          "error": {
+            "error_class": "other",
+            "text": "other: Order has invalid price."
+          }
+        },
+        {
+          "label": "d. size with too many decimals",
+          "cloid": "0xaacc9fcb760aeeec8c895fb8f635d35a",
+          "coin": "ETH",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "size": 0.005425,
+          "price": 2416.9,
+          "reduce_only": false,
+          "oid": null,
+          "immediate_status": "error",
+          "filled_size": null,
+          "avg_price": null,
+          "error": {
+            "error_class": "local_bug",
+            "text": "local_bug: Order has invalid size."
+          }
+        },
+        {
+          "label": "e. zero size",
+          "cloid": "0x14fc3e661a61aff885acd3aa5eeb6f80",
+          "coin": "ETH",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "size": 0.0,
+          "price": 2416.9,
+          "reduce_only": false,
+          "oid": null,
+          "immediate_status": "error",
+          "filled_size": null,
+          "avg_price": null,
+          "error": {
+            "error_class": "other",
+            "text": "other: Order has zero size."
+          }
+        },
+        {
+          "label": "f. price ten times the market",
+          "cloid": "0x6e8de96634288bbc004422ee970d8549",
+          "coin": "ETH",
+          "side": "SELL",
+          "type": "limit/Gtc",
+          "size": 0.0054,
+          "price": 24920.0,
+          "reduce_only": false,
+          "oid": null,
+          "immediate_status": "error",
+          "filled_size": null,
+          "avg_price": null,
+          "error": {
+            "error_class": "other",
+            "text": "other: Order price cannot be more than 80% away from the reference price"
+          }
+        },
+        {
+          "label": "g. unknown symbol",
+          "cloid": "0x360db6194d0a528589f71c06fe0d59af",
+          "coin": "NOPE",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "size": 1.0,
+          "price": 1.0,
+          "reduce_only": false,
+          "oid": null,
+          "immediate_status": "error",
+          "filled_size": null,
+          "avg_price": null,
+          "error": {
+            "error_class": "local_bug",
+            "text": "local_bug: asset id for NOPE has not been resolved"
+          }
+        },
+        {
+          "label": "h. post-only buy priced through the ask",
+          "cloid": "0x710e04178a8b751a97e2009c48b4e892",
+          "coin": "ETH",
+          "side": "BUY",
+          "type": "limit/Alo",
+          "size": 0.0054,
+          "price": 2494.5,
+          "reduce_only": false,
+          "oid": null,
+          "immediate_status": "error",
+          "filled_size": null,
+          "avg_price": null,
+          "error": {
+            "error_class": "other",
+            "text": "other: Post only order would have immediately matched, bbo was 2491.7@2492. asset=4"
+          }
+        },
+        {
+          "label": "i. resting order (first use of the client id)",
+          "cloid": "0x18757b9f0d91ba2ccfc1f23eb6978dd7",
+          "coin": "ETH",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "size": 0.0054,
+          "price": 2416.9,
+          "reduce_only": false,
+          "oid": 62414156450,
+          "immediate_status": "resting",
+          "filled_size": null,
+          "avg_price": null,
+          "error": null
+        },
+        {
+          "label": "i. second order with the same client id",
+          "cloid": "0x18757b9f0d91ba2ccfc1f23eb6978dd7",
+          "coin": "ETH",
+          "side": "BUY",
+          "type": "limit/Gtc",
+          "size": 0.0054,
+          "price": 2392.0,
+          "reduce_only": false,
+          "oid": 62414156719,
+          "immediate_status": "resting",
+          "filled_size": null,
+          "avg_price": null,
+          "error": null
+        }
+      ],
+      "assertions": [
+        {
+          "name": "a. order value below the 10 USDC minimum: rejected",
+          "passed": true,
+          "expected": "rejected",
+          "actual": {
+            "error_class": "local_bug",
+            "text": "local_bug: Order must have minimum value of $10. asset=4"
+          }
+        },
+        {
+          "name": "b. reduce-only sell with no position: rejected",
+          "passed": true,
+          "expected": "rejected",
+          "actual": {
+            "error_class": "reduce_only",
+            "text": "reduce_only: Reduce only order would increase position. asset=4"
+          }
+        },
+        {
+          "name": "c. price off the tick grid: rejected",
+          "passed": true,
+          "expected": "rejected",
+          "actual": {
+            "error_class": "other",
+            "text": "other: Order has invalid price."
+          }
+        },
+        {
+          "name": "d. size with too many decimals: rejected",
+          "passed": true,
+          "expected": "rejected",
+          "actual": {
+            "error_class": "local_bug",
+            "text": "local_bug: Order has invalid size."
+          }
+        },
+        {
+          "name": "e. zero size: rejected",
+          "passed": true,
+          "expected": "rejected",
+          "actual": {
+            "error_class": "other",
+            "text": "other: Order has zero size."
+          }
+        },
+        {
+          "name": "f. price ten times the market: rejected",
+          "passed": true,
+          "expected": "rejected",
+          "actual": {
+            "error_class": "other",
+            "text": "other: Order price cannot be more than 80% away from the reference price"
+          }
+        },
+        {
+          "name": "g. unknown symbol: rejected",
+          "passed": true,
+          "expected": "rejected",
+          "actual": {
+            "error_class": "local_bug",
+            "text": "local_bug: asset id for NOPE has not been resolved"
+          }
+        },
+        {
+          "name": "h. post-only buy priced through the ask: rejected",
+          "passed": true,
+          "expected": "rejected",
+          "actual": {
+            "error_class": "other",
+            "text": "other: Post only order would have immediately matched, bbo was 2491.7@2492. asset=4"
+          }
+        },
+        {
+          "name": "i. second order with the same client id: rejected",
+          "passed": false,
+          "expected": "rejected",
+          "actual": {
+            "status": "resting",
+            "oid": 62414156719,
+            "total_size": null,
+            "avg_price": null,
+            "error": null
+          }
+        },
+        {
+          "name": "i. still exactly one order under that client id",
+          "passed": true,
+          "expected": 1,
+          "actual": 1
+        },
+        {
+          "name": "no subtest created a position or left an order",
+          "passed": true,
+          "expected": {
+            "position": 0.0,
+            "open_orders": 0
+          },
+          "actual": {
+            "position": 0.0,
+            "open_orders": 0
+          }
+        },
+        {
+          "name": "j. bot: a buy signal with its stop above the entry is rejected as INVALID",
+          "passed": true,
+          "expected": "INVALID",
+          "actual": {
+            "state": "INVALID",
+            "reason": "entry_zone.low must be less than entry_zone.high; stop_loss must be below entry_zone for a BUY"
+          }
+        },
+        {
+          "name": "j. bot: the invalid signal produced no order and no position",
+          "passed": true,
+          "expected": "nothing",
+          "actual": {
+            "open_orders": 0,
+            "position": 0.0
+          }
+        }
+      ],
+      "final_state": {
+        "position": 0.0,
+        "open_orders": 0
+      },
+      "steps": [
+        {
+          "at": "2026-10-11T10:21:25.312+00:00",
+          "action": "book",
+          "latency_ms": 129.9,
+          "bid": 2491.7,
+          "ask": 2492.0,
+          "bid_size": 0.2635,
+          "ask_size": 5.0
+        },
+        {
+          "at": "2026-10-11T10:21:26.499+00:00",
+          "action": "place a. order value below the 10 USDC minimum",
+          "latency_ms": 1187.1,
+          "request": {
+            "coin": "ETH",
+            "is_buy": true,
+            "size": 0.0017,
+            "price": 2416.9,
+            "reduce_only": false,
+            "cloid": "0x799928d8ff3b0ca3ce7d2b033f0a3bc3",
+            "kind": "limit",
+            "tif": "Gtc",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "status": "error",
+            "oid": null,
+            "total_size": null,
+            "avg_price": null,
+            "error": {
+              "error_class": "local_bug",
+              "text": "local_bug: Order must have minimum value of $10. asset=4"
+            }
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:27.317+00:00",
+          "action": "place b. reduce-only sell with no position",
+          "latency_ms": 814.9,
+          "request": {
+            "coin": "ETH",
+            "is_buy": false,
+            "size": 0.0054,
+            "price": 2466.7,
+            "reduce_only": true,
+            "cloid": "0x8b8c4bc2991977e0bad948f5f909a839",
+            "kind": "limit",
+            "tif": "Ioc",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "status": "error",
+            "oid": null,
+            "total_size": null,
+            "avg_price": null,
+            "error": {
+              "error_class": "reduce_only",
+              "text": "reduce_only: Reduce only order would increase position. asset=4"
+            }
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:28.345+00:00",
+          "action": "place c. price off the tick grid",
+          "latency_ms": 1026.7,
+          "request": {
+            "coin": "ETH",
+            "is_buy": true,
+            "size": 0.0054,
+            "price": 2416.937,
+            "reduce_only": false,
+            "cloid": "0xad5ffa688fa86fb18e3369ff1bd16627",
+            "kind": "limit",
+            "tif": "Gtc",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "status": "error",
+            "oid": null,
+            "total_size": null,
+            "avg_price": null,
+            "error": {
+              "error_class": "other",
+              "text": "other: Order has invalid price."
+            }
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:29.192+00:00",
+          "action": "place d. size with too many decimals",
+          "latency_ms": 845.5,
+          "request": {
+            "coin": "ETH",
+            "is_buy": true,
+            "size": 0.005425,
+            "price": 2416.9,
+            "reduce_only": false,
+            "cloid": "0xaacc9fcb760aeeec8c895fb8f635d35a",
+            "kind": "limit",
+            "tif": "Gtc",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "status": "error",
+            "oid": null,
+            "total_size": null,
+            "avg_price": null,
+            "error": {
+              "error_class": "local_bug",
+              "text": "local_bug: Order has invalid size."
+            }
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:30.030+00:00",
+          "action": "place e. zero size",
+          "latency_ms": 837.7,
+          "request": {
+            "coin": "ETH",
+            "is_buy": true,
+            "size": 0.0,
+            "price": 2416.9,
+            "reduce_only": false,
+            "cloid": "0x14fc3e661a61aff885acd3aa5eeb6f80",
+            "kind": "limit",
+            "tif": "Gtc",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "status": "error",
+            "oid": null,
+            "total_size": null,
+            "avg_price": null,
+            "error": {
+              "error_class": "other",
+              "text": "other: Order has zero size."
+            }
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:30.844+00:00",
+          "action": "place f. price ten times the market",
+          "latency_ms": 812.8,
+          "request": {
+            "coin": "ETH",
+            "is_buy": false,
+            "size": 0.0054,
+            "price": 24920.0,
+            "reduce_only": false,
+            "cloid": "0x6e8de96634288bbc004422ee970d8549",
+            "kind": "limit",
+            "tif": "Gtc",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "status": "error",
+            "oid": null,
+            "total_size": null,
+            "avg_price": null,
+            "error": {
+              "error_class": "other",
+              "text": "other: Order price cannot be more than 80% away from the reference price"
+            }
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:30.870+00:00",
+          "action": "place g. unknown symbol",
+          "latency_ms": 25.7,
+          "request": {
+            "coin": "NOPE",
+            "is_buy": true,
+            "size": 1.0,
+            "price": 1.0,
+            "reduce_only": false,
+            "cloid": "0x360db6194d0a528589f71c06fe0d59af",
+            "kind": "limit",
+            "tif": "Gtc",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "error_class": "local_bug",
+            "text": "local_bug: asset id for NOPE has not been resolved"
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:31.485+00:00",
+          "action": "place h. post-only buy priced through the ask",
+          "latency_ms": 606.6,
+          "request": {
+            "coin": "ETH",
+            "is_buy": true,
+            "size": 0.0054,
+            "price": 2494.5,
+            "reduce_only": false,
+            "cloid": "0x710e04178a8b751a97e2009c48b4e892",
+            "kind": "limit",
+            "tif": "Alo",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "status": "error",
+            "oid": null,
+            "total_size": null,
+            "avg_price": null,
+            "error": {
+              "error_class": "other",
+              "text": "other: Post only order would have immediately matched, bbo was 2491.7@2492. asset=4"
+            }
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:32.379+00:00",
+          "action": "place i. resting order (first use of the client id)",
+          "latency_ms": 891.8,
+          "request": {
+            "coin": "ETH",
+            "is_buy": true,
+            "size": 0.0054,
+            "price": 2416.9,
+            "reduce_only": false,
+            "cloid": "0x18757b9f0d91ba2ccfc1f23eb6978dd7",
+            "kind": "limit",
+            "tif": "Gtc",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "status": "resting",
+            "oid": 62414156450,
+            "total_size": null,
+            "avg_price": null,
+            "error": null
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:33.371+00:00",
+          "action": "place i. second order with the same client id",
+          "latency_ms": 991.4,
+          "request": {
+            "coin": "ETH",
+            "is_buy": true,
+            "size": 0.0054,
+            "price": 2392.0,
+            "reduce_only": false,
+            "cloid": "0x18757b9f0d91ba2ccfc1f23eb6978dd7",
+            "kind": "limit",
+            "tif": "Gtc",
+            "trigger_px": null,
+            "tpsl": null,
+            "is_market": true
+          },
+          "response": {
+            "status": "resting",
+            "oid": 62414156719,
+            "total_size": null,
+            "avg_price": null,
+            "error": null
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:34.232+00:00",
+          "action": "cancel",
+          "latency_ms": 860.9,
+          "cloid": "0x18757b9f0d91ba2ccfc1f23eb6978dd7",
+          "response": "success"
+        },
+        {
+          "at": "2026-10-11T10:21:35.301+00:00",
+          "action": "cancel",
+          "latency_ms": 880.9,
+          "cloid": "0x18757b9f0d91ba2ccfc1f23eb6978dd7",
+          "response": {
+            "error_class": "not_found",
+            "text": "not_found: Order was never placed, already canceled, or filled. asset=4"
+          }
+        },
+        {
+          "at": "2026-10-11T10:21:36.487+00:00",
+          "action": "cancel by exchange order id (the client id no longer reaches it)",
+          "latency_ms": 1023.8,
+          "oid": 62414156450,
+          "response": "success"
+        },
+        {
+          "at": "2026-10-11T10:28:07.147+00:00",
+          "action": "bot command inject",
+          "latency_ms": 11.8,
+          "request": {
+            "text": "#ETH BUY NOW | ETH buy Zone 2491.8 - 2491.8 |  | SL : 2516.7 |  | TP1 : 2504.3 | #QA_Signals",
+            "channel": "qa"
+          },
+          "response": {
+            "ok": true,
+            "signal_id": 3,
+            "state": "INVALID",
+            "reason": "entry_zone.low must be less than entry_zone.high; stop_loss must be below entry_zone for a BUY"
+          }
+        }
+      ]
+    }
+  ]
+}

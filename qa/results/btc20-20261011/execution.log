@@ -1,0 +1,511 @@
+2026-10-11 10:46:03,426 INFO isolation check: {'env': 'testnet', 'rest_url': 'https://api.hyperliquid-testnet.xyz', 'ws_url': 'wss://api.hyperliquid-testnet.xyz/ws', 'operator_env': 'testnet'}
+2026-10-11 10:46:05,540 INFO preflight: {"account_value_usdc": 198.9258, "taker_fee": 0.00045, "maker_fee": 0.00015, "requests_used": 234, "requests_cap": 12335, "markets": {"BTC": {"instrument": {"coin": "BTC", "asset_id": 3, "sz_decimals": 5, "max_leverage": 40, "dex": "", "is_delisted": false, "only_isolated": false}, "bid": 82316.0, "ask": 82324.0, "spread_bps": 0.97, "direct_size": 0.00016, "position": 0.0, "open_orders": 0}}}
+2026-10-11 10:46:10,723 INFO bot session up for BTC: size 0.00085, health {'status': 'ok', 'health': 'HEALTHY', 'env': 'TESTNET', 'version': '1.0.0'}
+2026-10-11 10:46:10,725 INFO BT01 | START | Bot: long BTC, closed by command [BTC, bot]
+2026-10-11 10:46:10,828 INFO BT01 | book | {"latency_ms": 102.1, "bid": 82316.0, "ask": 82324.0, "bid_size": 0.3, "ask_size": 0.00025}
+2026-10-11 10:46:10,829 INFO BT01 | signal built | {"plan": {"side": "BUY", "zone": [82306.0, 82342.0], "stop": 81583.0, "take_profits": [82736.0, 82900.0, 83065.0, 83312.0, 83641.0], "touch": 82324.0}}
+2026-10-11 10:46:10,836 INFO BT01 | bot command inject | {"latency_ms": 6.7, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82306 - 82342 |  | SL : 81583 |  | TP1 : 82736 | TP2 : 82900 | TP3 : 83065 | TP4 : 83312 | TP5 : 83641 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 1, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:46:10,837 INFO BT01 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:46:14,434 INFO BT01 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:46:14,435 INFO BT01 | trade protected | {"trade": {"id": 1, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82325.41176470587, "sl_price": 81583.0, "opened_at": "2026-10-11T10:46:12.265+00:00", "protected_at": "2026-10-11T10:46:14.027+00:00"}}
+2026-10-11 10:46:14,435 INFO BT01 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:46:14,435 INFO BT01 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82306.0, 82342.0] actual=82325.41176470587
+2026-10-11 10:46:14,548 INFO BT01 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 10:46:14,549 INFO BT01 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82325.4, "unrealized_pnl": -0.00205, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.99491, "cum_funding": 0.0}}
+2026-10-11 10:46:14,549 INFO BT01 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:46:14,656 INFO BT01 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415534790, "cloid": "0x94bac87b5854ea0948751e70220585d9", "is_buy": false, "price": 83641.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715573660}, {"coin": "BTC", "oid": 62415534789, "cloid": "0xac0f491d12718a960a10addbd367b1b5", "is_buy": false, "price": 83312.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 10:46:14,658 INFO BT01 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81583.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415533674, 'cloid': '0xb396ce04e5b9b6b152db214e6d27ff54', 'is_buy': False, 'price': 73424.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81583.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715572844}]
+2026-10-11 10:46:14,659 INFO BT01 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:46:14,659 INFO BT01 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:46:14,660 INFO BT01 | PASS | take-profit prices match the signal | expected=[82736.0, 82900.0, 83065.0, 83312.0, 83641.0] actual=[82736.0, 82900.0, 83065.0, 83312.0, 83641.0]
+2026-10-11 10:46:14,660 INFO BT01 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:46:14,663 INFO BT01 | bot command close | {"latency_ms": 3.4, "request": {"trade_id": 1}, "response": {"ok": true, "trade_id": 1}}
+2026-10-11 10:46:14,663 INFO BT01 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 1}
+2026-10-11 10:46:18,210 INFO BT01 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:46:19,453 INFO BT01 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:46:19,453 INFO BT01 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:46:19,453 INFO BT01 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.070115, 'fees': 0.062975}
+2026-10-11 10:46:19,453 INFO BT01 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:46:19,610 INFO BT02 | START | Bot: short BTC, closed by command [BTC, bot]
+2026-10-11 10:46:19,707 INFO BT02 | book | {"latency_ms": 96.3, "bid": 82316.0, "ask": 82325.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:46:19,707 INFO BT02 | signal built | {"plan": {"side": "SELL", "zone": [82297.0, 82335.0], "stop": 83057.0, "take_profits": [81904.0, 81740.0, 81575.0, 81328.0, 80999.0], "touch": 82316.0}}
+2026-10-11 10:46:19,712 INFO BT02 | bot command inject | {"latency_ms": 4.6, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82297 - 82335 |  | SL : 83057 |  | TP1 : 81904 | TP2 : 81740 | TP3 : 81575 | TP4 : 81328 | TP5 : 80999 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 2, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:46:19,712 INFO BT02 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:46:22,777 INFO BT02 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:46:22,778 INFO BT02 | trade protected | {"trade": {"id": 2, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82316.0, "sl_price": 83057.0, "opened_at": "2026-10-11T10:46:20.886+00:00", "protected_at": "2026-10-11T10:46:22.749+00:00"}}
+2026-10-11 10:46:22,778 INFO BT02 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:46:22,778 INFO BT02 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82297.0, 82335.0] actual=82316.0
+2026-10-11 10:46:22,889 INFO BT02 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 10:46:22,889 INFO BT02 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82316.0, "unrealized_pnl": -0.00595, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 312322.7224400871, "margin_used": 13.99491, "cum_funding": 0.0}}
+2026-10-11 10:46:22,889 INFO BT02 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:46:22,996 INFO BT02 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415541926, "cloid": "0x0aa313d30db366ca3c7387ece2fae651", "is_buy": true, "price": 80999.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715582351}, {"coin": "BTC", "oid": 62415541925, "cloid": "0xedf31a2aaf9a116b366f35ca26cb6d47", "is_buy": true, "price": 81328.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 10:46:22,996 INFO BT02 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83057.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415541087, 'cloid': '0x4d61919862369aacfb14f368844e5524', 'is_buy': True, 'price': 91363.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83057.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715581431}]
+2026-10-11 10:46:22,997 INFO BT02 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:46:22,997 INFO BT02 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:46:22,997 INFO BT02 | PASS | take-profit prices match the signal | expected=[81904.0, 81740.0, 81575.0, 81328.0, 80999.0] actual=[81904.0, 81740.0, 81575.0, 81328.0, 80999.0]
+2026-10-11 10:46:22,997 INFO BT02 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:46:23,002 INFO BT02 | bot command close | {"latency_ms": 4.8, "request": {"trade_id": 2}, "response": {"ok": true, "trade_id": 2}}
+2026-10-11 10:46:23,003 INFO BT02 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 2}
+2026-10-11 10:46:26,550 INFO BT02 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:46:27,775 INFO BT02 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:46:27,775 INFO BT02 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:46:27,775 INFO BT02 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.069773, 'fees': 0.062973}
+2026-10-11 10:46:27,776 INFO BT02 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:46:27,904 INFO BT03 | START | Bot: long BTC, closed by command [BTC, bot]
+2026-10-11 10:46:28,088 INFO BT03 | book | {"latency_ms": 182.0, "bid": 82316.0, "ask": 82325.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:46:28,088 INFO BT03 | signal built | {"plan": {"side": "BUY", "zone": [82305.0, 82345.0], "stop": 81584.0, "take_profits": [82737.0, 82901.0, 83066.0, 83313.0, 83642.0], "touch": 82325.0}}
+2026-10-11 10:46:28,094 INFO BT03 | bot command inject | {"latency_ms": 5.7, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82305 - 82345 |  | SL : 81584 |  | TP1 : 82737 | TP2 : 82901 | TP3 : 83066 | TP4 : 83313 | TP5 : 83642 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 3, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:46:28,094 INFO BT03 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:46:31,645 INFO BT03 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:46:31,647 INFO BT03 | trade protected | {"trade": {"id": 3, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82325.0, "sl_price": 81584.0, "opened_at": "2026-10-11T10:46:29.272+00:00", "protected_at": "2026-10-11T10:46:31.249+00:00"}}
+2026-10-11 10:46:31,647 INFO BT03 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:46:31,647 INFO BT03 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82305.0, 82345.0] actual=82325.0
+2026-10-11 10:46:31,766 INFO BT03 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 10:46:31,766 INFO BT03 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82325.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.99525, "cum_funding": 0.0}}
+2026-10-11 10:46:31,766 INFO BT03 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:46:31,871 INFO BT03 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415549230, "cloid": "0x609ecb39d9fefa6c9fa4401ebb6b252e", "is_buy": false, "price": 83642.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715590842}, {"coin": "BTC", "oid": 62415549229, "cloid": "0x40c62f5cda12de50c8918c9163e6702a", "is_buy": false, "price": 83313.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 10:46:31,871 INFO BT03 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81584.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415548953, 'cloid': '0xd623bf80802ee02b2d77da5dff443e4e', 'is_buy': False, 'price': 73425.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81584.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715589867}]
+2026-10-11 10:46:31,871 INFO BT03 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:46:31,871 INFO BT03 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:46:31,871 INFO BT03 | PASS | take-profit prices match the signal | expected=[82737.0, 82901.0, 83066.0, 83313.0, 83642.0] actual=[82737.0, 82901.0, 83066.0, 83313.0, 83642.0]
+2026-10-11 10:46:31,871 INFO BT03 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:46:31,877 INFO BT03 | bot command close | {"latency_ms": 5.7, "request": {"trade_id": 3}, "response": {"ok": true, "trade_id": 3}}
+2026-10-11 10:46:31,877 INFO BT03 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 3}
+2026-10-11 10:46:36,232 INFO BT03 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:46:37,542 INFO BT03 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:46:37,542 INFO BT03 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:46:37,543 INFO BT03 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.069775, 'fees': 0.062975}
+2026-10-11 10:46:37,543 INFO BT03 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:46:37,658 INFO BT04 | START | Bot: short BTC, closed by command [BTC, bot]
+2026-10-11 10:46:37,755 INFO BT04 | book | {"latency_ms": 96.7, "bid": 82316.0, "ask": 82325.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:46:37,756 INFO BT04 | signal built | {"plan": {"side": "SELL", "zone": [82295.0, 82337.0], "stop": 83057.0, "take_profits": [81904.0, 81740.0, 81575.0, 81328.0, 80999.0], "touch": 82316.0}}
+2026-10-11 10:46:37,765 INFO BT04 | bot command inject | {"latency_ms": 8.6, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82295 - 82337 |  | SL : 83057 |  | TP1 : 81904 | TP2 : 81740 | TP3 : 81575 | TP4 : 81328 | TP5 : 80999 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 4, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:46:37,765 INFO BT04 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:46:41,326 INFO BT04 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:46:41,328 INFO BT04 | trade protected | {"trade": {"id": 4, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82316.0, "sl_price": 83057.0, "opened_at": "2026-10-11T10:46:39.201+00:00", "protected_at": "2026-10-11T10:46:41.201+00:00"}}
+2026-10-11 10:46:41,329 INFO BT04 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:46:41,329 INFO BT04 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82295.0, 82337.0] actual=82316.0
+2026-10-11 10:46:41,440 INFO BT04 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 10:46:41,441 INFO BT04 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82316.0, "unrealized_pnl": -0.0051, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 312160.5751633987, "margin_used": 13.99474, "cum_funding": 0.0}}
+2026-10-11 10:46:41,441 INFO BT04 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:46:41,625 INFO BT04 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415557838, "cloid": "0x0554779c69ce944ddba86c05224bb890", "is_buy": true, "price": 80999.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715600723}, {"coin": "BTC", "oid": 62415557837, "cloid": "0xe5c5db2b950c9f6c10e169e97d633807", "is_buy": true, "price": 81328.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 10:46:41,625 INFO BT04 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83057.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415557571, 'cloid': '0x4f82bbd98ba824693d50ece805bc0719', 'is_buy': True, 'price': 91363.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83057.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715599852}]
+2026-10-11 10:46:41,625 INFO BT04 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:46:41,625 INFO BT04 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:46:41,625 INFO BT04 | PASS | take-profit prices match the signal | expected=[81904.0, 81740.0, 81575.0, 81328.0, 80999.0] actual=[81904.0, 81740.0, 81575.0, 81328.0, 80999.0]
+2026-10-11 10:46:41,626 INFO BT04 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:46:41,629 INFO BT04 | bot command close | {"latency_ms": 3.2, "request": {"trade_id": 4}, "response": {"ok": true, "trade_id": 4}}
+2026-10-11 10:46:41,629 INFO BT04 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 4}
+2026-10-11 10:46:45,245 INFO BT04 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:46:46,554 INFO BT04 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:46:46,555 INFO BT04 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:46:46,555 INFO BT04 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.069773, 'fees': 0.062973}
+2026-10-11 10:46:46,555 INFO BT04 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:46:46,683 INFO BT05 | START | Bot: long BTC, stop-loss moved, then closed by command [BTC, bot]
+2026-10-11 10:46:46,780 INFO BT05 | book | {"latency_ms": 96.9, "bid": 82316.0, "ask": 82325.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:46:46,780 INFO BT05 | signal built | {"plan": {"side": "BUY", "zone": [82303.0, 82347.0], "stop": 81584.0, "take_profits": [82737.0, 82901.0, 83066.0, 83313.0, 83642.0], "touch": 82325.0}}
+2026-10-11 10:46:46,790 INFO BT05 | bot command inject | {"latency_ms": 9.4, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82303 - 82347 |  | SL : 81584 |  | TP1 : 82737 | TP2 : 82901 | TP3 : 83066 | TP4 : 83313 | TP5 : 83642 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 5, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:46:46,790 INFO BT05 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:46:50,446 INFO BT05 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:46:50,447 INFO BT05 | trade protected | {"trade": {"id": 5, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82325.0, "sl_price": 81584.0, "opened_at": "2026-10-11T10:46:48.211+00:00", "protected_at": "2026-10-11T10:46:50.267+00:00"}}
+2026-10-11 10:46:50,447 INFO BT05 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:46:50,447 INFO BT05 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82303.0, 82347.0] actual=82325.0
+2026-10-11 10:46:50,645 INFO BT05 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 10:46:50,646 INFO BT05 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82325.0, "unrealized_pnl": -0.00085, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.99508, "cum_funding": 0.0}}
+2026-10-11 10:46:50,646 INFO BT05 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:46:50,753 INFO BT05 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415567334, "cloid": "0x3222c22c39db2131b0813e89ed9ef4b7", "is_buy": false, "price": 83642.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715609743}, {"coin": "BTC", "oid": 62415567333, "cloid": "0x3cd16d4314e60b72c25ec8c29f8b8daa", "is_buy": false, "price": 83313.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 10:46:50,753 INFO BT05 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81584.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415565981, 'cloid': '0xdffdcce52aa5f46d8f9b1352a0969e73', 'is_buy': False, 'price': 73425.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81584.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715608876}]
+2026-10-11 10:46:50,753 INFO BT05 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:46:50,753 INFO BT05 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:46:50,753 INFO BT05 | PASS | take-profit prices match the signal | expected=[82737.0, 82901.0, 83066.0, 83313.0, 83642.0] actual=[82737.0, 82901.0, 83066.0, 83313.0, 83642.0]
+2026-10-11 10:46:50,753 INFO BT05 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:46:51,623 INFO BT05 | bot command modify_sl | {"latency_ms": 870.0, "request": {"trade_id": 5, "price": 81831.0}, "response": {"ok": true}}
+2026-10-11 10:46:51,624 INFO BT05 | PASS | bot accepted the stop-loss move | expected=True actual={'ok': True}
+2026-10-11 10:46:51,733 INFO BT05 | PASS | exactly one stop on the exchange, at the new price, still full size | expected={'trigger': 81831.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415567862, 'cloid': '0xdffdcce52aa5f46d8f9b1352a0969e73', 'is_buy': False, 'price': 73647.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81831.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715611378}]
+2026-10-11 10:46:51,740 INFO BT05 | PASS | trade is still PROTECTED with the new stop recorded | expected=81831.0 actual={'state': 'PROTECTED', 'sl_price': 81831.0}
+2026-10-11 10:46:51,745 INFO BT05 | bot command close | {"latency_ms": 4.2, "request": {"trade_id": 5}, "response": {"ok": true, "trade_id": 5}}
+2026-10-11 10:46:51,745 INFO BT05 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 5}
+2026-10-11 10:46:56,079 INFO BT05 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:46:57,353 INFO BT05 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:46:57,354 INFO BT05 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:46:57,354 INFO BT05 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.069775, 'fees': 0.062975}
+2026-10-11 10:46:57,357 INFO BT05 | RESULT PASSED (19/19 assertions passed)
+2026-10-11 10:46:57,484 INFO BT06 | START | Bot: short BTC, stop-loss moved, then closed by command [BTC, bot]
+2026-10-11 10:46:57,584 INFO BT06 | book | {"latency_ms": 99.2, "bid": 82316.0, "ask": 82324.0, "bid_size": 0.3, "ask_size": 0.00016}
+2026-10-11 10:46:57,584 INFO BT06 | signal built | {"plan": {"side": "SELL", "zone": [82293.0, 82339.0], "stop": 83057.0, "take_profits": [81904.0, 81740.0, 81575.0, 81328.0, 80999.0], "touch": 82316.0}}
+2026-10-11 10:46:57,591 INFO BT06 | bot command inject | {"latency_ms": 6.0, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82293 - 82339 |  | SL : 83057 |  | TP1 : 81904 | TP2 : 81740 | TP3 : 81575 | TP4 : 81328 | TP5 : 80999 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 6, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:46:57,591 INFO BT06 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:47:01,268 INFO BT06 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:47:01,270 INFO BT06 | trade protected | {"trade": {"id": 6, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82316.0, "sl_price": 83057.0, "opened_at": "2026-10-11T10:46:59.021+00:00", "protected_at": "2026-10-11T10:47:01.224+00:00"}}
+2026-10-11 10:47:01,271 INFO BT06 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:47:01,271 INFO BT06 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82293.0, 82339.0] actual=82316.0
+2026-10-11 10:47:01,379 INFO BT06 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 10:47:01,379 INFO BT06 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82316.0, "unrealized_pnl": -0.0051, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 311998.4278867103, "margin_used": 13.99474, "cum_funding": 0.0}}
+2026-10-11 10:47:01,380 INFO BT06 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:47:01,548 INFO BT06 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415577043, "cloid": "0xa21d13fd07f608ce0e11294f424088e2", "is_buy": true, "price": 80999.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715620858}, {"coin": "BTC", "oid": 62415577042, "cloid": "0xe2849d7076e926281f20f5a8c65f6445", "is_buy": true, "price": 81328.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 10:47:01,549 INFO BT06 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83057.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415576028, 'cloid': '0x6f3ba61cb8bb7f7e545a7a928a35e2ca', 'is_buy': True, 'price': 91363.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83057.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715619630}]
+2026-10-11 10:47:01,549 INFO BT06 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:47:01,549 INFO BT06 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:47:01,549 INFO BT06 | PASS | take-profit prices match the signal | expected=[81904.0, 81740.0, 81575.0, 81328.0, 80999.0] actual=[81904.0, 81740.0, 81575.0, 81328.0, 80999.0]
+2026-10-11 10:47:01,552 INFO BT06 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:47:02,428 INFO BT06 | bot command modify_sl | {"latency_ms": 874.8, "request": {"trade_id": 6, "price": 82810.0}, "response": {"ok": true}}
+2026-10-11 10:47:02,429 INFO BT06 | PASS | bot accepted the stop-loss move | expected=True actual={'ok': True}
+2026-10-11 10:47:02,602 INFO BT06 | PASS | exactly one stop on the exchange, at the new price, still full size | expected={'trigger': 82810.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415578111, 'cloid': '0x6f3ba61cb8bb7f7e545a7a928a35e2ca', 'is_buy': True, 'price': 91092.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 82810.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715622142}]
+2026-10-11 10:47:02,616 INFO BT06 | PASS | trade is still PROTECTED with the new stop recorded | expected=82810.0 actual={'state': 'PROTECTED', 'sl_price': 82810.0}
+2026-10-11 10:47:02,621 INFO BT06 | bot command close | {"latency_ms": 4.5, "request": {"trade_id": 6}, "response": {"ok": true, "trade_id": 6}}
+2026-10-11 10:47:02,621 INFO BT06 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 6}
+2026-10-11 10:47:06,182 INFO BT06 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:47:07,424 INFO BT06 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:47:07,425 INFO BT06 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:47:07,425 INFO BT06 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.06297, 'fees': 0.06297}
+2026-10-11 10:47:07,425 INFO BT06 | RESULT PASSED (19/19 assertions passed)
+2026-10-11 10:47:07,545 INFO BT07 | START | Bot: long BTC, closed by command [BTC, bot]
+2026-10-11 10:47:07,643 INFO BT07 | book | {"latency_ms": 97.1, "bid": 82315.0, "ask": 82316.0, "bid_size": 0.00016, "ask_size": 0.3}
+2026-10-11 10:47:07,643 INFO BT07 | signal built | {"plan": {"side": "BUY", "zone": [82292.0, 82340.0], "stop": 81575.0, "take_profits": [82728.0, 82892.0, 83057.0, 83304.0, 83633.0], "touch": 82316.0}}
+2026-10-11 10:47:07,647 INFO BT07 | bot command inject | {"latency_ms": 3.4, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82292 - 82340 |  | SL : 81575 |  | TP1 : 82728 | TP2 : 82892 | TP3 : 83057 | TP4 : 83304 | TP5 : 83633 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 7, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:47:07,647 INFO BT07 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:47:11,218 INFO BT07 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:47:11,218 INFO BT07 | trade protected | {"trade": {"id": 7, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82316.0, "sl_price": 81575.0, "opened_at": "2026-10-11T10:47:08.992+00:00", "protected_at": "2026-10-11T10:47:11.196+00:00"}}
+2026-10-11 10:47:11,218 INFO BT07 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:47:11,219 INFO BT07 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82292.0, 82340.0] actual=82316.0
+2026-10-11 10:47:11,330 INFO BT07 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 10:47:11,330 INFO BT07 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82316.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.99372, "cum_funding": 0.0}}
+2026-10-11 10:47:11,330 INFO BT07 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:47:11,512 INFO BT07 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415586657, "cloid": "0xbb9a69df0bfc136e450edd0431408488", "is_buy": false, "price": 83633.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715630788}, {"coin": "BTC", "oid": 62415586656, "cloid": "0x8aaf9fe5bdd90dd922065cabb6232ef8", "is_buy": false, "price": 83304.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 10:47:11,513 INFO BT07 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81575.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415586335, 'cloid': '0x6bce1597841a3d4ec2e8ac84d8f67b87', 'is_buy': False, 'price': 73417.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81575.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715629514}]
+2026-10-11 10:47:11,513 INFO BT07 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:47:11,513 INFO BT07 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:47:11,513 INFO BT07 | PASS | take-profit prices match the signal | expected=[82728.0, 82892.0, 83057.0, 83304.0, 83633.0] actual=[82728.0, 82892.0, 83057.0, 83304.0, 83633.0]
+2026-10-11 10:47:11,514 INFO BT07 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:47:11,520 INFO BT07 | bot command close | {"latency_ms": 6.0, "request": {"trade_id": 7}, "response": {"ok": true, "trade_id": 7}}
+2026-10-11 10:47:11,520 INFO BT07 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 7}
+2026-10-11 10:47:15,091 INFO BT07 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:47:16,349 INFO BT07 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:47:16,349 INFO BT07 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:47:16,349 INFO BT07 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.069337, 'fees': 0.062967}
+2026-10-11 10:47:16,349 INFO BT07 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:47:16,487 INFO BT08 | START | Bot: short BTC, closed by command [BTC, bot]
+2026-10-11 10:47:16,584 INFO BT08 | book | {"latency_ms": 96.2, "bid": 82306.0, "ask": 82315.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:47:16,584 INFO BT08 | signal built | {"plan": {"side": "SELL", "zone": [82281.0, 82331.0], "stop": 83047.0, "take_profits": [81894.0, 81730.0, 81565.0, 81318.0, 80989.0], "touch": 82306.0}}
+2026-10-11 10:47:16,589 INFO BT08 | bot command inject | {"latency_ms": 4.4, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82281 - 82331 |  | SL : 83047 |  | TP1 : 81894 | TP2 : 81730 | TP3 : 81565 | TP4 : 81318 | TP5 : 80989 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 8, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:47:16,589 INFO BT08 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:47:20,686 INFO BT08 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:47:20,687 INFO BT08 | trade protected | {"trade": {"id": 8, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82306.0, "sl_price": 83047.0, "opened_at": "2026-10-11T10:47:17.947+00:00", "protected_at": "2026-10-11T10:47:20.429+00:00"}}
+2026-10-11 10:47:20,687 INFO BT08 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:47:20,687 INFO BT08 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82281.0, 82331.0] actual=82306.0
+2026-10-11 10:47:20,814 INFO BT08 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 10:47:20,815 INFO BT08 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82306.0, "unrealized_pnl": -0.00595, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 311834.8212055193, "margin_used": 13.99321, "cum_funding": 0.0}}
+2026-10-11 10:47:20,815 INFO BT08 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:47:20,956 INFO BT08 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415595202, "cloid": "0xfae67a191db9a9528ccf9805d726e304", "is_buy": true, "price": 80989.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715639613}, {"coin": "BTC", "oid": 62415595201, "cloid": "0x876681b95030face436819cec8aede1d", "is_buy": true, "price": 81318.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 10:47:20,956 INFO BT08 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83047.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415593273, 'cloid': '0xd1279cff975ad836ca074701033811ca', 'is_buy': True, 'price': 91352.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83047.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715638487}]
+2026-10-11 10:47:20,956 INFO BT08 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:47:20,956 INFO BT08 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:47:20,956 INFO BT08 | PASS | take-profit prices match the signal | expected=[81894.0, 81730.0, 81565.0, 81318.0, 80989.0] actual=[81894.0, 81730.0, 81565.0, 81318.0, 80989.0]
+2026-10-11 10:47:20,956 INFO BT08 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:47:20,963 INFO BT08 | bot command close | {"latency_ms": 6.4, "request": {"trade_id": 8}, "response": {"ok": true, "trade_id": 8}}
+2026-10-11 10:47:20,963 INFO BT08 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 8}
+2026-10-11 10:47:24,541 INFO BT08 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:47:25,779 INFO BT08 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:47:25,780 INFO BT08 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:47:25,780 INFO BT08 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.069767, 'fees': 0.062967}
+2026-10-11 10:47:25,780 INFO BT08 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:47:25,901 INFO BT09 | START | Bot: long BTC, take-profit levels a few ticks away; waits for a partial close, then closes the rest [BTC, bot]
+2026-10-11 10:47:25,998 INFO BT09 | book | {"latency_ms": 96.4, "bid": 82306.0, "ask": 82315.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:47:25,998 INFO BT09 | signal built | {"plan": {"side": "BUY", "zone": [82289.0, 82341.0], "stop": 81739.0, "take_profits": [82342.0, 82364.0, 82397.0, 82644.0, 82974.0], "touch": 82315.0}}
+2026-10-11 10:47:26,004 INFO BT09 | bot command inject | {"latency_ms": 5.6, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82289 - 82341 |  | SL : 81739 |  | TP1 : 82342 | TP2 : 82364 | TP3 : 82397 | TP4 : 82644 | TP5 : 82974 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 9, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:47:26,004 INFO BT09 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:47:29,573 INFO BT09 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:47:29,573 INFO BT09 | trade protected | {"trade": {"id": 9, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82315.0, "sl_price": 81739.0, "opened_at": "2026-10-11T10:47:27.444+00:00", "protected_at": "2026-10-11T10:47:29.244+00:00"}}
+2026-10-11 10:47:29,574 INFO BT09 | waiting up to 120 s for the market to reach a take-profit level | {}
+2026-10-11 10:49:29,881 WARNING BT09 | BLOCKED | the market did not reach the first take-profit (82342.0) within 120 s, so partial closure could not be observed
+2026-10-11 10:49:29,898 INFO BT09 | bot command close | {"latency_ms": 8.2, "request": {"trade_id": 9}, "response": {"ok": true, "trade_id": 9}}
+2026-10-11 10:49:29,898 INFO BT09 | PASS | close command for the rest accepted | expected=True actual={'ok': True, 'trade_id': 9}
+2026-10-11 10:49:33,485 INFO BT09 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:49:39,508 WARNING read account failed (attempt 1): unknown_outcome: ReadTimeout
+2026-10-11 10:49:40,308 INFO BT09 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:49:40,309 INFO BT09 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:49:40,309 INFO BT09 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.057872, 'fees': 0.062972}
+2026-10-11 10:49:40,309 INFO BT09 | RESULT BLOCKED (7/7 assertions passed)
+2026-10-11 10:49:40,439 INFO BT10 | START | Bot: short BTC, take-profit levels a few ticks away; waits for a partial close, then closes the rest [BTC, bot]
+2026-10-11 10:49:40,535 INFO BT10 | book | {"latency_ms": 95.2, "bid": 82320.0, "ask": 82324.0, "bid_size": 0.3, "ask_size": 0.00016}
+2026-10-11 10:49:40,536 INFO BT10 | signal built | {"plan": {"side": "SELL", "zone": [82293.0, 82347.0], "stop": 82896.0, "take_profits": [82292.0, 82271.0, 82238.0, 81991.0, 81661.0], "touch": 82320.0}}
+2026-10-11 10:49:40,544 INFO BT10 | bot command inject | {"latency_ms": 8.4, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82293 - 82347 |  | SL : 82896 |  | TP1 : 82292 | TP2 : 82271 | TP3 : 82238 | TP4 : 81991 | TP5 : 81661 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 10, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:49:40,545 INFO BT10 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:49:44,132 INFO BT10 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:49:44,132 INFO BT10 | trade protected | {"trade": {"id": 10, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82320.0, "sl_price": 82896.0, "opened_at": "2026-10-11T10:49:41.880+00:00", "protected_at": "2026-10-11T10:49:43.809+00:00"}}
+2026-10-11 10:49:44,133 INFO BT10 | waiting up to 120 s for the market to reach a take-profit level | {}
+2026-10-11 10:51:44,464 WARNING BT10 | BLOCKED | the market did not reach the first take-profit (82292.0) within 120 s, so partial closure could not be observed
+2026-10-11 10:51:44,477 INFO BT10 | bot command close | {"latency_ms": 7.0, "request": {"trade_id": 10}, "response": {"ok": true, "trade_id": 10}}
+2026-10-11 10:51:44,477 INFO BT10 | PASS | close command for the rest accepted | expected=True actual={'ok': True, 'trade_id': 10}
+2026-10-11 10:51:48,064 INFO BT10 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:51:54,109 WARNING read account failed (attempt 1): unknown_outcome: ReadTimeout
+2026-10-11 10:51:54,980 INFO BT10 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:51:54,981 INFO BT10 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:51:54,981 INFO BT10 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.071427, 'fees': 0.062977}
+2026-10-11 10:51:54,981 INFO BT10 | RESULT BLOCKED (7/7 assertions passed)
+2026-10-11 10:51:55,193 INFO BT11 | START | Bot: long BTC, closed by command [BTC, bot]
+2026-10-11 10:51:55,351 INFO BT11 | book | {"latency_ms": 158.4, "bid": 82323.0, "ask": 82331.0, "bid_size": 0.00014, "ask_size": 0.3}
+2026-10-11 10:51:55,352 INFO BT11 | signal built | {"plan": {"side": "BUY", "zone": [82303.0, 82359.0], "stop": 81590.0, "take_profits": [82743.0, 82907.0, 83072.0, 83319.0, 83648.0], "touch": 82331.0}}
+2026-10-11 10:51:55,358 INFO BT11 | bot command inject | {"latency_ms": 5.7, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82303 - 82359 |  | SL : 81590 |  | TP1 : 82743 | TP2 : 82907 | TP3 : 83072 | TP4 : 83319 | TP5 : 83648 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 11, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:51:55,358 INFO BT11 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:51:58,950 INFO BT11 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:51:58,951 INFO BT11 | trade protected | {"trade": {"id": 11, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82331.0, "sl_price": 81590.0, "opened_at": "2026-10-11T10:51:56.733+00:00", "protected_at": "2026-10-11T10:51:58.627+00:00"}}
+2026-10-11 10:51:58,952 INFO BT11 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:51:58,952 INFO BT11 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82303.0, 82359.0] actual=82331.0
+2026-10-11 10:51:59,124 INFO BT11 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 10:51:59,125 INFO BT11 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82331.0, "unrealized_pnl": -0.00085, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.9961, "cum_funding": 0.0}}
+2026-10-11 10:51:59,125 INFO BT11 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:51:59,232 INFO BT11 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415843041, "cloid": "0xdec54d96002db618b9c8f17afcc0c240", "is_buy": false, "price": 83648.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715918282}, {"coin": "BTC", "oid": 62415843040, "cloid": "0x993b6aa648aadc8b6da209043bb7ea01", "is_buy": false, "price": 83319.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 10:51:59,233 INFO BT11 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81590.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415842154, 'cloid': '0x7e850ab46aae9c0eada9b2ff940e0198', 'is_buy': False, 'price': 73431.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81590.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715917311}]
+2026-10-11 10:51:59,236 INFO BT11 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:51:59,236 INFO BT11 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:51:59,236 INFO BT11 | PASS | take-profit prices match the signal | expected=[82743.0, 82907.0, 83072.0, 83319.0, 83648.0] actual=[82743.0, 82907.0, 83072.0, 83319.0, 83648.0]
+2026-10-11 10:51:59,237 INFO BT11 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:51:59,260 INFO BT11 | bot command close | {"latency_ms": 22.9, "request": {"trade_id": 11}, "response": {"ok": true, "trade_id": 11}}
+2026-10-11 10:51:59,260 INFO BT11 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 11}
+2026-10-11 10:52:03,603 INFO BT11 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:52:04,896 INFO BT11 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:52:04,897 INFO BT11 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:52:04,897 INFO BT11 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.065531, 'fees': 0.062981}
+2026-10-11 10:52:04,897 INFO BT11 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:52:05,137 INFO BT12 | START | Bot: short BTC, closed by command [BTC, bot]
+2026-10-11 10:52:05,312 INFO BT12 | book | {"latency_ms": 170.9, "bid": 82327.0, "ask": 82337.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:52:05,312 INFO BT12 | signal built | {"plan": {"side": "SELL", "zone": [82298.0, 82356.0], "stop": 83068.0, "take_profits": [81915.0, 81751.0, 81586.0, 81339.0, 81010.0], "touch": 82327.0}}
+2026-10-11 10:52:05,319 INFO BT12 | bot command inject | {"latency_ms": 6.5, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82298 - 82356 |  | SL : 83068 |  | TP1 : 81915 | TP2 : 81751 | TP3 : 81586 | TP4 : 81339 | TP5 : 81010 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 12, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:52:05,319 INFO BT12 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:52:08,915 INFO BT12 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:52:08,916 INFO BT12 | trade protected | {"trade": {"id": 12, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82327.0, "sl_price": 83068.0, "opened_at": "2026-10-11T10:52:06.457+00:00", "protected_at": "2026-10-11T10:52:08.459+00:00"}}
+2026-10-11 10:52:08,916 INFO BT12 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:52:08,916 INFO BT12 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82298.0, 82356.0] actual=82327.0
+2026-10-11 10:52:09,086 INFO BT12 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 10:52:09,087 INFO BT12 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82327.0, "unrealized_pnl": -0.0051, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 311548.1051561365, "margin_used": 13.99661, "cum_funding": 0.0}}
+2026-10-11 10:52:09,087 INFO BT12 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:52:09,197 INFO BT12 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415851783, "cloid": "0xdcdee9cb0d3fc8dd3508c64de59a77b6", "is_buy": true, "price": 81010.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715927942}, {"coin": "BTC", "oid": 62415851782, "cloid": "0x670d90fb417bf28178df88dbd1555e0f", "is_buy": true, "price": 81339.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 10:52:09,197 INFO BT12 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83068.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415851343, 'cloid': '0x4d8633da81431cc64b239ea85c908eb3', 'is_buy': True, 'price': 91375.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83068.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715927058}]
+2026-10-11 10:52:09,197 INFO BT12 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:52:09,198 INFO BT12 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:52:09,198 INFO BT12 | PASS | take-profit prices match the signal | expected=[81915.0, 81751.0, 81586.0, 81339.0, 81010.0] actual=[81915.0, 81751.0, 81586.0, 81339.0, 81010.0]
+2026-10-11 10:52:09,198 INFO BT12 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:52:09,202 INFO BT12 | bot command close | {"latency_ms": 4.0, "request": {"trade_id": 12}, "response": {"ok": true, "trade_id": 12}}
+2026-10-11 10:52:09,202 INFO BT12 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 12}
+2026-10-11 10:52:12,862 INFO BT12 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:52:14,225 INFO BT12 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:52:14,228 INFO BT12 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:52:14,229 INFO BT12 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.070633, 'fees': 0.062983}
+2026-10-11 10:52:14,230 INFO BT12 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:52:14,362 INFO BT13 | START | Bot: long BTC, closed by the kill switch, then resumed [BTC, bot]
+2026-10-11 10:52:14,464 INFO BT13 | book | {"latency_ms": 102.0, "bid": 82327.0, "ask": 82337.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:52:14,465 INFO BT13 | signal built | {"plan": {"side": "BUY", "zone": [82307.0, 82367.0], "stop": 81596.0, "take_profits": [82749.0, 82913.0, 83078.0, 83325.0, 83654.0], "touch": 82337.0}}
+2026-10-11 10:52:14,473 INFO BT13 | bot command inject | {"latency_ms": 6.7, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82307 - 82367 |  | SL : 81596 |  | TP1 : 82749 | TP2 : 82913 | TP3 : 83078 | TP4 : 83325 | TP5 : 83654 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 13, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:52:14,473 INFO BT13 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:52:18,095 INFO BT13 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:52:18,096 INFO BT13 | trade protected | {"trade": {"id": 13, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82337.0, "sl_price": 81596.0, "opened_at": "2026-10-11T10:52:15.905+00:00", "protected_at": "2026-10-11T10:52:17.900+00:00"}}
+2026-10-11 10:52:18,096 INFO BT13 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:52:18,096 INFO BT13 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82307.0, 82367.0] actual=82337.0
+2026-10-11 10:52:18,236 INFO BT13 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 10:52:18,236 INFO BT13 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82337.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.99729, "cum_funding": 0.0}}
+2026-10-11 10:52:18,236 INFO BT13 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:52:18,424 INFO BT13 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415860701, "cloid": "0x84ee724a6d8d7aaf862994c309eb8a99", "is_buy": false, "price": 83654.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715937406}, {"coin": "BTC", "oid": 62415860700, "cloid": "0x00f6ecc1eac1a44ecdd56cc00aa65547", "is_buy": false, "price": 83325.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 10:52:18,425 INFO BT13 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81596.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415859967, 'cloid': '0x0b5c39d1201c919886200990b06d03fc', 'is_buy': False, 'price': 73436.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81596.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715936531}]
+2026-10-11 10:52:18,425 INFO BT13 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:52:18,426 INFO BT13 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:52:18,426 INFO BT13 | PASS | take-profit prices match the signal | expected=[82749.0, 82913.0, 83078.0, 83325.0, 83654.0] actual=[82749.0, 82913.0, 83078.0, 83325.0, 83654.0]
+2026-10-11 10:52:18,426 INFO BT13 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:52:22,156 INFO BT13 | bot command kill | {"latency_ms": 3726.9, "request": {"confirm": "KILL"}, "response": {"ok": true, "closed": 1, "remaining": []}}
+2026-10-11 10:52:22,158 INFO BT13 | PASS | kill switch reports nothing left open | expected=[] actual=[]
+2026-10-11 10:52:22,169 INFO BT13 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:52:23,471 INFO BT13 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:52:23,471 INFO BT13 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:52:23,471 INFO BT13 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.070633, 'fees': 0.062983}
+2026-10-11 10:52:23,482 INFO BT13 | PASS | bot is paused after the kill switch | expected=PAUSED actual=PAUSED
+2026-10-11 10:52:23,486 INFO BT13 | bot command resume | {"latency_ms": 4.0, "request": {}, "response": {"ok": true, "cleared": [], "state": "HEALTHY"}}
+2026-10-11 10:52:23,487 INFO BT13 | PASS | resume returns the bot to HEALTHY | expected=HEALTHY actual=HEALTHY
+2026-10-11 10:52:23,487 INFO BT13 | RESULT PASSED (18/18 assertions passed)
+2026-10-11 10:52:23,673 INFO BT14 | START | Bot: short BTC, closed by the kill switch, then resumed [BTC, bot]
+2026-10-11 10:52:23,768 INFO BT14 | book | {"latency_ms": 94.4, "bid": 82327.0, "ask": 82337.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:52:23,768 INFO BT14 | signal built | {"plan": {"side": "SELL", "zone": [82296.0, 82358.0], "stop": 83068.0, "take_profits": [81915.0, 81751.0, 81586.0, 81339.0, 81010.0], "touch": 82327.0}}
+2026-10-11 10:52:23,773 INFO BT14 | bot command inject | {"latency_ms": 4.2, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82296 - 82358 |  | SL : 83068 |  | TP1 : 81915 | TP2 : 81751 | TP3 : 81586 | TP4 : 81339 | TP5 : 81010 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 14, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:52:23,774 INFO BT14 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:52:27,370 INFO BT14 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:52:27,374 INFO BT14 | trade protected | {"trade": {"id": 14, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82327.0, "sl_price": 83068.0, "opened_at": "2026-10-11T10:52:24.960+00:00", "protected_at": "2026-10-11T10:52:26.938+00:00"}}
+2026-10-11 10:52:27,375 INFO BT14 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:52:27,375 INFO BT14 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82296.0, 82358.0] actual=82327.0
+2026-10-11 10:52:27,496 INFO BT14 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 10:52:27,498 INFO BT14 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82327.0, "unrealized_pnl": -0.00765, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 311383.9616557735, "margin_used": 13.99712, "cum_funding": 0.0}}
+2026-10-11 10:52:27,498 INFO BT14 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:52:27,667 INFO BT14 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415868728, "cloid": "0xa8bdabfdda09cbf53c8efc8ec4c5d6c9", "is_buy": true, "price": 81010.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715946477}, {"coin": "BTC", "oid": 62415868727, "cloid": "0xac3f1b8614cb1c6901b133158b0e80d8", "is_buy": true, "price": 81339.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 10:52:27,667 INFO BT14 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83068.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415868208, 'cloid': '0xb3f536b3d578a9bdebcdf16bb29ed5c9', 'is_buy': True, 'price': 91375.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83068.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715945602}]
+2026-10-11 10:52:27,667 INFO BT14 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:52:27,667 INFO BT14 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:52:27,667 INFO BT14 | PASS | take-profit prices match the signal | expected=[81915.0, 81751.0, 81586.0, 81339.0, 81010.0] actual=[81915.0, 81751.0, 81586.0, 81339.0, 81010.0]
+2026-10-11 10:52:27,667 INFO BT14 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:52:31,120 INFO BT14 | bot command kill | {"latency_ms": 3451.9, "request": {"confirm": "KILL"}, "response": {"ok": true, "closed": 1, "remaining": []}}
+2026-10-11 10:52:31,121 INFO BT14 | PASS | kill switch reports nothing left open | expected=[] actual=[]
+2026-10-11 10:52:31,135 INFO BT14 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:52:32,394 INFO BT14 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:52:32,398 INFO BT14 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:52:32,399 INFO BT14 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.070633, 'fees': 0.062983}
+2026-10-11 10:52:32,422 INFO BT14 | PASS | bot is paused after the kill switch | expected=PAUSED actual=PAUSED
+2026-10-11 10:52:32,430 INFO BT14 | bot command resume | {"latency_ms": 7.3, "request": {}, "response": {"ok": true, "cleared": [], "state": "HEALTHY"}}
+2026-10-11 10:52:32,430 INFO BT14 | PASS | resume returns the bot to HEALTHY | expected=HEALTHY actual=HEALTHY
+2026-10-11 10:52:32,430 INFO BT14 | RESULT PASSED (18/18 assertions passed)
+2026-10-11 10:52:32,582 INFO BT15 | START | Bot: long BTC, closed by command [BTC, bot]
+2026-10-11 10:52:32,682 INFO BT15 | book | {"latency_ms": 99.5, "bid": 82328.0, "ask": 82337.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:52:32,682 INFO BT15 | signal built | {"plan": {"side": "BUY", "zone": [82305.0, 82369.0], "stop": 81596.0, "take_profits": [82749.0, 82913.0, 83078.0, 83325.0, 83654.0], "touch": 82337.0}}
+2026-10-11 10:52:32,687 INFO BT15 | bot command inject | {"latency_ms": 4.4, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82305 - 82369 |  | SL : 81596 |  | TP1 : 82749 | TP2 : 82913 | TP3 : 83078 | TP4 : 83325 | TP5 : 83654 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 15, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:52:32,687 INFO BT15 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:52:36,274 INFO BT15 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:52:36,275 INFO BT15 | trade protected | {"trade": {"id": 15, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82337.0, "sl_price": 81596.0, "opened_at": "2026-10-11T10:52:33.963+00:00", "protected_at": "2026-10-11T10:52:35.838+00:00"}}
+2026-10-11 10:52:36,276 INFO BT15 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:52:36,276 INFO BT15 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82305.0, 82369.0] actual=82337.0
+2026-10-11 10:52:36,390 INFO BT15 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 10:52:36,390 INFO BT15 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82337.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.99729, "cum_funding": 0.0}}
+2026-10-11 10:52:36,390 INFO BT15 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:52:36,580 INFO BT15 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415876701, "cloid": "0x40aee8619aafad67c7ea430708b939fe", "is_buy": false, "price": 83654.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715955440}, {"coin": "BTC", "oid": 62415876700, "cloid": "0x5de155f49360a86380511624f234371a", "is_buy": false, "price": 83325.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 10:52:36,580 INFO BT15 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81596.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415876246, 'cloid': '0xcd3cd8c044d3494441f33046e0298e46', 'is_buy': False, 'price': 73436.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81596.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715954621}]
+2026-10-11 10:52:36,580 INFO BT15 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:52:36,580 INFO BT15 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:52:36,580 INFO BT15 | PASS | take-profit prices match the signal | expected=[82749.0, 82913.0, 83078.0, 83325.0, 83654.0] actual=[82749.0, 82913.0, 83078.0, 83325.0, 83654.0]
+2026-10-11 10:52:36,580 INFO BT15 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:52:36,585 INFO BT15 | bot command close | {"latency_ms": 4.9, "request": {"trade_id": 15}, "response": {"ok": true, "trade_id": 15}}
+2026-10-11 10:52:36,586 INFO BT15 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 15}
+2026-10-11 10:52:40,199 INFO BT15 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:52:41,591 INFO BT15 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:52:41,592 INFO BT15 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:52:41,592 INFO BT15 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.070633, 'fees': 0.062983}
+2026-10-11 10:52:41,593 INFO BT15 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:52:41,719 INFO BT16 | START | Bot: short BTC, closed by command [BTC, bot]
+2026-10-11 10:52:41,824 INFO BT16 | book | {"latency_ms": 103.5, "bid": 82328.0, "ask": 82337.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:52:41,826 INFO BT16 | signal built | {"plan": {"side": "SELL", "zone": [82295.0, 82361.0], "stop": 83069.0, "take_profits": [81916.0, 81752.0, 81587.0, 81340.0, 81011.0], "touch": 82328.0}}
+2026-10-11 10:52:41,830 INFO BT16 | bot command inject | {"latency_ms": 3.5, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82295 - 82361 |  | SL : 83069 |  | TP1 : 81916 | TP2 : 81752 | TP3 : 81587 | TP4 : 81340 | TP5 : 81011 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 16, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:52:41,830 INFO BT16 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:52:45,960 INFO BT16 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:52:45,960 INFO BT16 | trade protected | {"trade": {"id": 16, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82328.0, "sl_price": 83069.0, "opened_at": "2026-10-11T10:52:43.592+00:00", "protected_at": "2026-10-11T10:52:45.619+00:00"}}
+2026-10-11 10:52:45,961 INFO BT16 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:52:45,961 INFO BT16 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82295.0, 82361.0] actual=82328.0
+2026-10-11 10:52:46,136 INFO BT16 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 10:52:46,137 INFO BT16 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82328.0, "unrealized_pnl": -0.00425, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 311220.8058097313, "margin_used": 13.99661, "cum_funding": 0.0}}
+2026-10-11 10:52:46,137 INFO BT16 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:52:46,244 INFO BT16 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415885362, "cloid": "0x49782c876b905902f3be759f4617d605", "is_buy": true, "price": 81011.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715965259}, {"coin": "BTC", "oid": 62415885361, "cloid": "0xe04dd17d61e7f29e21d4bad8a97cd2b0", "is_buy": true, "price": 81340.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 10:52:46,244 INFO BT16 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83069.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415883980, 'cloid': '0x59c0bca931aff8ba162fea424e00c5e4', 'is_buy': True, 'price': 91376.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83069.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715964254}]
+2026-10-11 10:52:46,244 INFO BT16 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:52:46,244 INFO BT16 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:52:46,244 INFO BT16 | PASS | take-profit prices match the signal | expected=[81916.0, 81752.0, 81587.0, 81340.0, 81011.0] actual=[81916.0, 81752.0, 81587.0, 81340.0, 81011.0]
+2026-10-11 10:52:46,244 INFO BT16 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:52:46,246 INFO BT16 | bot command close | {"latency_ms": 2.2, "request": {"trade_id": 16}, "response": {"ok": true, "trade_id": 16}}
+2026-10-11 10:52:46,246 INFO BT16 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 16}
+2026-10-11 10:52:49,851 INFO BT16 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:52:51,136 INFO BT16 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:52:51,137 INFO BT16 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:52:51,137 INFO BT16 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.069783, 'fees': 0.062983}
+2026-10-11 10:52:51,137 INFO BT16 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:52:51,266 INFO BT17 | START | Bot: long BTC, stop-loss moved, then closed by command [BTC, bot]
+2026-10-11 10:52:51,363 INFO BT17 | book | {"latency_ms": 96.1, "bid": 82328.0, "ask": 82337.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:52:51,363 INFO BT17 | signal built | {"plan": {"side": "BUY", "zone": [82303.0, 82371.0], "stop": 81596.0, "take_profits": [82749.0, 82913.0, 83078.0, 83325.0, 83654.0], "touch": 82337.0}}
+2026-10-11 10:52:51,390 INFO BT17 | bot command inject | {"latency_ms": 27.0, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82303 - 82371 |  | SL : 81596 |  | TP1 : 82749 | TP2 : 82913 | TP3 : 83078 | TP4 : 83325 | TP5 : 83654 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 17, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:52:51,390 INFO BT17 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:52:55,066 INFO BT17 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:52:55,066 INFO BT17 | trade protected | {"trade": {"id": 17, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82337.0, "sl_price": 81596.0, "opened_at": "2026-10-11T10:52:52.746+00:00", "protected_at": "2026-10-11T10:52:54.711+00:00"}}
+2026-10-11 10:52:55,066 INFO BT17 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:52:55,066 INFO BT17 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82303.0, 82371.0] actual=82337.0
+2026-10-11 10:52:55,225 INFO BT17 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 10:52:55,227 INFO BT17 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82337.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.99729, "cum_funding": 0.0}}
+2026-10-11 10:52:55,228 INFO BT17 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:52:55,344 INFO BT17 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415892997, "cloid": "0x850ba5777519276f17493ad5f17dc0a0", "is_buy": false, "price": 83654.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715974303}, {"coin": "BTC", "oid": 62415892996, "cloid": "0xeb6ec6c7b101211215314dea43b02560", "is_buy": false, "price": 83325.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 10:52:55,344 INFO BT17 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81596.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415891706, 'cloid': '0x5d71512b1ea7594c9abdbad8c89fac53', 'is_buy': False, 'price': 73436.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81596.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715973436}]
+2026-10-11 10:52:55,345 INFO BT17 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:52:55,345 INFO BT17 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:52:55,345 INFO BT17 | PASS | take-profit prices match the signal | expected=[82749.0, 82913.0, 83078.0, 83325.0, 83654.0] actual=[82749.0, 82913.0, 83078.0, 83325.0, 83654.0]
+2026-10-11 10:52:55,345 INFO BT17 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:52:56,285 INFO BT17 | bot command modify_sl | {"latency_ms": 937.8, "request": {"trade_id": 17, "price": 81843.0}, "response": {"ok": true}}
+2026-10-11 10:52:56,286 INFO BT17 | PASS | bot accepted the stop-loss move | expected=True actual={'ok': True}
+2026-10-11 10:52:56,394 INFO BT17 | PASS | exactly one stop on the exchange, at the new price, still full size | expected={'trigger': 81843.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415894565, 'cloid': '0x5d71512b1ea7594c9abdbad8c89fac53', 'is_buy': False, 'price': 73658.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81843.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715976053}]
+2026-10-11 10:52:56,400 INFO BT17 | PASS | trade is still PROTECTED with the new stop recorded | expected=81843.0 actual={'state': 'PROTECTED', 'sl_price': 81843.0}
+2026-10-11 10:52:56,405 INFO BT17 | bot command close | {"latency_ms": 5.1, "request": {"trade_id": 17}, "response": {"ok": true, "trade_id": 17}}
+2026-10-11 10:52:56,405 INFO BT17 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 17}
+2026-10-11 10:52:59,972 INFO BT17 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:53:01,225 INFO BT17 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:53:01,226 INFO BT17 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:53:01,226 INFO BT17 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.070633, 'fees': 0.062983}
+2026-10-11 10:53:01,226 INFO BT17 | RESULT PASSED (19/19 assertions passed)
+2026-10-11 10:53:01,426 INFO BT18 | START | Bot: short BTC, stop-loss moved, then closed by command [BTC, bot]
+2026-10-11 10:53:01,520 INFO BT18 | book | {"latency_ms": 93.3, "bid": 82327.0, "ask": 82337.0, "bid_size": 0.30025, "ask_size": 0.3}
+2026-10-11 10:53:01,520 INFO BT18 | signal built | {"plan": {"side": "SELL", "zone": [82292.0, 82362.0], "stop": 83068.0, "take_profits": [81915.0, 81751.0, 81586.0, 81339.0, 81010.0], "touch": 82327.0}}
+2026-10-11 10:53:01,523 INFO BT18 | bot command inject | {"latency_ms": 2.9, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82292 - 82362 |  | SL : 83068 |  | TP1 : 81915 | TP2 : 81751 | TP3 : 81586 | TP4 : 81339 | TP5 : 81010 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 18, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:53:01,523 INFO BT18 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:53:05,119 INFO BT18 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:53:05,119 INFO BT18 | trade protected | {"trade": {"id": 18, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82327.0, "sl_price": 83068.0, "opened_at": "2026-10-11T10:53:02.889+00:00", "protected_at": "2026-10-11T10:53:04.894+00:00"}}
+2026-10-11 10:53:05,119 INFO BT18 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:53:05,119 INFO BT18 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82292.0, 82362.0] actual=82327.0
+2026-10-11 10:53:05,231 INFO BT18 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 10:53:05,231 INFO BT18 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82327.0, "unrealized_pnl": -0.0051, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 311056.6634713145, "margin_used": 13.99661, "cum_funding": 0.0}}
+2026-10-11 10:53:05,231 INFO BT18 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:53:05,421 INFO BT18 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415902180, "cloid": "0x2f6d9639091582e08ee7b304c718d796", "is_buy": true, "price": 81010.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715984515}, {"coin": "BTC", "oid": 62415902179, "cloid": "0x0dfb7bc6ef6be2fb03c966284fb89433", "is_buy": true, "price": 81339.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 10:53:05,421 INFO BT18 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83068.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415900572, 'cloid': '0x2ce4bcc9a8eab09278687375819eefa8', 'is_buy': True, 'price': 91375.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83068.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715983546}]
+2026-10-11 10:53:05,421 INFO BT18 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:53:05,421 INFO BT18 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:53:05,422 INFO BT18 | PASS | take-profit prices match the signal | expected=[81915.0, 81751.0, 81586.0, 81339.0, 81010.0] actual=[81915.0, 81751.0, 81586.0, 81339.0, 81010.0]
+2026-10-11 10:53:05,422 INFO BT18 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:53:06,349 INFO BT18 | bot command modify_sl | {"latency_ms": 927.2, "request": {"trade_id": 18, "price": 82821.0}, "response": {"ok": true}}
+2026-10-11 10:53:06,350 INFO BT18 | PASS | bot accepted the stop-loss move | expected=True actual={'ok': True}
+2026-10-11 10:53:06,466 INFO BT18 | PASS | exactly one stop on the exchange, at the new price, still full size | expected={'trigger': 82821.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415903986, 'cloid': '0x2ce4bcc9a8eab09278687375819eefa8', 'is_buy': True, 'price': 91104.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 82821.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715986011}]
+2026-10-11 10:53:06,477 INFO BT18 | PASS | trade is still PROTECTED with the new stop recorded | expected=82821.0 actual={'state': 'PROTECTED', 'sl_price': 82821.0}
+2026-10-11 10:53:06,479 INFO BT18 | bot command close | {"latency_ms": 1.6, "request": {"trade_id": 18}, "response": {"ok": true, "trade_id": 18}}
+2026-10-11 10:53:06,479 INFO BT18 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 18}
+2026-10-11 10:53:10,752 INFO BT18 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:53:12,021 INFO BT18 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:53:12,021 INFO BT18 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:53:12,021 INFO BT18 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.070632, 'fees': 0.062982}
+2026-10-11 10:53:12,021 INFO BT18 | RESULT PASSED (19/19 assertions passed)
+2026-10-11 10:53:12,170 INFO BT19 | START | Bot: long BTC, closed by command [BTC, bot]
+2026-10-11 10:53:12,321 INFO BT19 | book | {"latency_ms": 150.9, "bid": 82328.0, "ask": 82337.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:53:12,323 INFO BT19 | signal built | {"plan": {"side": "BUY", "zone": [82301.0, 82373.0], "stop": 81596.0, "take_profits": [82749.0, 82913.0, 83078.0, 83325.0, 83654.0], "touch": 82337.0}}
+2026-10-11 10:53:12,331 INFO BT19 | bot command inject | {"latency_ms": 6.4, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82301 - 82373 |  | SL : 81596 |  | TP1 : 82749 | TP2 : 82913 | TP3 : 83078 | TP4 : 83325 | TP5 : 83654 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 19, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:53:12,331 INFO BT19 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:53:15,946 INFO BT19 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:53:15,950 INFO BT19 | trade protected | {"trade": {"id": 19, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82337.0, "sl_price": 81596.0, "opened_at": "2026-10-11T10:53:13.687+00:00", "protected_at": "2026-10-11T10:53:15.570+00:00"}}
+2026-10-11 10:53:15,950 INFO BT19 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:53:15,950 INFO BT19 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82301.0, 82373.0] actual=82337.0
+2026-10-11 10:53:16,096 INFO BT19 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 10:53:16,097 INFO BT19 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82337.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.99729, "cum_funding": 0.0}}
+2026-10-11 10:53:16,098 INFO BT19 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:53:16,203 INFO BT19 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415912498, "cloid": "0xcb0efdaf39a8765b4078d79adccdf44d", "is_buy": false, "price": 83654.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791715995117}, {"coin": "BTC", "oid": 62415912497, "cloid": "0x613812d07f555a21a6f73fa9ae998006", "is_buy": false, "price": 83325.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 10:53:16,204 INFO BT19 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81596.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415910724, 'cloid': '0x9eb56c26baabab976ea57c7dc78daee4', 'is_buy': False, 'price': 73436.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81596.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791715994296}]
+2026-10-11 10:53:16,204 INFO BT19 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:53:16,204 INFO BT19 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:53:16,204 INFO BT19 | PASS | take-profit prices match the signal | expected=[82749.0, 82913.0, 83078.0, 83325.0, 83654.0] actual=[82749.0, 82913.0, 83078.0, 83325.0, 83654.0]
+2026-10-11 10:53:16,204 INFO BT19 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:53:16,209 INFO BT19 | bot command close | {"latency_ms": 4.0, "request": {"trade_id": 19}, "response": {"ok": true, "trade_id": 19}}
+2026-10-11 10:53:16,209 INFO BT19 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 19}
+2026-10-11 10:53:20,505 INFO BT19 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:53:21,858 INFO BT19 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:53:21,859 INFO BT19 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:53:21,859 INFO BT19 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.070633, 'fees': 0.062983}
+2026-10-11 10:53:21,859 INFO BT19 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:53:21,983 INFO BT20 | START | Bot: short BTC, closed by command [BTC, bot]
+2026-10-11 10:53:22,078 INFO BT20 | book | {"latency_ms": 95.0, "bid": 82328.0, "ask": 82337.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 10:53:22,079 INFO BT20 | signal built | {"plan": {"side": "SELL", "zone": [82291.0, 82365.0], "stop": 83069.0, "take_profits": [81916.0, 81752.0, 81587.0, 81340.0, 81011.0], "touch": 82328.0}}
+2026-10-11 10:53:22,084 INFO BT20 | bot command inject | {"latency_ms": 4.8, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82291 - 82365 |  | SL : 83069 |  | TP1 : 81916 | TP2 : 81752 | TP3 : 81587 | TP4 : 81340 | TP5 : 81011 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 20, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:53:22,084 INFO BT20 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:53:25,694 INFO BT20 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:53:25,694 INFO BT20 | trade protected | {"trade": {"id": 20, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82328.0, "sl_price": 83069.0, "opened_at": "2026-10-11T10:53:23.613+00:00", "protected_at": "2026-10-11T10:53:25.453+00:00"}}
+2026-10-11 10:53:25,695 INFO BT20 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 10:53:25,695 INFO BT20 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82291.0, 82365.0] actual=82328.0
+2026-10-11 10:53:25,864 INFO BT20 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 10:53:25,864 INFO BT20 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82328.0, "unrealized_pnl": -0.00425, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 310893.5076252723, "margin_used": 13.99661, "cum_funding": 0.0}}
+2026-10-11 10:53:25,864 INFO BT20 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:53:25,972 INFO BT20 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62415920724, "cloid": "0x9703a1f1c36f9dead4ec99254cc7af16", "is_buy": true, "price": 81011.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791716005019}, {"coin": "BTC", "oid": 62415920723, "cloid": "0x8892e9bcb585e9edd4ed35804a337873", "is_buy": true, "price": 81340.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 10:53:25,972 INFO BT20 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83069.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62415919316, 'cloid': '0x386a87b1c70bc7e170f67cd7b8c18eb5', 'is_buy': True, 'price': 91376.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83069.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791716004202}]
+2026-10-11 10:53:25,972 INFO BT20 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:53:25,972 INFO BT20 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:53:25,972 INFO BT20 | PASS | take-profit prices match the signal | expected=[81916.0, 81752.0, 81587.0, 81340.0, 81011.0] actual=[81916.0, 81752.0, 81587.0, 81340.0, 81011.0]
+2026-10-11 10:53:25,973 INFO BT20 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 10:53:25,975 INFO BT20 | bot command close | {"latency_ms": 2.1, "request": {"trade_id": 20}, "response": {"ok": true, "trade_id": 20}}
+2026-10-11 10:53:25,975 INFO BT20 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 20}
+2026-10-11 10:53:29,546 INFO BT20 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:53:30,806 INFO BT20 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:53:30,807 INFO BT20 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:53:30,807 INFO BT20 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.069783, 'fees': 0.062983}
+2026-10-11 10:53:30,807 INFO BT20 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:53:34,674 INFO finished: {"planned": 20, "executed": 20, "passed": 18, "failed": 0, "blocked": 2, "skipped": 0, "not_run": 0}
+2026-10-11 10:53:34,674 INFO cleanup clean=True positions={'BTC': 0.0} open_orders=0

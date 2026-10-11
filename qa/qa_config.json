@@ -1,0 +1,12 @@
+{
+  "symbols": ["BTC", "ETH", "SOL"],
+  "direct_notional_usd": 13,
+  "bot_tp_notional_usd": 13,
+  "bot_leverage": 5,
+  "market_slippage_pct": 1.0,
+  "resting_offset_pct": 3.0,
+  "tp_wait_s": 240,
+  "api_port": 8797,
+  "bot_start_timeout_s": 60,
+  "min_account_value_usdc": 50
+}

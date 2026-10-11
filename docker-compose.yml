@@ -1,0 +1,38 @@
+# One bot process per account. Do not scale this service: a second
+# instance on the same data volume refuses to start (FR-061), and two
+# instances on different volumes against one account would double-send.
+services:
+  hlbot:
+    build: .
+    image: hlbot:1.0.0
+    restart: unless-stopped            # supervisor: back within seconds of a crash (NFR-005)
+    stop_grace_period: 30s             # lets the "stopped" notification go out
+    env_file: .env                     # non-secret settings only
+    environment:
+      DATA_DIR: /app/data
+      LOG_DIR: /app/logs
+      SECRETS_FILE: /secrets/hlbot.secrets
+      TELEGRAM_SESSION: /secrets/telegram.session
+      # Uncomment for testnet / mainnet. Paper mode never opens a key file.
+      # HL_AGENT_KEY_FILE: /secrets/agent.key
+    volumes:
+      - hlbot-data:/app/data
+      - hlbot-logs:/app/logs
+      # Owner-only files on the host (chmod 600), owned by uid 10001:
+      #   hlbot.secrets, telegram.session, and for testnet/mainnet agent.key
+      - ${HLBOT_SECRETS_DIR:-./secrets}:/secrets
+    # The dashboard: to reach it from the host, set API_HOST=0.0.0.0 in
+    # .env and publish the port on the host's loopback ONLY. For remote
+    # access use an SSH tunnel or an authenticating reverse proxy.
+    # ports:
+    #   - "127.0.0.1:8787:8787"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  hlbot-data:
+  hlbot-logs:

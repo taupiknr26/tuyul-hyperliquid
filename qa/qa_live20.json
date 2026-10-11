@@ -1,0 +1,25 @@
+{
+  "symbols": [
+    "BTC"
+  ],
+  "direct_notional_usd": 13,
+  "bot_tp_notional_usd": 13,
+  "bot_leverage": 5,
+  "market_slippage_pct": 1.0,
+  "resting_offset_pct": 3.0,
+  "tp_wait_s": 120,
+  "api_port": 8787,
+  "bot_start_timeout_s": 60,
+  "min_account_value_usdc": 50,
+  "live_hold_s": 25,
+  "live_zone_half": 10,
+  "live_stop_beyond_zone": 10,
+  "live_tp_beyond_zone": [
+    15,
+    35,
+    55,
+    75,
+    100
+  ],
+  "live_est_cost_per_trade_usdc": 0.055
+}

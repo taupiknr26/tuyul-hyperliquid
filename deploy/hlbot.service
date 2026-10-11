@@ -1,0 +1,49 @@
+# systemd unit for hlbot (NFR-005: restart within 10 s of a crash).
+#
+#   sudo useradd --system --create-home --home-dir /opt/hlbot hlbot
+#   sudo -u hlbot python3.13 -m venv /opt/hlbot/venv
+#   sudo -u hlbot /opt/hlbot/venv/bin/pip install --require-hashes -r requirements.lock
+#   sudo -u hlbot /opt/hlbot/venv/bin/pip install --no-deps .
+#   sudo cp deploy/hlbot.service /etc/systemd/system/ && sudo systemctl daemon-reload
+#   sudo systemctl enable --now hlbot
+#
+# Mainnet additionally needs "--mainnet" on ExecStart AND HL_MAINNET_CONFIRM
+# in /opt/hlbot/.env. Without both the bot runs in paper mode and says so.
+[Unit]
+Description=hlbot - Telegram signal trading bot for Hyperliquid
+After=network-online.target time-sync.target
+Wants=network-online.target time-sync.target
+# Give up restarting only if it fails 10 times in 5 minutes; that needs a human.
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=hlbot
+Group=hlbot
+WorkingDirectory=/opt/hlbot
+ExecStart=/opt/hlbot/venv/bin/botctl --env-file /opt/hlbot/.env run --quiet
+# Graceful stop: SIGTERM -> "stopped" notification -> exit. Exchange-resident
+# SL/TP orders stay in place.
+KillSignal=SIGTERM
+TimeoutStopSec=30
+Restart=always
+RestartSec=5
+# Exit code 2 = configuration error, 3 = another instance holds the lock:
+# restarting cannot fix either.
+RestartPreventExitStatus=2 3
+
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/opt/hlbot/data /opt/hlbot/logs /opt/hlbot/.config
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+LockPersonality=true
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

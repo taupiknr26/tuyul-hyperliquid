@@ -1,0 +1,610 @@
+2026-10-11 09:54:15,132 INFO isolation check: {'env': 'testnet', 'rest_url': 'https://api.hyperliquid-testnet.xyz', 'ws_url': 'wss://api.hyperliquid-testnet.xyz/ws', 'operator_env': 'testnet'}
+2026-10-11 09:54:18,225 INFO preflight: {"account_value_usdc": 199.4691, "taker_fee": 0.00045, "maker_fee": 0.00015, "requests_used": 61, "requests_cap": 11026, "markets": {"BTC": {"instrument": {"coin": "BTC", "asset_id": 3, "sz_decimals": 5, "max_leverage": 40, "dex": "", "is_delisted": false, "only_isolated": false}, "bid": 82344.0, "ask": 82353.0, "spread_bps": 1.09, "direct_size": 0.00016, "position": 0.0, "open_orders": 0}, "ETH": {"instrument": {"coin": "ETH", "asset_id": 4, "sz_decimals": 4, "max_leverage": 25, "dex": "", "is_delisted": false, "only_isolated": false}, "bid": 2492.2, "ask": 2492.5, "spread_bps": 1.2, "direct_size": 0.0053, "position": 0.0, "open_orders": 0}, "SOL": {"instrument": {"coin": "SOL", "asset_id": 0, "sz_decimals": 2, "max_leverage": 10, "dex": "", "is_delisted": false, "only_isolated": false}, "bid": 108.9, "ask": 108.95, "spread_bps": 4.59, "direct_size": 0.12, "position": 0.0, "open_orders": 0}}}
+2026-10-11 09:54:18,245 INFO TC01 | START | Market buy BTC [BTC, exchange]
+2026-10-11 09:54:18,551 INFO TC01 | book | {"latency_ms": 100.0, "bid": 82344.0, "ask": 82353.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 09:54:19,415 INFO TC01 | place market buy | {"latency_ms": 862.5, "request": {"coin": "BTC", "is_buy": true, "size": 0.00016, "price": 83177.0, "reduce_only": false, "cloid": "0x5dcd7a9a96a432f68877c62f57d61e65", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412648333, "total_size": 0.00016, "avg_price": 82353.0, "error": null}}
+2026-10-11 09:54:19,416 INFO TC01 | PASS | order accepted by the exchange | expected=no error actual={'status': 'filled', 'oid': 62412648333, 'total_size': 0.00016, 'avg_price': 82353.0, 'error': None}
+2026-10-11 09:54:19,416 INFO TC01 | PASS | immediate status is filled | expected=filled actual=filled
+2026-10-11 09:54:19,417 INFO TC01 | PASS | filled quantity equals the requested quantity | expected=0.00016 actual=0.00016
+2026-10-11 09:54:19,417 INFO TC01 | PASS | execution price is inside the slippage cap | expected=<= 83177.0 actual=82353.0
+2026-10-11 09:54:19,592 INFO TC01 | order status | {"latency_ms": 175.1, "cloid": "0x5dcd7a9a96a432f68877c62f57d61e65", "status": {"found": true, "status": "filled", "oid": 62412648333, "cloid": "0x5dcd7a9a96a432f68877c62f57d61e65", "coin": "BTC", "size": 0.0, "orig_size": 0.00016, "status_ms": 1791712459166}}
+2026-10-11 09:54:19,592 INFO TC01 | PASS | order status by client id is filled | expected=filled actual=filled
+2026-10-11 09:54:19,706 INFO TC01 | PASS | position size matches the fill | expected=0.00016 actual=0.00016
+2026-10-11 09:54:19,707 INFO TC01 | position | {"position": {"coin": "BTC", "szi": 0.00016, "entry_px": 82353.0, "unrealized_pnl": -0.00144, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 2.635008, "cum_funding": 0.0}}
+2026-10-11 09:54:19,707 INFO TC01 | PASS | position entry price equals the fill price | expected=82353.0 actual=82353.0
+2026-10-11 09:54:20,815 INFO TC01 | place close BTC | {"latency_ms": 897.9, "request": {"coin": "BTC", "is_buy": false, "size": 0.00016, "price": 81520.0, "reduce_only": true, "cloid": "0x4c7149418385960bc6688a9ac6c4ba12", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412650221, "total_size": 0.00016, "avg_price": 82344.0, "error": null}}
+2026-10-11 09:54:21,630 INFO TC01 | PASS | test position closed (flat after the case) | expected=0.0 actual=0.0
+2026-10-11 09:54:21,882 INFO TC01 | fills | {"fills": [{"cloid": "0x5dcd7a9a96a432f68877c62f57d61e65", "side": "BUY", "price": 82353.0, "size": 0.00016, "fee": 0.005929, "closed_pnl": 0.0, "dir": "Open Long", "crossed": true}, {"cloid": "0x4c7149418385960bc6688a9ac6c4ba12", "side": "SELL", "price": 82344.0, "size": 0.00016, "fee": 0.005928, "closed_pnl": -0.00144, "dir": "Close Long", "crossed": true}]}
+2026-10-11 09:54:21,883 INFO TC01 | PASS | fills carry our client order ids and a fee was charged | expected=>= 2 fills, fee > 0 actual=2 fills, fee 0.011857
+2026-10-11 09:54:22,000 INFO TC01 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:22,107 INFO TC01 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:54:22,108 INFO TC02 | START | Market buy ETH [ETH, exchange]
+2026-10-11 09:54:22,410 INFO TC02 | book | {"latency_ms": 102.0, "bid": 2492.4, "ask": 2492.5, "bid_size": 0.3054, "ask_size": 5.0}
+2026-10-11 09:54:23,263 INFO TC02 | place market buy | {"latency_ms": 851.3, "request": {"coin": "ETH", "is_buy": true, "size": 0.0053, "price": 2517.5, "reduce_only": false, "cloid": "0xd7ec0c9ac3166820c090bf39efb838f1", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412652317, "total_size": 0.0053, "avg_price": 2492.5, "error": null}}
+2026-10-11 09:54:23,263 INFO TC02 | PASS | order accepted by the exchange | expected=no error actual={'status': 'filled', 'oid': 62412652317, 'total_size': 0.0053, 'avg_price': 2492.5, 'error': None}
+2026-10-11 09:54:23,263 INFO TC02 | PASS | immediate status is filled | expected=filled actual=filled
+2026-10-11 09:54:23,264 INFO TC02 | PASS | filled quantity equals the requested quantity | expected=0.0053 actual=0.0053
+2026-10-11 09:54:23,264 INFO TC02 | PASS | execution price is inside the slippage cap | expected=<= 2517.5 actual=2492.5
+2026-10-11 09:54:23,369 INFO TC02 | order status | {"latency_ms": 104.9, "cloid": "0xd7ec0c9ac3166820c090bf39efb838f1", "status": {"found": true, "status": "filled", "oid": 62412652317, "cloid": "0xd7ec0c9ac3166820c090bf39efb838f1", "coin": "ETH", "size": 0.0, "orig_size": 0.0053, "status_ms": 1791712462995}}
+2026-10-11 09:54:23,370 INFO TC02 | PASS | order status by client id is filled | expected=filled actual=filled
+2026-10-11 09:54:23,479 INFO TC02 | PASS | position size matches the fill | expected=0.0053 actual=0.0053
+2026-10-11 09:54:23,480 INFO TC02 | position | {"position": {"coin": "ETH", "szi": 0.0053, "entry_px": 2492.5, "unrealized_pnl": 0.00106, "leverage": 1.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.21131, "cum_funding": 0.0}}
+2026-10-11 09:54:23,481 INFO TC02 | PASS | position entry price equals the fill price | expected=2492.5 actual=2492.5
+2026-10-11 09:54:25,583 INFO TC02 | place close ETH | {"latency_ms": 1890.0, "request": {"coin": "ETH", "is_buy": false, "size": 0.0053, "price": 2467.4, "reduce_only": true, "cloid": "0xf0231faa835e6283aa21fb5ee39fba96", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412652905, "total_size": 0.0053, "avg_price": 2492.4, "error": null}}
+2026-10-11 09:54:26,292 INFO TC02 | PASS | test position closed (flat after the case) | expected=0.0 actual=0.0
+2026-10-11 09:54:26,409 INFO TC02 | fills | {"fills": [{"cloid": "0xd7ec0c9ac3166820c090bf39efb838f1", "side": "BUY", "price": 2492.5, "size": 0.0053, "fee": 0.005944, "closed_pnl": 0.0, "dir": "Open Long", "crossed": true}, {"cloid": "0xf0231faa835e6283aa21fb5ee39fba96", "side": "SELL", "price": 2492.4, "size": 0.0053, "fee": 0.005944, "closed_pnl": -0.00053, "dir": "Close Long", "crossed": true}]}
+2026-10-11 09:54:26,409 INFO TC02 | PASS | fills carry our client order ids and a fee was charged | expected=>= 2 fills, fee > 0 actual=2 fills, fee 0.011888
+2026-10-11 09:54:26,517 INFO TC02 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:26,626 INFO TC02 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:54:26,629 INFO TC03 | START | Market buy SOL [SOL, exchange]
+2026-10-11 09:54:26,835 INFO TC03 | book | {"latency_ms": 98.7, "bid": 108.93, "ask": 108.98, "bid_size": 0.44, "ask_size": 4.41}
+2026-10-11 09:54:27,716 INFO TC03 | place market buy | {"latency_ms": 879.0, "request": {"coin": "SOL", "is_buy": true, "size": 0.12, "price": 110.07, "reduce_only": false, "cloid": "0xf85e6cc2c192f2876a1af4952306a337", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412656771, "total_size": 0.12, "avg_price": 108.98, "error": null}}
+2026-10-11 09:54:27,717 INFO TC03 | PASS | order accepted by the exchange | expected=no error actual={'status': 'filled', 'oid': 62412656771, 'total_size': 0.12, 'avg_price': 108.98, 'error': None}
+2026-10-11 09:54:27,717 INFO TC03 | PASS | immediate status is filled | expected=filled actual=filled
+2026-10-11 09:54:27,717 INFO TC03 | PASS | filled quantity equals the requested quantity | expected=0.12 actual=0.12
+2026-10-11 09:54:27,717 INFO TC03 | PASS | execution price is inside the slippage cap | expected=<= 110.07 actual=108.98
+2026-10-11 09:54:27,816 INFO TC03 | order status | {"latency_ms": 98.2, "cloid": "0xf85e6cc2c192f2876a1af4952306a337", "status": {"found": true, "status": "filled", "oid": 62412656771, "cloid": "0xf85e6cc2c192f2876a1af4952306a337", "coin": "SOL", "size": 0.0, "orig_size": 0.12, "status_ms": 1791712467501}}
+2026-10-11 09:54:27,816 INFO TC03 | PASS | order status by client id is filled | expected=filled actual=filled
+2026-10-11 09:54:28,050 INFO TC03 | PASS | position size matches the fill | expected=0.12 actual=0.12
+2026-10-11 09:54:28,051 INFO TC03 | position | {"position": {"coin": "SOL", "szi": 0.12, "entry_px": 108.98, "unrealized_pnl": -0.0036, "leverage": 10.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 1.3074, "cum_funding": 0.0}}
+2026-10-11 09:54:28,051 INFO TC03 | PASS | position entry price equals the fill price | expected=108.98 actual=108.98
+2026-10-11 09:54:29,046 INFO TC03 | place close SOL | {"latency_ms": 790.0, "request": {"coin": "SOL", "is_buy": false, "size": 0.12, "price": 107.84, "reduce_only": true, "cloid": "0x8453b86fda76a8ff28511b89fa0ce178", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412657588, "total_size": 0.12, "avg_price": 108.93, "error": null}}
+2026-10-11 09:54:29,902 INFO TC03 | PASS | test position closed (flat after the case) | expected=0.0 actual=0.0
+2026-10-11 09:54:30,100 INFO TC03 | fills | {"fills": [{"cloid": "0xf85e6cc2c192f2876a1af4952306a337", "side": "BUY", "price": 108.98, "size": 0.12, "fee": 0.005884, "closed_pnl": 0.0, "dir": "Open Long", "crossed": true}, {"cloid": "0x8453b86fda76a8ff28511b89fa0ce178", "side": "SELL", "price": 108.93, "size": 0.12, "fee": 0.005882, "closed_pnl": -0.006, "dir": "Close Long", "crossed": true}]}
+2026-10-11 09:54:30,101 INFO TC03 | PASS | fills carry our client order ids and a fee was charged | expected=>= 2 fills, fee > 0 actual=2 fills, fee 0.011766
+2026-10-11 09:54:30,211 INFO TC03 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:30,336 INFO TC03 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:54:30,359 INFO TC04 | START | Market sell BTC (open short) [BTC, exchange]
+2026-10-11 09:54:30,794 INFO TC04 | book | {"latency_ms": 282.8, "bid": 82344.0, "ask": 82353.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 09:54:32,042 INFO TC04 | place market sell | {"latency_ms": 1240.9, "request": {"coin": "BTC", "is_buy": false, "size": 0.00016, "price": 81520.0, "reduce_only": false, "cloid": "0x9c9ae6d037fc307dfa7a563aa2c7c114", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412660411, "total_size": 0.00016, "avg_price": 82344.0, "error": null}}
+2026-10-11 09:54:32,042 INFO TC04 | PASS | order accepted by the exchange | expected=no error actual={'status': 'filled', 'oid': 62412660411, 'total_size': 0.00016, 'avg_price': 82344.0, 'error': None}
+2026-10-11 09:54:32,043 INFO TC04 | PASS | immediate status is filled | expected=filled actual=filled
+2026-10-11 09:54:32,043 INFO TC04 | PASS | filled quantity equals the requested quantity | expected=0.00016 actual=0.00016
+2026-10-11 09:54:32,043 INFO TC04 | PASS | execution price is inside the slippage cap | expected=>= 81520.0 actual=82344.0
+2026-10-11 09:54:32,318 INFO TC04 | order status | {"latency_ms": 273.0, "cloid": "0x9c9ae6d037fc307dfa7a563aa2c7c114", "status": {"found": true, "status": "filled", "oid": 62412660411, "cloid": "0x9c9ae6d037fc307dfa7a563aa2c7c114", "coin": "BTC", "size": 0.0, "orig_size": 0.00016, "status_ms": 1791712471435}}
+2026-10-11 09:54:32,318 INFO TC04 | PASS | order status by client id is filled | expected=filled actual=filled
+2026-10-11 09:54:32,484 INFO TC04 | PASS | position size matches the fill | expected=-0.00016 actual=-0.00016
+2026-10-11 09:54:32,484 INFO TC04 | position | {"position": {"coin": "BTC", "szi": -0.00016, "entry_px": 82344.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 1312313.3024691357, "margin_used": 2.635008, "cum_funding": 0.0}}
+2026-10-11 09:54:32,484 INFO TC04 | PASS | position entry price equals the fill price | expected=82344.0 actual=82344.0
+2026-10-11 09:54:33,586 INFO TC04 | place close BTC | {"latency_ms": 883.1, "request": {"coin": "BTC", "is_buy": true, "size": 0.00016, "price": 83177.0, "reduce_only": true, "cloid": "0x594b306a1a876a343ba01949daf9b470", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412661952, "total_size": 0.00016, "avg_price": 82353.0, "error": null}}
+2026-10-11 09:54:34,722 INFO TC04 | PASS | test position closed (flat after the case) | expected=0.0 actual=0.0
+2026-10-11 09:54:34,905 INFO TC04 | fills | {"fills": [{"cloid": "0x9c9ae6d037fc307dfa7a563aa2c7c114", "side": "SELL", "price": 82344.0, "size": 0.00016, "fee": 0.005928, "closed_pnl": 0.0, "dir": "Open Short", "crossed": true}, {"cloid": "0x594b306a1a876a343ba01949daf9b470", "side": "BUY", "price": 82353.0, "size": 0.00016, "fee": 0.005929, "closed_pnl": -0.00144, "dir": "Close Short", "crossed": true}]}
+2026-10-11 09:54:34,905 INFO TC04 | PASS | fills carry our client order ids and a fee was charged | expected=>= 2 fills, fee > 0 actual=2 fills, fee 0.011857
+2026-10-11 09:54:35,014 INFO TC04 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:35,127 INFO TC04 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:54:35,128 INFO TC05 | START | Market sell ETH (open short) [ETH, exchange]
+2026-10-11 09:54:35,420 INFO TC05 | book | {"latency_ms": 183.8, "bid": 2492.4, "ask": 2492.5, "bid_size": 0.3067, "ask_size": 5.0}
+2026-10-11 09:54:36,377 INFO TC05 | place market sell | {"latency_ms": 952.0, "request": {"coin": "ETH", "is_buy": false, "size": 0.0053, "price": 2467.4, "reduce_only": false, "cloid": "0x7296bf4b9d79b954477ef1c1f3f420be", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412664763, "total_size": 0.0053, "avg_price": 2492.4, "error": null}}
+2026-10-11 09:54:36,378 INFO TC05 | PASS | order accepted by the exchange | expected=no error actual={'status': 'filled', 'oid': 62412664763, 'total_size': 0.0053, 'avg_price': 2492.4, 'error': None}
+2026-10-11 09:54:36,378 INFO TC05 | PASS | immediate status is filled | expected=filled actual=filled
+2026-10-11 09:54:36,378 INFO TC05 | PASS | filled quantity equals the requested quantity | expected=0.0053 actual=0.0053
+2026-10-11 09:54:36,378 INFO TC05 | PASS | execution price is inside the slippage cap | expected=>= 2467.4 actual=2492.4
+2026-10-11 09:54:36,478 INFO TC05 | order status | {"latency_ms": 99.8, "cloid": "0x7296bf4b9d79b954477ef1c1f3f420be", "status": {"found": true, "status": "filled", "oid": 62412664763, "cloid": "0x7296bf4b9d79b954477ef1c1f3f420be", "coin": "ETH", "size": 0.0, "orig_size": 0.0053, "status_ms": 1791712476102}}
+2026-10-11 09:54:36,478 INFO TC05 | PASS | order status by client id is filled | expected=filled actual=filled
+2026-10-11 09:54:36,585 INFO TC05 | PASS | position size matches the fill | expected=-0.0053 actual=-0.0053
+2026-10-11 09:54:36,585 INFO TC05 | position | {"position": {"coin": "ETH", "szi": -0.0053, "entry_px": 2492.4, "unrealized_pnl": -0.00159, "leverage": 1.0, "leverage_type": "cross", "liquidation_px": 39329.6563078061, "margin_used": 13.21131, "cum_funding": 0.0}}
+2026-10-11 09:54:36,586 INFO TC05 | PASS | position entry price equals the fill price | expected=2492.4 actual=2492.4
+2026-10-11 09:54:37,699 INFO TC05 | place close ETH | {"latency_ms": 866.2, "request": {"coin": "ETH", "is_buy": true, "size": 0.0053, "price": 2517.5, "reduce_only": true, "cloid": "0xcdafcb00c62f7605c329b0fb169dcc3f", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412665693, "total_size": 0.0053, "avg_price": 2492.5, "error": null}}
+2026-10-11 09:54:38,469 INFO TC05 | PASS | test position closed (flat after the case) | expected=0.0 actual=0.0
+2026-10-11 09:54:38,581 INFO TC05 | fills | {"fills": [{"cloid": "0x7296bf4b9d79b954477ef1c1f3f420be", "side": "SELL", "price": 2492.4, "size": 0.0053, "fee": 0.005944, "closed_pnl": 0.0, "dir": "Open Short", "crossed": true}, {"cloid": "0xcdafcb00c62f7605c329b0fb169dcc3f", "side": "BUY", "price": 2492.5, "size": 0.0053, "fee": 0.005944, "closed_pnl": -0.00053, "dir": "Close Short", "crossed": true}]}
+2026-10-11 09:54:38,582 INFO TC05 | PASS | fills carry our client order ids and a fee was charged | expected=>= 2 fills, fee > 0 actual=2 fills, fee 0.011888
+2026-10-11 09:54:38,689 INFO TC05 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:38,796 INFO TC05 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:54:38,798 INFO TC06 | START | Market sell SOL (open short) [SOL, exchange]
+2026-10-11 09:54:39,093 INFO TC06 | book | {"latency_ms": 100.4, "bid": 108.93, "ask": 108.98, "bid_size": 0.32, "ask_size": 4.47}
+2026-10-11 09:54:40,096 INFO TC06 | place market sell | {"latency_ms": 1001.6, "request": {"coin": "SOL", "is_buy": false, "size": 0.12, "price": 107.84, "reduce_only": false, "cloid": "0x2472787bc6d2d9f90d4bbea44b409246", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412667747, "total_size": 0.12, "avg_price": 108.93, "error": null}}
+2026-10-11 09:54:40,096 INFO TC06 | PASS | order accepted by the exchange | expected=no error actual={'status': 'filled', 'oid': 62412667747, 'total_size': 0.12, 'avg_price': 108.93, 'error': None}
+2026-10-11 09:54:40,096 INFO TC06 | PASS | immediate status is filled | expected=filled actual=filled
+2026-10-11 09:54:40,097 INFO TC06 | PASS | filled quantity equals the requested quantity | expected=0.12 actual=0.12
+2026-10-11 09:54:40,097 INFO TC06 | PASS | execution price is inside the slippage cap | expected=>= 107.84 actual=108.93
+2026-10-11 09:54:41,718 INFO TC06 | order status | {"latency_ms": 103.2, "cloid": "0x2472787bc6d2d9f90d4bbea44b409246", "status": {"found": true, "status": "filled", "oid": 62412667747, "cloid": "0x2472787bc6d2d9f90d4bbea44b409246", "coin": "SOL", "size": 0.0, "orig_size": 0.12, "status_ms": 1791712479885}}
+2026-10-11 09:54:41,720 INFO TC06 | PASS | order status by client id is filled | expected=filled actual=filled
+2026-10-11 09:54:41,833 INFO TC06 | PASS | position size matches the fill | expected=-0.12 actual=-0.12
+2026-10-11 09:54:41,834 INFO TC06 | position | {"position": {"coin": "SOL", "szi": -0.12, "entry_px": 108.93, "unrealized_pnl": -0.0012, "leverage": 10.0, "leverage_type": "cross", "liquidation_px": 1686.2352857143, "margin_used": 1.30728, "cum_funding": 0.0}}
+2026-10-11 09:54:41,834 INFO TC06 | PASS | position entry price equals the fill price | expected=108.93 actual=108.93
+2026-10-11 09:54:43,025 INFO TC06 | place close SOL | {"latency_ms": 797.2, "request": {"coin": "SOL", "is_buy": true, "size": 0.12, "price": 110.07, "reduce_only": true, "cloid": "0x29cf3e79d6ae747195d787f5d71d03c5", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412670510, "total_size": 0.12, "avg_price": 108.98, "error": null}}
+2026-10-11 09:54:43,812 INFO TC06 | PASS | test position closed (flat after the case) | expected=0.0 actual=0.0
+2026-10-11 09:54:43,908 INFO TC06 | fills | {"fills": [{"cloid": "0x2472787bc6d2d9f90d4bbea44b409246", "side": "SELL", "price": 108.93, "size": 0.12, "fee": 0.005882, "closed_pnl": 0.0, "dir": "Open Short", "crossed": true}, {"cloid": "0x29cf3e79d6ae747195d787f5d71d03c5", "side": "BUY", "price": 108.98, "size": 0.12, "fee": 0.005884, "closed_pnl": -0.006, "dir": "Close Short", "crossed": true}]}
+2026-10-11 09:54:43,908 INFO TC06 | PASS | fills carry our client order ids and a fee was charged | expected=>= 2 fills, fee > 0 actual=2 fills, fee 0.011766
+2026-10-11 09:54:44,019 INFO TC06 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:44,239 INFO TC06 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:54:44,241 INFO TC07 | START | Limit buy BTC, resting below the market [BTC, exchange]
+2026-10-11 09:54:44,847 INFO TC07 | book | {"latency_ms": 146.9, "bid": 82344.0, "ask": 82353.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 09:54:45,698 INFO TC07 | place limit buy (resting) | {"latency_ms": 849.4, "request": {"coin": "BTC", "is_buy": true, "size": 0.00017, "price": 79873.0, "reduce_only": false, "cloid": "0xec543de43e143099745060ef05fe4221", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "resting", "oid": 62412672877, "total_size": null, "avg_price": null, "error": null}}
+2026-10-11 09:54:45,698 INFO TC07 | PASS | order accepted by the exchange | expected=no error actual={'status': 'resting', 'oid': 62412672877, 'total_size': None, 'avg_price': None, 'error': None}
+2026-10-11 09:54:45,698 INFO TC07 | PASS | immediate status is resting (open) | expected=resting with an order id actual=resting oid=62412672877
+2026-10-11 09:54:45,810 INFO TC07 | PASS | order is listed in open orders | expected=1 actual=1
+2026-10-11 09:54:45,810 INFO TC07 | PASS | open order has the requested price, size and side | expected={'price': 79873.0, 'size': 0.00017, 'is_buy': True} actual={'coin': 'BTC', 'oid': 62412672877, 'cloid': '0xec543de43e143099745060ef05fe4221', 'is_buy': True, 'price': 79873.0, 'size': 0.00017, 'orig_size': 0.00017, 'reduce_only': False, 'is_trigger': False, 'trigger_px': None, 'tpsl': None, 'is_position_tpsl': False, 'order_type': 'Limit', 'timestamp': 1791712485485}
+2026-10-11 09:54:45,907 INFO TC07 | order status | {"latency_ms": 95.8, "cloid": "0xec543de43e143099745060ef05fe4221", "status": {"found": true, "status": "open", "oid": 62412672877, "cloid": "0xec543de43e143099745060ef05fe4221", "coin": "BTC", "size": 0.00017, "orig_size": 0.00017, "status_ms": 1791712485485}}
+2026-10-11 09:54:45,907 INFO TC07 | PASS | order status by client id is open | expected=open actual=open
+2026-10-11 09:54:46,124 INFO TC07 | PASS | a resting order creates no position | expected=0.0 actual=0.0
+2026-10-11 09:54:47,079 INFO TC07 | cancel | {"latency_ms": 946.9, "cloid": "0xec543de43e143099745060ef05fe4221", "response": "success"}
+2026-10-11 09:54:47,080 INFO TC07 | PASS | cancel accepted | expected=success actual=None
+2026-10-11 09:54:47,221 INFO TC07 | order status | {"latency_ms": 139.6, "cloid": "0xec543de43e143099745060ef05fe4221", "status": {"found": true, "status": "canceled", "oid": 62412672877, "cloid": "0xec543de43e143099745060ef05fe4221", "coin": "BTC", "size": 0.00017, "orig_size": 0.00017, "status_ms": 1791712486770}}
+2026-10-11 09:54:47,222 INFO TC07 | PASS | order status after cancel is canceled | expected=canceled actual=canceled
+2026-10-11 09:54:47,391 INFO TC07 | PASS | flat after the case | expected=0.0 actual=0.0
+2026-10-11 09:54:47,520 INFO TC07 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:47,653 INFO TC07 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:54:47,655 INFO TC08 | START | Limit buy ETH at the touch [ETH, exchange]
+2026-10-11 09:54:47,950 INFO TC08 | book | {"latency_ms": 182.9, "bid": 2492.2, "ask": 2492.6, "bid_size": 5.2925, "ask_size": 5.0}
+2026-10-11 09:54:48,975 INFO TC08 | place limit buy (marketable) | {"latency_ms": 1022.9, "request": {"coin": "ETH", "is_buy": true, "size": 0.0053, "price": 2492.6, "reduce_only": false, "cloid": "0x102d5cdede128a4086af3a6fa6d7e5ce", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412675325, "total_size": 0.0053, "avg_price": 2492.6, "error": null}}
+2026-10-11 09:54:48,979 INFO TC08 | PASS | order accepted by the exchange | expected=no error actual={'status': 'filled', 'oid': 62412675325, 'total_size': 0.0053, 'avg_price': 2492.6, 'error': None}
+2026-10-11 09:54:48,979 INFO TC08 | PASS | a limit at the touch fills immediately | expected=filled actual=filled
+2026-10-11 09:54:48,979 INFO TC08 | PASS | filled quantity equals the requested quantity | expected=0.0053 actual=0.0053
+2026-10-11 09:54:48,980 INFO TC08 | PASS | execution price is at the limit or better | expected=<= 2492.6 actual=2492.6
+2026-10-11 09:54:49,095 INFO TC08 | PASS | position size matches the fill | expected=0.0053 actual=0.0053
+2026-10-11 09:54:49,095 INFO TC08 | position | {"position": {"coin": "ETH", "szi": 0.0053, "entry_px": 2492.6, "unrealized_pnl": 0.0, "leverage": 1.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.21078, "cum_funding": 0.0}}
+2026-10-11 09:54:49,276 INFO TC08 | order status | {"latency_ms": 180.2, "cloid": "0x102d5cdede128a4086af3a6fa6d7e5ce", "status": {"found": true, "status": "filled", "oid": 62412675325, "cloid": "0x102d5cdede128a4086af3a6fa6d7e5ce", "coin": "ETH", "size": 0.0, "orig_size": 0.0053, "status_ms": 1791712488575}}
+2026-10-11 09:54:49,277 INFO TC08 | PASS | order status by client id is filled | expected=filled actual=filled
+2026-10-11 09:54:50,895 INFO TC08 | place close ETH | {"latency_ms": 983.3, "request": {"coin": "ETH", "is_buy": false, "size": 0.0053, "price": 2467.2, "reduce_only": true, "cloid": "0x5e14f6d950cae13f50228cba7821ecc7", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412676815, "total_size": 0.0053, "avg_price": 2492.2, "error": null}}
+2026-10-11 09:54:51,734 INFO TC08 | PASS | flat after the case | expected=0.0 actual=0.0
+2026-10-11 09:54:51,839 INFO TC08 | fills | {"fills": [{"cloid": "0x102d5cdede128a4086af3a6fa6d7e5ce", "side": "BUY", "price": 2492.6, "size": 0.0053, "fee": 0.005944, "closed_pnl": 0.0, "dir": "Open Long", "crossed": true}, {"cloid": "0x5e14f6d950cae13f50228cba7821ecc7", "side": "SELL", "price": 2492.2, "size": 0.0053, "fee": 0.005943, "closed_pnl": -0.00212, "dir": "Close Long", "crossed": true}]}
+2026-10-11 09:54:51,839 INFO TC08 | PASS | fills carry our client order ids and a fee was charged | expected=>= 2 fills, fee > 0 actual=2 fills, fee 0.011887
+2026-10-11 09:54:51,955 INFO TC08 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:52,101 INFO TC08 | RESULT PASSED (9/9 assertions passed)
+2026-10-11 09:54:52,103 INFO TC09 | START | Limit buy SOL, post-only [SOL, exchange]
+2026-10-11 09:54:52,623 INFO TC09 | book | {"latency_ms": 194.9, "bid": 108.93, "ask": 108.97, "bid_size": 0.44, "ask_size": 4.02}
+2026-10-11 09:54:53,153 INFO TC09 | place limit buy (post_only) | {"latency_ms": 528.0, "request": {"coin": "SOL", "is_buy": true, "size": 0.12, "price": 108.38, "reduce_only": false, "cloid": "0x587abe4620d7292d04192000e93353d9", "kind": "limit", "tif": "Alo", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "resting", "oid": 62412678943, "total_size": null, "avg_price": null, "error": null}}
+2026-10-11 09:54:53,153 INFO TC09 | PASS | order accepted by the exchange | expected=no error actual={'status': 'resting', 'oid': 62412678943, 'total_size': None, 'avg_price': None, 'error': None}
+2026-10-11 09:54:53,153 INFO TC09 | PASS | immediate status is resting (open) | expected=resting with an order id actual=resting oid=62412678943
+2026-10-11 09:54:53,262 INFO TC09 | PASS | order is listed in open orders | expected=1 actual=1
+2026-10-11 09:54:53,262 INFO TC09 | PASS | open order has the requested price, size and side | expected={'price': 108.38, 'size': 0.12, 'is_buy': True} actual={'coin': 'SOL', 'oid': 62412678943, 'cloid': '0x587abe4620d7292d04192000e93353d9', 'is_buy': True, 'price': 108.38, 'size': 0.12, 'orig_size': 0.12, 'reduce_only': False, 'is_trigger': False, 'trigger_px': None, 'tpsl': None, 'is_position_tpsl': False, 'order_type': 'Limit', 'timestamp': 1791712492931}
+2026-10-11 09:54:53,360 INFO TC09 | order status | {"latency_ms": 97.1, "cloid": "0x587abe4620d7292d04192000e93353d9", "status": {"found": true, "status": "open", "oid": 62412678943, "cloid": "0x587abe4620d7292d04192000e93353d9", "coin": "SOL", "size": 0.12, "orig_size": 0.12, "status_ms": 1791712492931}}
+2026-10-11 09:54:53,360 INFO TC09 | PASS | order status by client id is open | expected=open actual=open
+2026-10-11 09:54:53,579 INFO TC09 | PASS | a resting order creates no position | expected=0.0 actual=0.0
+2026-10-11 09:54:54,705 INFO TC09 | cancel | {"latency_ms": 1125.7, "cloid": "0x587abe4620d7292d04192000e93353d9", "response": "success"}
+2026-10-11 09:54:54,706 INFO TC09 | PASS | cancel accepted | expected=success actual=None
+2026-10-11 09:54:54,810 INFO TC09 | order status | {"latency_ms": 104.2, "cloid": "0x587abe4620d7292d04192000e93353d9", "status": {"found": true, "status": "canceled", "oid": 62412678943, "cloid": "0x587abe4620d7292d04192000e93353d9", "coin": "SOL", "size": 0.12, "orig_size": 0.12, "status_ms": 1791712494262}}
+2026-10-11 09:54:54,810 INFO TC09 | PASS | order status after cancel is canceled | expected=canceled actual=canceled
+2026-10-11 09:54:54,918 INFO TC09 | PASS | flat after the case | expected=0.0 actual=0.0
+2026-10-11 09:54:55,024 INFO TC09 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:55,132 INFO TC09 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:54:55,135 INFO TC10 | START | Limit sell BTC at the touch [BTC, exchange]
+2026-10-11 09:54:55,354 INFO TC10 | book | {"latency_ms": 108.1, "bid": 82344.0, "ask": 82353.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 09:54:56,118 INFO TC10 | place limit sell (marketable) | {"latency_ms": 762.1, "request": {"coin": "BTC", "is_buy": false, "size": 0.00016, "price": 82344.0, "reduce_only": false, "cloid": "0xfffd6604d9d24fe0d9244f6068ffae39", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412682030, "total_size": 0.00016, "avg_price": 82344.0, "error": null}}
+2026-10-11 09:54:56,119 INFO TC10 | PASS | order accepted by the exchange | expected=no error actual={'status': 'filled', 'oid': 62412682030, 'total_size': 0.00016, 'avg_price': 82344.0, 'error': None}
+2026-10-11 09:54:56,119 INFO TC10 | PASS | a limit at the touch fills immediately | expected=filled actual=filled
+2026-10-11 09:54:56,119 INFO TC10 | PASS | filled quantity equals the requested quantity | expected=0.00016 actual=0.00016
+2026-10-11 09:54:56,119 INFO TC10 | PASS | execution price is at the limit or better | expected=>= 82344.0 actual=82344.0
+2026-10-11 09:54:56,296 INFO TC10 | PASS | position size matches the fill | expected=-0.00016 actual=-0.00016
+2026-10-11 09:54:56,297 INFO TC10 | position | {"position": {"coin": "BTC", "szi": -0.00016, "entry_px": 82344.0, "unrealized_pnl": -0.00144, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 1311958.438271605, "margin_used": 2.635296, "cum_funding": 0.0}}
+2026-10-11 09:54:56,485 INFO TC10 | order status | {"latency_ms": 187.2, "cloid": "0xfffd6604d9d24fe0d9244f6068ffae39", "status": {"found": true, "status": "filled", "oid": 62412682030, "cloid": "0xfffd6604d9d24fe0d9244f6068ffae39", "coin": "BTC", "size": 0.0, "orig_size": 0.00016, "status_ms": 1791712495904}}
+2026-10-11 09:54:56,485 INFO TC10 | PASS | order status by client id is filled | expected=filled actual=filled
+2026-10-11 09:54:57,652 INFO TC10 | place close BTC | {"latency_ms": 823.9, "request": {"coin": "BTC", "is_buy": true, "size": 0.00016, "price": 83177.0, "reduce_only": true, "cloid": "0x78e3aec858831616f03ec6f9f308b7e2", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412682843, "total_size": 0.00016, "avg_price": 82353.0, "error": null}}
+2026-10-11 09:54:58,388 INFO TC10 | PASS | flat after the case | expected=0.0 actual=0.0
+2026-10-11 09:54:58,487 INFO TC10 | fills | {"fills": [{"cloid": "0xfffd6604d9d24fe0d9244f6068ffae39", "side": "SELL", "price": 82344.0, "size": 0.00016, "fee": 0.005928, "closed_pnl": 0.0, "dir": "Open Short", "crossed": true}, {"cloid": "0x78e3aec858831616f03ec6f9f308b7e2", "side": "BUY", "price": 82353.0, "size": 0.00016, "fee": 0.005929, "closed_pnl": -0.00144, "dir": "Close Short", "crossed": true}]}
+2026-10-11 09:54:58,487 INFO TC10 | PASS | fills carry our client order ids and a fee was charged | expected=>= 2 fills, fee > 0 actual=2 fills, fee 0.011857
+2026-10-11 09:54:58,595 INFO TC10 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:54:58,705 INFO TC10 | RESULT PASSED (9/9 assertions passed)
+2026-10-11 09:54:58,707 INFO TC11 | START | Limit sell ETH, resting above the market [ETH, exchange]
+2026-10-11 09:54:58,915 INFO TC11 | book | {"latency_ms": 97.0, "bid": 2492.3, "ask": 2492.6, "bid_size": 0.0061, "ask_size": 5.0}
+2026-10-11 09:54:59,755 INFO TC11 | place limit sell (resting) | {"latency_ms": 839.7, "request": {"coin": "ETH", "is_buy": false, "size": 0.0051, "price": 2567.4, "reduce_only": false, "cloid": "0x38e201cb9910e1963ea5f1119e387331", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "resting", "oid": 62412684455, "total_size": null, "avg_price": null, "error": null}}
+2026-10-11 09:54:59,755 INFO TC11 | PASS | order accepted by the exchange | expected=no error actual={'status': 'resting', 'oid': 62412684455, 'total_size': None, 'avg_price': None, 'error': None}
+2026-10-11 09:54:59,755 INFO TC11 | PASS | immediate status is resting (open) | expected=resting with an order id actual=resting oid=62412684455
+2026-10-11 09:54:59,866 INFO TC11 | PASS | order is listed in open orders | expected=1 actual=1
+2026-10-11 09:54:59,866 INFO TC11 | PASS | open order has the requested price, size and side | expected={'price': 2567.4, 'size': 0.0051, 'is_buy': False} actual={'coin': 'ETH', 'oid': 62412684455, 'cloid': '0x38e201cb9910e1963ea5f1119e387331', 'is_buy': False, 'price': 2567.4, 'size': 0.0051, 'orig_size': 0.0051, 'reduce_only': False, 'is_trigger': False, 'trigger_px': None, 'tpsl': None, 'is_position_tpsl': False, 'order_type': 'Limit', 'timestamp': 1791712499549}
+2026-10-11 09:54:59,967 INFO TC11 | order status | {"latency_ms": 100.4, "cloid": "0x38e201cb9910e1963ea5f1119e387331", "status": {"found": true, "status": "open", "oid": 62412684455, "cloid": "0x38e201cb9910e1963ea5f1119e387331", "coin": "ETH", "size": 0.0051, "orig_size": 0.0051, "status_ms": 1791712499549}}
+2026-10-11 09:54:59,967 INFO TC11 | PASS | order status by client id is open | expected=open actual=open
+2026-10-11 09:55:00,269 INFO TC11 | PASS | a resting order creates no position | expected=0.0 actual=0.0
+2026-10-11 09:55:01,318 INFO TC11 | cancel | {"latency_ms": 1047.2, "cloid": "0x38e201cb9910e1963ea5f1119e387331", "response": "success"}
+2026-10-11 09:55:01,320 INFO TC11 | PASS | cancel accepted | expected=success actual=None
+2026-10-11 09:55:01,424 INFO TC11 | order status | {"latency_ms": 103.4, "cloid": "0x38e201cb9910e1963ea5f1119e387331", "status": {"found": true, "status": "canceled", "oid": 62412684455, "cloid": "0x38e201cb9910e1963ea5f1119e387331", "coin": "ETH", "size": 0.0051, "orig_size": 0.0051, "status_ms": 1791712501045}}
+2026-10-11 09:55:01,424 INFO TC11 | PASS | order status after cancel is canceled | expected=canceled actual=canceled
+2026-10-11 09:55:01,536 INFO TC11 | PASS | flat after the case | expected=0.0 actual=0.0
+2026-10-11 09:55:01,654 INFO TC11 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:55:01,843 INFO TC11 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:55:01,846 INFO TC12 | START | Limit sell SOL, post-only [SOL, exchange]
+2026-10-11 09:55:02,245 INFO TC12 | book | {"latency_ms": 275.3, "bid": 108.93, "ask": 108.97, "bid_size": 0.44, "ask_size": 4.02}
+2026-10-11 09:55:02,890 INFO TC12 | place limit sell (post_only) | {"latency_ms": 642.3, "request": {"coin": "SOL", "is_buy": false, "size": 0.12, "price": 109.52, "reduce_only": false, "cloid": "0xbe7c534762cab95daee6a2322603987c", "kind": "limit", "tif": "Alo", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "resting", "oid": 62412687483, "total_size": null, "avg_price": null, "error": null}}
+2026-10-11 09:55:02,892 INFO TC12 | PASS | order accepted by the exchange | expected=no error actual={'status': 'resting', 'oid': 62412687483, 'total_size': None, 'avg_price': None, 'error': None}
+2026-10-11 09:55:02,892 INFO TC12 | PASS | immediate status is resting (open) | expected=resting with an order id actual=resting oid=62412687483
+2026-10-11 09:55:03,001 INFO TC12 | PASS | order is listed in open orders | expected=1 actual=1
+2026-10-11 09:55:03,002 INFO TC12 | PASS | open order has the requested price, size and side | expected={'price': 109.52, 'size': 0.12, 'is_buy': False} actual={'coin': 'SOL', 'oid': 62412687483, 'cloid': '0xbe7c534762cab95daee6a2322603987c', 'is_buy': False, 'price': 109.52, 'size': 0.12, 'orig_size': 0.12, 'reduce_only': False, 'is_trigger': False, 'trigger_px': None, 'tpsl': None, 'is_position_tpsl': False, 'order_type': 'Limit', 'timestamp': 1791712502625}
+2026-10-11 09:55:03,109 INFO TC12 | order status | {"latency_ms": 106.5, "cloid": "0xbe7c534762cab95daee6a2322603987c", "status": {"found": true, "status": "open", "oid": 62412687483, "cloid": "0xbe7c534762cab95daee6a2322603987c", "coin": "SOL", "size": 0.12, "orig_size": 0.12, "status_ms": 1791712502625}}
+2026-10-11 09:55:03,110 INFO TC12 | PASS | order status by client id is open | expected=open actual=open
+2026-10-11 09:55:03,350 INFO TC12 | PASS | a resting order creates no position | expected=0.0 actual=0.0
+2026-10-11 09:55:04,271 INFO TC12 | cancel | {"latency_ms": 920.0, "cloid": "0xbe7c534762cab95daee6a2322603987c", "response": "success"}
+2026-10-11 09:55:04,272 INFO TC12 | PASS | cancel accepted | expected=success actual=None
+2026-10-11 09:55:04,791 INFO TC12 | order status | {"latency_ms": 518.1, "cloid": "0xbe7c534762cab95daee6a2322603987c", "status": {"found": true, "status": "canceled", "oid": 62412687483, "cloid": "0xbe7c534762cab95daee6a2322603987c", "coin": "SOL", "size": 0.12, "orig_size": 0.12, "status_ms": 1791712503953}}
+2026-10-11 09:55:04,791 INFO TC12 | PASS | order status after cancel is canceled | expected=canceled actual=canceled
+2026-10-11 09:55:04,991 INFO TC12 | PASS | flat after the case | expected=0.0 actual=0.0
+2026-10-11 09:55:05,105 INFO TC12 | PASS | no open orders left on the symbol | expected=[] actual=[]
+2026-10-11 09:55:05,295 INFO TC12 | RESULT PASSED (10/10 assertions passed)
+2026-10-11 09:55:05,298 INFO TC19 | START | Modify in place, cancel, and replace a resting order [BTC, exchange]
+2026-10-11 09:55:05,511 INFO TC19 | book | {"latency_ms": 100.2, "bid": 82344.0, "ask": 82353.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 09:55:06,541 INFO TC19 | place resting buy | {"latency_ms": 1027.6, "request": {"coin": "BTC", "is_buy": true, "size": 0.00017, "price": 79873.0, "reduce_only": false, "cloid": "0x24827be8040ba7a92afa99c3c45870c4", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "resting", "oid": 62412691254, "total_size": null, "avg_price": null, "error": null}}
+2026-10-11 09:55:06,546 INFO TC19 | PASS | original order rests | expected=resting actual={'status': 'resting', 'oid': 62412691254, 'total_size': None, 'avg_price': None, 'error': None}
+2026-10-11 09:55:07,438 INFO TC19 | modify (replace in place) | {"latency_ms": 887.4, "request": {"coin": "BTC", "is_buy": true, "size": 0.00017, "price": 80367.0, "reduce_only": false, "cloid": "0x24827be8040ba7a92afa99c3c45870c4", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "resting", "oid": 62412691906, "total_size": null, "avg_price": null, "error": null}}
+2026-10-11 09:55:07,440 INFO TC19 | PASS | modify accepted | expected=resting actual={'status': 'resting', 'oid': 62412691906, 'total_size': None, 'avg_price': None, 'error': None}
+2026-10-11 09:55:07,550 INFO TC19 | PASS | exactly one open order carries the client id after the modify | expected=1 actual=1
+2026-10-11 09:55:07,551 INFO TC19 | PASS | the open order has the new price and the same size | expected={'price': 80367.0, 'size': 0.00017} actual={'coin': 'BTC', 'oid': 62412691906, 'cloid': '0x24827be8040ba7a92afa99c3c45870c4', 'is_buy': True, 'price': 80367.0, 'size': 0.00017, 'orig_size': 0.00017, 'reduce_only': False, 'is_trigger': False, 'trigger_px': None, 'tpsl': None, 'is_position_tpsl': False, 'order_type': 'Limit', 'timestamp': 1791712507177}
+2026-10-11 09:55:08,437 INFO TC19 | cancel | {"latency_ms": 882.8, "cloid": "0x24827be8040ba7a92afa99c3c45870c4", "response": "success"}
+2026-10-11 09:55:08,440 INFO TC19 | PASS | cancel accepted | expected=success actual=None
+2026-10-11 09:55:08,630 INFO TC19 | order status | {"latency_ms": 189.0, "cloid": "0x24827be8040ba7a92afa99c3c45870c4", "status": {"found": true, "status": "canceled", "oid": 62412691906, "cloid": "0x24827be8040ba7a92afa99c3c45870c4", "coin": "BTC", "size": 0.00017, "orig_size": 0.00017, "status_ms": 1791712508147}}
+2026-10-11 09:55:08,630 INFO TC19 | PASS | old order is canceled | expected=canceled actual=canceled
+2026-10-11 09:55:09,770 INFO TC19 | cancel | {"latency_ms": 1137.4, "cloid": "0x24827be8040ba7a92afa99c3c45870c4", "response": {"error_class": "not_found", "text": "not_found: Order was never placed, already canceled, or filled. asset=3"}}
+2026-10-11 09:55:09,770 INFO TC19 | PASS | cancelling it a second time is refused, not silently accepted | expected=an error actual={'error_class': 'not_found', 'text': 'not_found: Order was never placed, already canceled, or filled. asset=3'}
+2026-10-11 09:55:10,567 INFO TC19 | place replacement buy | {"latency_ms": 795.1, "request": {"coin": "BTC", "is_buy": true, "size": 0.00017, "price": 80861.0, "reduce_only": false, "cloid": "0x0acef06b8a53b67e1b9a69e109b5edeb", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "resting", "oid": 62412694657, "total_size": null, "avg_price": null, "error": null}}
+2026-10-11 09:55:10,567 INFO TC19 | PASS | replacement order rests under a new client id | expected=resting actual={'status': 'resting', 'oid': 62412694657, 'total_size': None, 'avg_price': None, 'error': None}
+2026-10-11 09:55:10,779 INFO TC19 | PASS | only the replacement is open | expected=['0x0acef06b8a53b67e1b9a69e109b5edeb'] actual=['0x0acef06b8a53b67e1b9a69e109b5edeb']
+2026-10-11 09:55:11,629 INFO TC19 | cancel | {"latency_ms": 848.4, "cloid": "0x0acef06b8a53b67e1b9a69e109b5edeb", "response": "success"}
+2026-10-11 09:55:11,630 INFO TC19 | PASS | replacement cancelled in cleanup | expected=success actual=None
+2026-10-11 09:55:12,065 INFO TC19 | PASS | no open orders left and no position was created | expected={'orders': 0, 'position': 0.0} actual={'orders': 0, 'position': 0.0}
+2026-10-11 09:55:12,174 INFO TC19 | RESULT PASSED (11/11 assertions passed)
+2026-10-11 09:55:12,560 INFO TC20 | book | {"latency_ms": 180.2, "bid": 2492.2, "ask": 2492.6, "bid_size": 5.2925, "ask_size": 4.9951}
+2026-10-11 09:55:13,371 INFO TC20 | a. order value below the 10 USDC minimum: refused before sending | {"error": {"exception": "AttributeError", "text": "'str' object has no attribute 'value'"}}
+2026-10-11 09:55:13,371 INFO TC20 | PASS | a. order value below the 10 USDC minimum: rejected | expected=rejected actual=refused locally: AttributeError: 'str' object has no attribute 'value'
+2026-10-11 09:55:14,307 INFO TC20 | b. reduce-only sell with no position: refused before sending | {"error": {"exception": "AttributeError", "text": "'str' object has no attribute 'value'"}}
+2026-10-11 09:55:14,308 INFO TC20 | PASS | b. reduce-only sell with no position: rejected | expected=rejected actual=refused locally: AttributeError: 'str' object has no attribute 'value'
+2026-10-11 09:55:15,607 INFO TC20 | c. price off the tick grid: refused before sending | {"error": {"exception": "AttributeError", "text": "'str' object has no attribute 'value'"}}
+2026-10-11 09:55:15,607 INFO TC20 | PASS | c. price off the tick grid: rejected | expected=rejected actual=refused locally: AttributeError: 'str' object has no attribute 'value'
+2026-10-11 09:55:16,601 INFO TC20 | d. size with too many decimals: refused before sending | {"error": {"exception": "AttributeError", "text": "'str' object has no attribute 'value'"}}
+2026-10-11 09:55:16,601 INFO TC20 | PASS | d. size with too many decimals: rejected | expected=rejected actual=refused locally: AttributeError: 'str' object has no attribute 'value'
+2026-10-11 09:55:17,423 INFO TC20 | e. zero size: refused before sending | {"error": {"exception": "AttributeError", "text": "'str' object has no attribute 'value'"}}
+2026-10-11 09:55:17,424 INFO TC20 | PASS | e. zero size: rejected | expected=rejected actual=refused locally: AttributeError: 'str' object has no attribute 'value'
+2026-10-11 09:55:18,314 INFO TC20 | f. price ten times the market: refused before sending | {"error": {"exception": "AttributeError", "text": "'str' object has no attribute 'value'"}}
+2026-10-11 09:55:18,315 INFO TC20 | PASS | f. price ten times the market: rejected | expected=rejected actual=refused locally: AttributeError: 'str' object has no attribute 'value'
+2026-10-11 09:55:18,315 INFO TC20 | place g. unknown symbol | {"latency_ms": 0.0, "request": {"coin": "NOPE", "is_buy": true, "size": 1.0, "price": 1.0, "reduce_only": false, "cloid": "0xcd96040ad5997928340f9f7873f76850", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"error_class": "local_bug", "text": "local_bug: asset id for NOPE has not been resolved"}}
+2026-10-11 09:55:18,315 INFO TC20 | PASS | g. unknown symbol: rejected | expected=rejected actual={'error_class': 'local_bug', 'text': 'local_bug: asset id for NOPE has not been resolved'}
+2026-10-11 09:55:18,840 INFO TC20 | h. post-only buy priced through the ask: refused before sending | {"error": {"exception": "AttributeError", "text": "'str' object has no attribute 'value'"}}
+2026-10-11 09:55:18,840 INFO TC20 | PASS | h. post-only buy priced through the ask: rejected | expected=rejected actual=refused locally: AttributeError: 'str' object has no attribute 'value'
+2026-10-11 09:55:19,710 INFO TC20 | place i. resting order (first use of the client id) | {"latency_ms": 869.1, "request": {"coin": "ETH", "is_buy": true, "size": 0.0054, "price": 2417.4, "reduce_only": false, "cloid": "0xd655db549027dd4c777c7ee0468299b7", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "resting", "oid": 62412703046, "total_size": null, "avg_price": null, "error": null}}
+2026-10-11 09:55:20,640 INFO TC20 | place i. second order with the same client id | {"latency_ms": 923.6, "request": {"coin": "ETH", "is_buy": true, "size": 0.0054, "price": 2392.5, "reduce_only": false, "cloid": "0xd655db549027dd4c777c7ee0468299b7", "kind": "limit", "tif": "Gtc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "resting", "oid": 62412703581, "total_size": null, "avg_price": null, "error": null}}
+2026-10-11 09:55:20,640 INFO TC20 | FAIL | i. second order with the same client id: rejected | expected=rejected actual={'status': 'resting', 'oid': 62412703581, 'total_size': None, 'avg_price': None, 'error': None}
+2026-10-11 09:55:21,635 INFO TC20 | cancel | {"latency_ms": 961.7, "cloid": "0xd655db549027dd4c777c7ee0468299b7", "response": "success"}
+2026-10-11 09:55:21,757 INFO TC20 | PASS | i. still exactly one order under that client id | expected=1 actual=1
+2026-10-11 09:55:22,615 INFO TC20 | cancel | {"latency_ms": 855.8, "cloid": "0xd655db549027dd4c777c7ee0468299b7", "response": {"error_class": "not_found", "text": "not_found: Order was never placed, already canceled, or filled. asset=4"}}
+2026-10-11 09:55:24,255 INFO TC20 | FAIL | no subtest created a position or left an order | expected={'position': 0.0, 'open_orders': 0} actual={'position': 0.0, 'open_orders': 1}
+2026-10-11 09:55:29,872 INFO bot session up for BTC: size 0.00085, health {'status': 'ok', 'health': 'HEALTHY', 'env': 'TESTNET', 'version': '1.0.0'}
+2026-10-11 09:55:29,879 INFO TC13 | START | Bot: long BTC from a signal, closed by command [BTC, bot]
+2026-10-11 09:55:29,985 INFO TC13 | book | {"latency_ms": 105.0, "bid": 82344.0, "ask": 82351.0, "bid_size": 0.00025, "ask_size": 0.3}
+2026-10-11 09:55:29,989 INFO TC13 | signal built | {"plan": {"side": "BUY", "zone": [82334.0, 82368.0], "stop": 81610.0, "take_profits": [82763.0, 82927.0, 83092.0, 83339.0, 83669.0], "touch": 82351.0}}
+2026-10-11 09:55:29,999 INFO TC13 | bot command inject | {"latency_ms": 9.3, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82334 - 82368 |  | SL : 81610 |  | TP1 : 82763 | TP2 : 82927 | TP3 : 83092 | TP4 : 83339 | TP5 : 83669 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 1, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 09:55:29,999 INFO TC13 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 09:55:34,296 INFO TC13 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 09:55:34,297 INFO TC13 | trade protected | {"trade": {"id": 1, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82351.0, "sl_price": 81610.0, "opened_at": "2026-10-11T09:55:31.680+00:00", "protected_at": "2026-10-11T09:55:34.109+00:00"}}
+2026-10-11 09:55:34,297 INFO TC13 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 09:55:34,297 INFO TC13 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82334.0, 82368.0] actual=82351.0
+2026-10-11 09:55:34,804 INFO TC13 | PASS | exchange position matches the trade (direction and size) | expected=0.00085 actual=0.00085
+2026-10-11 09:55:34,805 INFO TC13 | exchange position | {"position": {"coin": "BTC", "szi": 0.00085, "entry_px": 82351.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.99967, "cum_funding": 0.0}}
+2026-10-11 09:55:34,805 INFO TC13 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 09:55:34,991 INFO TC13 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62412716225, "cloid": "0x94bac87b5854ea0948751e70220585d9", "is_buy": false, "price": 83669.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791712533414}, {"coin": "BTC", "oid": 62412716224, "cloid": "0xac0f491d12718a960a10addbd367b1b5", "is_buy": false, "price": 83339.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "L
+2026-10-11 09:55:34,992 INFO TC13 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 81610.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62412715462, 'cloid': '0xb396ce04e5b9b6b152db214e6d27ff54', 'is_buy': False, 'price': 73449.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 81610.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791712532389}]
+2026-10-11 09:55:34,992 INFO TC13 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 09:55:34,993 INFO TC13 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 09:55:34,993 INFO TC13 | PASS | take-profit prices match the signal | expected=[82763.0, 82927.0, 83092.0, 83339.0, 83669.0] actual=[82763.0, 82927.0, 83092.0, 83339.0, 83669.0]
+2026-10-11 09:55:34,993 INFO TC13 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 09:55:35,003 INFO TC13 | bot command close | {"latency_ms": 9.7, "request": {"trade_id": 1}, "response": {"ok": true, "trade_id": 1}}
+2026-10-11 09:55:35,003 INFO TC13 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 1}
+2026-10-11 09:55:39,592 INFO TC13 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 09:55:41,105 INFO TC13 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 09:55:41,105 INFO TC13 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 09:55:41,105 INFO TC13 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.070144, 'fees': 0.062994}
+2026-10-11 09:55:41,106 INFO TC13 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 09:55:41,264 INFO TC16 | START | Bot: short BTC, closed by the kill switch [BTC, bot]
+2026-10-11 09:55:41,442 INFO TC16 | book | {"latency_ms": 178.0, "bid": 82347.0, "ask": 82353.0, "bid_size": 0.3, "ask_size": 0.00025}
+2026-10-11 09:55:41,443 INFO TC16 | signal built | {"plan": {"side": "SELL", "zone": [82330.0, 82364.0], "stop": 83088.0, "take_profits": [81935.0, 81771.0, 81606.0, 81359.0, 81029.0], "touch": 82347.0}}
+2026-10-11 09:55:41,454 INFO TC16 | bot command inject | {"latency_ms": 10.7, "request": {"text": "#BTC SELL NOW | BTC sell Zone 82330 - 82364 |  | SL : 83088 |  | TP1 : 81935 | TP2 : 81771 | TP3 : 81606 | TP4 : 81359 | TP5 : 81029 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 2, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 09:55:41,454 INFO TC16 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 09:55:46,101 INFO TC16 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 09:55:46,105 INFO TC16 | trade protected | {"trade": {"id": 2, "coin": "BTC", "side": "SELL", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82347.00000000001, "sl_price": 83088.0, "opened_at": "2026-10-11T09:55:43.161+00:00", "protected_at": "2026-10-11T09:55:45.814+00:00"}}
+2026-10-11 09:55:46,106 INFO TC16 | PASS | filled size equals the configured size | expected=0.00085 actual=0.00085
+2026-10-11 09:55:46,106 INFO TC16 | PASS | entry price is inside the signal zone (with its buffer) | expected=[82330.0, 82364.0] actual=82347.00000000001
+2026-10-11 09:55:46,217 INFO TC16 | PASS | exchange position matches the trade (direction and size) | expected=-0.00085 actual=-0.00085
+2026-10-11 09:55:46,218 INFO TC16 | exchange position | {"position": {"coin": "BTC", "szi": -0.00085, "entry_px": 82347.0, "unrealized_pnl": 0.0, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 312851.9006535948, "margin_used": 13.99899, "cum_funding": 0.0}}
+2026-10-11 09:55:46,218 INFO TC16 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 09:55:46,327 INFO TC16 | exchange open orders | {"orders": [{"coin": "BTC", "oid": 62412727155, "cloid": "0x0aa313d30db366ca3c7387ece2fae651", "is_buy": true, "price": 81029.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791712545349}, {"coin": "BTC", "oid": 62412727154, "cloid": "0xedf31a2aaf9a116b366f35ca26cb6d47", "is_buy": true, "price": 81359.0, "size": 0.00017, "orig_size": 0.00017, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Lim
+2026-10-11 09:55:46,328 INFO TC16 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 83088.0, 'size': 0.00085} actual=[{'coin': 'BTC', 'oid': 62412726034, 'cloid': '0x4d61919862369aacfb14f368844e5524', 'is_buy': True, 'price': 91397.0, 'size': 0.00085, 'orig_size': 0.00085, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 83088.0, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791712544018}]
+2026-10-11 09:55:46,328 INFO TC16 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 09:55:46,328 INFO TC16 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 09:55:46,328 INFO TC16 | PASS | take-profit prices match the signal | expected=[81935.0, 81771.0, 81606.0, 81359.0, 81029.0] actual=[81935.0, 81771.0, 81606.0, 81359.0, 81029.0]
+2026-10-11 09:55:46,329 INFO TC16 | PASS | take-profit sizes add up to the position | expected=0.00085 actual=0.00085
+2026-10-11 09:55:50,392 INFO TC16 | bot command kill | {"latency_ms": 4060.4, "request": {"confirm": "KILL"}, "response": {"ok": true, "closed": 1, "remaining": []}}
+2026-10-11 09:55:50,395 INFO TC16 | PASS | kill switch reports nothing left open | expected=[] actual=[]
+2026-10-11 09:55:50,429 INFO TC16 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 09:55:51,701 INFO TC16 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 09:55:51,704 INFO TC16 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 09:55:51,704 INFO TC16 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.068696, 'fees': 0.062996}
+2026-10-11 09:55:51,762 INFO TC16 | PASS | bot is paused after the kill switch | expected=PAUSED actual=PAUSED
+2026-10-11 09:55:51,769 INFO TC16 | bot command resume | {"latency_ms": 6.3, "request": {}, "response": {"ok": true, "cleared": [], "state": "HEALTHY"}}
+2026-10-11 09:55:51,770 INFO TC16 | PASS | resume returns the bot to HEALTHY | expected=HEALTHY actual=HEALTHY
+2026-10-11 09:55:51,772 INFO TC16 | RESULT PASSED (18/18 assertions passed)
+2026-10-11 09:55:51,902 INFO TC17 | START | Bot: long BTC, take-profit levels close the position in parts [BTC, bot]
+2026-10-11 09:55:51,999 INFO TC17 | book | {"latency_ms": 96.2, "bid": 82345.0, "ask": 82354.0, "bid_size": 0.3, "ask_size": 0.3}
+2026-10-11 09:55:52,000 INFO TC17 | signal built | {"plan": {"side": "BUY", "zone": [82337.0, 82371.0], "stop": 81778.0, "take_profits": [82379.0, 82403.0, 82436.0, 82683.0, 83013.0], "touch": 82354.0}}
+2026-10-11 09:55:52,006 INFO TC17 | bot command inject | {"latency_ms": 5.9, "request": {"text": "#BTC BUY NOW | BTC buy Zone 82337 - 82371 |  | SL : 81778 |  | TP1 : 82379 | TP2 : 82403 | TP3 : 82436 | TP4 : 82683 | TP5 : 83013 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 3, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 09:55:52,006 INFO TC17 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 09:56:24,503 INFO TC17 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 09:56:24,505 INFO TC17 | trade protected | {"trade": {"id": 3, "coin": "BTC", "side": "BUY", "state": "PROTECTED", "planned_size": 0.00085, "filled_size": 0.00085, "avg_entry": 82354.0, "sl_price": 81778.0, "opened_at": "2026-10-11T09:55:53.669+00:00", "protected_at": "2026-10-11T09:56:24.493+00:00"}}
+2026-10-11 09:56:24,505 INFO TC17 | waiting up to 240 s for the market to reach a take-profit level | {}
+2026-10-11 10:00:10,390 INFO TC17 | take-profit filled | {"legs": [1, 2, 3], "closed": 0.00051, "trade_state": "REDUCING", "remaining": 0.00034}
+2026-10-11 10:00:10,430 INFO TC17 | PASS | at least one take-profit level filled | expected=>= 1 actual=3
+2026-10-11 10:00:10,431 INFO TC17 | PASS | trade moved to REDUCING | expected=REDUCING actual=REDUCING
+2026-10-11 10:00:10,438 INFO TC17 | PASS | remaining size is the filled size minus what the take-profits closed | expected=0.00034 actual=0.00034
+2026-10-11 10:00:15,697 ERROR TC17 | ERROR
+Traceback (most recent call last):
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 540, in _make_request
+    response = conn.getresponse()
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connection.py", line 638, in getresponse
+    httplib_response = super().getresponse()
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/http/client.py", line 1430, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/http/client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/http/client.py", line 292, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py", line 719, in readinto
+    return self._sock.recv_into(b)
+           ~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ssl.py", line 1304, in recv_into
+    return self.read(nbytes, buffer)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ssl.py", line 1138, in read
+    return self._sslobj.read(len, buffer)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+TimeoutError: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/adapters.py", line 696, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/util/retry.py", line 510, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 542, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 373, in _raise_timeout
+    raise ReadTimeoutError(
+        self, url, f"Read timed out. (read timeout={timeout_value})"
+    ) from err
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.hyperliquid-testnet.xyz', port=443): Read timed out. (read timeout=5.0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 239, in _post_sync
+    return self._api().post(path, payload)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/hyperliquid/api.py", line 23, in post
+    response = self.session.post(url, json=payload, timeout=self.timeout)
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/sessions.py", line 712, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/adapters.py", line 742, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.hyperliquid-testnet.xyz', port=443): Read timed out. (read timeout=5.0)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbook/TRD/hyperliquid-tuyul/qa/run_qa.py", line 786, in run_case
+    await body
+  File "/Users/macbook/TRD/hyperliquid-tuyul/qa/run_qa.py", line 722, in case_partial
+    szi, orders = await b.v.szi(b.coin), await b.v.open_orders(b.coin)
+                  ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/qa/run_qa.py", line 177, in szi
+    return (await self.a.get_account()).szi(coin)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 347, in get_account
+    state = await self._info({"type": "clearinghouseState", "user": user, "dex": dex})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 274, in _info
+    return await self._timed(self._post_sync, "/info", payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 265, in _timed
+    return await asyncio.get_running_loop().run_in_executor(self._pool, fn, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 248, in _post_sync
+    raise OutcomeUnknown(type(exc).__name__) from exc
+hlbot.exchange.base.OutcomeUnknown: unknown_outcome: ReadTimeout
+2026-10-11 10:00:16,050 INFO TC17 | RESULT FAILED (5/5 assertions passed)
+2026-10-11 10:00:19,896 INFO CLEANUP | place close BTC | {"latency_ms": 810.3, "request": {"coin": "BTC", "is_buy": false, "size": 0.00034, "price": 81626.0, "reduce_only": true, "cloid": "0x1e539a78fcc990e6303fb40fe21347bb", "kind": "limit", "tif": "Ioc", "trigger_px": null, "tpsl": null, "is_market": true}, "response": {"status": "filled", "oid": 62412978474, "total_size": 0.00034, "avg_price": 82451.0, "error": null}}
+2026-10-11 10:00:28,703 INFO bot session up for ETH: size 0.0265, health {'status': 'ok', 'health': 'HEALTHY', 'env': 'TESTNET', 'version': '1.0.0'}
+2026-10-11 10:00:28,704 INFO TC14 | START | Bot: long ETH, stop-loss moved, then closed [ETH, bot]
+2026-10-11 10:00:28,899 INFO TC14 | book | {"latency_ms": 195.4, "bid": 2493.4, "ask": 2493.5, "bid_size": 0.1655, "ask_size": 5.0}
+2026-10-11 10:00:28,900 INFO TC14 | signal built | {"plan": {"side": "BUY", "zone": [2493.0, 2494.0], "stop": 2471.1, "take_profits": [2506.0, 2511.0, 2515.9, 2523.4, 2533.4], "touch": 2493.5}}
+2026-10-11 10:00:28,912 INFO TC14 | bot command inject | {"latency_ms": 11.3, "request": {"text": "#ETH BUY NOW | ETH buy Zone 2493 - 2494 |  | SL : 2471.1 |  | TP1 : 2506 | TP2 : 2511 | TP3 : 2515.9 | TP4 : 2523.4 | TP5 : 2533.4 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 4, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:00:28,912 INFO TC14 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:00:33,500 INFO TC14 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:00:33,501 INFO TC14 | trade protected | {"trade": {"id": 4, "coin": "ETH", "side": "BUY", "state": "PROTECTED", "planned_size": 0.0265, "filled_size": 0.0265, "avg_entry": 2493.5, "sl_price": 2471.1, "opened_at": "2026-10-11T10:00:31.380+00:00", "protected_at": "2026-10-11T10:00:33.275+00:00"}}
+2026-10-11 10:00:33,504 INFO TC14 | PASS | filled size equals the configured size | expected=0.0265 actual=0.0265
+2026-10-11 10:00:33,504 INFO TC14 | PASS | entry price is inside the signal zone (with its buffer) | expected=[2493.0, 2494.0] actual=2493.5
+2026-10-11 10:00:33,618 INFO TC14 | PASS | exchange position matches the trade (direction and size) | expected=0.0265 actual=0.0265
+2026-10-11 10:00:33,618 INFO TC14 | exchange position | {"position": {"coin": "ETH", "szi": 0.0265, "entry_px": 2493.5, "unrealized_pnl": 0.00265, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": null, "margin_used": 13.21608, "cum_funding": 0.0}}
+2026-10-11 10:00:33,618 INFO TC14 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:00:33,727 INFO TC14 | exchange open orders | {"orders": [{"coin": "ETH", "oid": 62412990778, "cloid": "0x0554779c69ce944ddba86c05224bb890", "is_buy": false, "price": 2533.4, "size": 0.0053, "orig_size": 0.0053, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791712832962}, {"coin": "ETH", "oid": 62412990777, "cloid": "0xe5c5db2b950c9f6c10e169e97d633807", "is_buy": false, "price": 2523.4, "size": 0.0053, "orig_size": 0.0053, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit",
+2026-10-11 10:00:33,728 INFO TC14 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 2471.1, 'size': 0.0265} actual=[{'coin': 'ETH', 'oid': 62412990420, 'cloid': '0x4f82bbd98ba824693d50ece805bc0719', 'is_buy': False, 'price': 2223.9, 'size': 0.0265, 'orig_size': 0.0265, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 2471.1, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791712832041}]
+2026-10-11 10:00:33,728 INFO TC14 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:00:33,728 INFO TC14 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, False, True], [True, False, True], [True, False, True], [True, False, True], [True, False, True]]
+2026-10-11 10:00:33,729 INFO TC14 | PASS | take-profit prices match the signal | expected=[2506.0, 2511.0, 2515.9, 2523.4, 2533.4] actual=[2506.0, 2511.0, 2515.9, 2523.4, 2533.4]
+2026-10-11 10:00:33,729 INFO TC14 | PASS | take-profit sizes add up to the position | expected=0.0265 actual=0.0265
+2026-10-11 10:00:34,555 INFO TC14 | bot command modify_sl | {"latency_ms": 825.5, "request": {"trade_id": 4, "price": 2478.5}, "response": {"ok": true}}
+2026-10-11 10:00:34,556 INFO TC14 | PASS | bot accepted the stop-loss move | expected=True actual={'ok': True}
+2026-10-11 10:00:34,665 INFO TC14 | PASS | exactly one stop on the exchange, at the new price, still full size | expected={'trigger': 2478.5, 'size': 0.0265} actual=[{'coin': 'ETH', 'oid': 62412992015, 'cloid': '0x4f82bbd98ba824693d50ece805bc0719', 'is_buy': False, 'price': 2230.6, 'size': 0.0265, 'orig_size': 0.0265, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 2478.5, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791712834314}]
+2026-10-11 10:00:34,681 INFO TC14 | PASS | trade is still PROTECTED with the new stop recorded | expected=2478.5 actual={'state': 'PROTECTED', 'sl_price': 2478.5}
+2026-10-11 10:00:34,683 INFO TC14 | bot command close | {"latency_ms": 2.6, "request": {"trade_id": 4}, "response": {"ok": true, "trade_id": 4}}
+2026-10-11 10:00:34,684 INFO TC14 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 4}
+2026-10-11 10:00:38,234 INFO TC14 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:00:39,464 INFO TC14 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:00:39,464 INFO TC14 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:00:39,464 INFO TC14 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.062117, 'fees': 0.059467}
+2026-10-11 10:00:39,464 INFO TC14 | RESULT PASSED (19/19 assertions passed)
+2026-10-11 10:00:39,575 INFO TC18 | START | Bot: short ETH, take-profit levels close the position in parts [ETH, bot]
+2026-10-11 10:00:39,672 INFO TC18 | book | {"latency_ms": 97.3, "bid": 2493.2, "ask": 2493.5, "bid_size": 5.5662, "ask_size": 5.0}
+2026-10-11 10:00:39,673 INFO TC18 | signal built | {"plan": {"side": "SELL", "zone": [2492.7, 2493.7], "stop": 2510.7, "take_profits": [2492.5, 2491.7, 2490.7, 2483.2, 2473.3], "touch": 2493.2}}
+2026-10-11 10:00:39,679 INFO TC18 | bot command inject | {"latency_ms": 6.4, "request": {"text": "#ETH SELL NOW | ETH sell Zone 2492.7 - 2493.7 |  | SL : 2510.7 |  | TP1 : 2492.5 | TP2 : 2491.7 | TP3 : 2490.7 | TP4 : 2483.2 | TP5 : 2473.3 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 5, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:00:39,681 INFO TC18 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:00:43,279 INFO TC18 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:00:43,280 INFO TC18 | trade protected | {"trade": {"id": 5, "coin": "ETH", "side": "SELL", "state": "PROTECTED", "planned_size": 0.0265, "filled_size": 0.0265, "avg_entry": 2493.1999999999994, "sl_price": 2510.7, "opened_at": "2026-10-11T10:00:41.108+00:00", "protected_at": "2026-10-11T10:00:43.030+00:00"}}
+2026-10-11 10:00:43,281 INFO TC18 | waiting up to 240 s for the market to reach a take-profit level | {}
+2026-10-11 10:04:43,537 WARNING TC18 | BLOCKED | the market did not reach the first take-profit (2492.5) within 240 s, so partial closure could not be observed
+2026-10-11 10:04:43,566 INFO TC18 | bot command close | {"latency_ms": 12.5, "request": {"trade_id": 5}, "response": {"ok": true, "trade_id": 5}}
+2026-10-11 10:04:43,566 INFO TC18 | PASS | close command for the rest accepted | expected=True actual={'ok': True, 'trade_id': 5}
+2026-10-11 10:04:47,132 INFO TC18 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:04:53,176 ERROR TC18 | ERROR
+Traceback (most recent call last):
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 540, in _make_request
+    response = conn.getresponse()
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connection.py", line 638, in getresponse
+    httplib_response = super().getresponse()
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/http/client.py", line 1430, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/http/client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/http/client.py", line 292, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/socket.py", line 719, in readinto
+    return self._sock.recv_into(b)
+           ~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ssl.py", line 1304, in recv_into
+    return self.read(nbytes, buffer)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ssl.py", line 1138, in read
+    return self._sslobj.read(len, buffer)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+TimeoutError: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/adapters.py", line 696, in send
+    resp = conn.urlopen(
+        method=request.method,
+    ...<9 lines>...
+        chunked=chunked,
+    )
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/util/retry.py", line 510, in increment
+    raise reraise(type(error), error, _stacktrace)
+          ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/util/util.py", line 39, in reraise
+    raise value
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 542, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/urllib3/connectionpool.py", line 373, in _raise_timeout
+    raise ReadTimeoutError(
+        self, url, f"Read timed out. (read timeout={timeout_value})"
+    ) from err
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.hyperliquid-testnet.xyz', port=443): Read timed out. (read timeout=5.0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 239, in _post_sync
+    return self._api().post(path, payload)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/hyperliquid/api.py", line 23, in post
+    response = self.session.post(url, json=payload, timeout=self.timeout)
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/sessions.py", line 712, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/macbook/TRD/hyperliquid-tuyul/.venv/lib/python3.13/site-packages/requests/adapters.py", line 742, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.hyperliquid-testnet.xyz', port=443): Read timed out. (read timeout=5.0)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macbook/TRD/hyperliquid-tuyul/qa/run_qa.py", line 786, in run_case
+    await body
+  File "/Users/macbook/TRD/hyperliquid-tuyul/qa/run_qa.py", line 737, in case_partial
+    final = await b.verify_closed(case, trade["id"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/qa/run_qa.py", line 637, in verify_closed
+    szi, orders = await self.v.szi(self.coin), await self.v.open_orders(self.coin)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/qa/run_qa.py", line 177, in szi
+    return (await self.a.get_account()).szi(coin)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 347, in get_account
+    state = await self._info({"type": "clearinghouseState", "user": user, "dex": dex})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 274, in _info
+    return await self._timed(self._post_sync, "/info", payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 265, in _timed
+    return await asyncio.get_running_loop().run_in_executor(self._pool, fn, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.9_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/Users/macbook/TRD/hyperliquid-tuyul/hlbot/exchange/hyperliquid.py", line 248, in _post_sync
+    raise OutcomeUnknown(type(exc).__name__) from exc
+hlbot.exchange.base.OutcomeUnknown: unknown_outcome: ReadTimeout
+2026-10-11 10:04:53,527 INFO TC18 | RESULT FAILED (4/4 assertions passed)
+2026-10-11 10:04:53,854 INFO TC20 | bot command inject | {"latency_ms": 13.9, "request": {"text": "#ETH BUY NOW | ETH buy Zone 2493.1 - 2493.1 |  | SL : 2518 |  | TP1 : 2505.6 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 6, "state": "INVALID", "reason": "entry_zone.low must be less than entry_zone.high; stop_loss must be below entry_zone for a BUY"}}
+2026-10-11 10:04:53,855 INFO TC20 | PASS | j. bot: a buy signal with its stop above the entry is rejected as INVALID | expected=INVALID actual={'state': 'INVALID', 'reason': 'entry_zone.low must be less than entry_zone.high; stop_loss must be below entry_zone for a BUY'}
+2026-10-11 10:04:56,455 INFO TC20 | PASS | j. bot: the invalid signal produced no order and no position | expected=nothing actual={'open_orders': 0, 'position': 0.0}
+2026-10-11 10:05:03,919 INFO bot session up for SOL: size 0.65, health {'status': 'ok', 'health': 'HEALTHY', 'env': 'TESTNET', 'version': '1.0.0'}
+2026-10-11 10:05:03,920 INFO TC15 | START | Bot: short SOL from a signal, closed by command [SOL, bot]
+2026-10-11 10:05:04,107 INFO TC15 | book | {"latency_ms": 186.9, "bid": 109.09, "ask": 109.12, "bid_size": 2.25, "ask_size": 0.3}
+2026-10-11 10:05:04,108 INFO TC15 | signal built | {"plan": {"side": "SELL", "zone": [109.06, 109.12], "stop": 110.07, "take_profits": [108.54, 108.33, 108.11, 107.78, 107.34], "touch": 109.09}}
+2026-10-11 10:05:04,118 INFO TC15 | bot command inject | {"latency_ms": 9.6, "request": {"text": "#SOL SELL NOW | SOL sell Zone 109.06 - 109.12 |  | SL : 110.07 |  | TP1 : 108.54 | TP2 : 108.33 | TP3 : 108.11 | TP4 : 107.78 | TP5 : 107.34 | #QA_Signals", "channel": "qa"}, "response": {"ok": true, "signal_id": 7, "state": "WAITING_PRICE", "reason": null}}
+2026-10-11 10:05:04,118 INFO TC15 | PASS | signal accepted by the bot (parsed and valid) | expected=WAITING_PRICE / ENTERING / TRADED actual={'state': 'WAITING_PRICE', 'reason': None}
+2026-10-11 10:05:08,703 INFO TC15 | PASS | trade reached PROTECTED | expected=PROTECTED actual=PROTECTED
+2026-10-11 10:05:08,703 INFO TC15 | trade protected | {"trade": {"id": 6, "coin": "SOL", "side": "SELL", "state": "PROTECTED", "planned_size": 0.65, "filled_size": 0.65, "avg_entry": 109.09, "sl_price": 110.07, "opened_at": "2026-10-11T10:05:06.634+00:00", "protected_at": "2026-10-11T10:05:08.488+00:00"}}
+2026-10-11 10:05:08,704 INFO TC15 | PASS | filled size equals the configured size | expected=0.65 actual=0.65
+2026-10-11 10:05:08,704 INFO TC15 | PASS | entry price is inside the signal zone (with its buffer) | expected=[109.06, 109.12] actual=109.09
+2026-10-11 10:05:08,838 INFO TC15 | PASS | exchange position matches the trade (direction and size) | expected=-0.65 actual=-0.65
+2026-10-11 10:05:08,839 INFO TC15 | exchange position | {"position": {"coin": "SOL", "szi": -0.65, "entry_px": 109.09, "unrealized_pnl": -0.0065, "leverage": 5.0, "leverage_type": "cross", "liquidation_px": 395.6702901099, "margin_used": 14.183, "cum_funding": 0.0}}
+2026-10-11 10:05:08,839 INFO TC15 | PASS | leverage on the exchange is the configured leverage | expected=5 actual=5.0
+2026-10-11 10:05:08,946 INFO TC15 | exchange open orders | {"orders": [{"coin": "SOL", "oid": 62413246303, "cloid": "0xbb9a69df0bfc136e450edd0431408488", "is_buy": true, "price": 107.34, "size": 0.13, "orig_size": 0.13, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestamp": 1791713108180}, {"coin": "SOL", "oid": 62413246302, "cloid": "0x8aaf9fe5bdd90dd922065cabb6232ef8", "is_buy": true, "price": 107.78, "size": 0.13, "orig_size": 0.13, "reduce_only": true, "is_trigger": false, "trigger_px": null, "tpsl": null, "is_position_tpsl": false, "order_type": "Limit", "timestam
+2026-10-11 10:05:08,947 INFO TC15 | PASS | one reduce-only stop-loss for the full size at the signal's stop price | expected={'trigger': 110.07, 'size': 0.65} actual=[{'coin': 'SOL', 'oid': 62413245704, 'cloid': '0x6bce1597841a3d4ec2e8ac84d8f67b87', 'is_buy': True, 'price': 121.08, 'size': 0.65, 'orig_size': 0.65, 'reduce_only': True, 'is_trigger': True, 'trigger_px': 110.07, 'tpsl': 'sl', 'is_position_tpsl': False, 'order_type': 'Stop Market', 'timestamp': 1791713107310}]
+2026-10-11 10:05:08,947 INFO TC15 | PASS | five take-profit orders rest on the exchange | expected=5 actual=5
+2026-10-11 10:05:08,947 INFO TC15 | PASS | every take-profit is reduce-only, on the closing side, with a client id | expected=True actual=[[True, True, True], [True, True, True], [True, True, True], [True, True, True], [True, True, True]]
+2026-10-11 10:05:08,947 INFO TC15 | PASS | take-profit prices match the signal | expected=[108.54, 108.33, 108.11, 107.78, 107.34] actual=[108.54, 108.33, 108.11, 107.78, 107.34]
+2026-10-11 10:05:08,948 INFO TC15 | PASS | take-profit sizes add up to the position | expected=0.65 actual=0.65
+2026-10-11 10:05:08,952 INFO TC15 | bot command close | {"latency_ms": 3.8, "request": {"trade_id": 6}, "response": {"ok": true, "trade_id": 6}}
+2026-10-11 10:05:08,952 INFO TC15 | PASS | close command accepted | expected=True actual={'ok': True, 'trade_id': 6}
+2026-10-11 10:05:13,269 INFO TC15 | PASS | trade is CLOSED in the bot | expected=CLOSED actual=CLOSED
+2026-10-11 10:05:14,506 INFO TC15 | PASS | exchange position is flat | expected=0.0 actual=0.0
+2026-10-11 10:05:14,506 INFO TC15 | PASS | no orders of the trade are left on the exchange | expected=[] actual=[]
+2026-10-11 10:05:14,506 INFO TC15 | PASS | the bot recorded fees and a net result for the trade | expected=net P/L set, fees > 0 actual={'net_pnl': -0.122343, 'fees': 0.063843}
+2026-10-11 10:05:14,506 INFO TC15 | RESULT PASSED (16/16 assertions passed)
+2026-10-11 10:05:16,348 INFO TC20 | RESULT FAILED (11/13 assertions passed)
+2026-10-11 10:05:20,549 INFO finished: {"planned": 20, "executed": 20, "passed": 17, "failed": 3, "blocked": 0, "skipped": 0, "not_run": 0}
+2026-10-11 10:05:20,550 INFO cleanup clean=True positions={'BTC': 0.0, 'ETH': 0.0, 'SOL': 0.0} open_orders=0
+exit code 0

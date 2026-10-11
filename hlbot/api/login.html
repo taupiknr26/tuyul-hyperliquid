@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Sign in</title>
+<link rel="icon" href="/logo">
+<script>try { var t = localStorage.getItem("hlbot-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+  :root {
+    --bg: #141414; --surface: #1b1b1b; --surface-deep: #0b0b0b; --border: #2a2a2a; --text: #ffffff; --text-muted: #8c8c8c;
+    --lime: #c6eb72; --yellow: #e8d94c; --teal: #4dd9c6; --link: #3a9bff; --neg-text: #ff5c5c; --focus: #c6eb72;
+    --gradient-accent: linear-gradient(135deg, var(--teal), var(--lime), var(--yellow));
+    --gradient-header: linear-gradient(135deg, #c5e4f3, #e6de7c 70%, transparent);
+    --glow-opacity: .34; --shadow: 0 18px 48px rgba(0, 0, 0, .5);
+    --font: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] {
+    --bg: #f3f4f0; --surface: #ffffff; --surface-deep: #f1f2ee; --border: #e1e3dc; --text: #141414; --text-muted: #666b61;
+    --link: #1668cf; --neg-text: #c62f2f; --focus: #0e8c7c;
+    --gradient-header: linear-gradient(135deg, #a9d8f0, #e9df6a 70%, transparent);
+    --glow-opacity: .85; --shadow: 0 18px 48px rgba(20, 20, 20, .14);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; background: var(--bg); color: var(--text);
+    font: 500 13px/1.45 var(--font); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  h1, p { margin: 0; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+  .shell { position: relative; width: min(400px, 100%); isolation: isolate; }
+  .shell::before { content: ""; position: absolute; z-index: -1; left: -60px; top: -70px; width: 380px; max-width: 110%; height: 200px;
+    background: var(--gradient-header); filter: blur(70px); opacity: var(--glow-opacity); pointer-events: none; }
+  .card { padding: 28px 26px 24px; border-radius: 24px; border: 2px solid transparent; box-shadow: var(--shadow);
+    background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--gradient-accent) border-box; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand img { width: 56px; height: 56px; border-radius: 15px; object-fit: cover; background: var(--surface-deep); flex: none; }
+  .brand h1 { font-size: 22px; font-weight: 800; letter-spacing: -.02em; overflow-wrap: anywhere; }
+  .brand p { color: var(--text-muted); margin-top: 2px; }
+  form { margin-top: 22px; display: grid; gap: 14px; }
+  form[hidden] { display: none; }
+  label { display: grid; gap: 6px; color: var(--text-muted); font-size: 12px; font-weight: 600; }
+  input { font: 500 14px var(--font); padding: 11px 13px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-deep); color: var(--text); width: 100%; }
+  button { font: 700 13px var(--font); padding: 11px 14px; border-radius: 12px; border: 1px solid var(--lime); background: var(--lime); color: #101010; cursor: pointer; }
+  button:disabled { opacity: .6; cursor: default; }
+  .msg { min-height: 1.45em; color: var(--neg-text); font-weight: 600; }
+  .hint { color: var(--text-muted); font-size: 12px; }
+  .hint code { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--text); }
+  .iconbtn { position: fixed; top: 16px; right: 16px; width: 36px; height: 36px; padding: 0; display: inline-grid; place-items: center;
+    background: var(--surface); border-color: var(--border); color: var(--text); }
+  .iconbtn svg { width: 18px; height: 18px; }
+  .themeicon { overflow: visible; transition: transform .5s cubic-bezier(.4, 0, .2, 1); }
+  .themeicon .core, .themeicon .bite, .themeicon .rays { transform-origin: 12px 12px; transition: transform .5s cubic-bezier(.4, 0, .2, 1), opacity .3s ease; }
+  .themeicon .core { transform: scale(1.5); }
+  .themeicon .rays { transform: rotate(-90deg) scale(.3); opacity: 0; }
+  :root[data-theme="light"] .themeicon { transform: rotate(90deg); }
+  :root[data-theme="light"] .themeicon .core { transform: scale(1); }
+  :root[data-theme="light"] .themeicon .bite { transform: translate(14px, -12px); }
+  :root[data-theme="light"] .themeicon .rays { transform: none; opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+<button type="button" id="theme-toggle" class="iconbtn" aria-label="Switch to light theme" title="Switch to light theme">
+  <svg class="themeicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+    <mask id="theme-mask"><rect x="-8" y="-8" width="40" height="40" fill="white"/><circle class="bite" cx="17.5" cy="6.5" r="6.5" fill="black"/></mask>
+    <g mask="url(#theme-mask)"><circle class="core" cx="12" cy="12" r="5" fill="currentColor" stroke="none"/></g>
+    <path class="rays" d="M12 1.5V4M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/>
+  </svg>
+</button>
+
+<main class="shell">
+  <div class="card">
+    <div class="brand">
+      <img src="/logo" alt="" width="56" height="56">
+      <div><h1 id="name">&nbsp;</h1><p id="lead">Sign in to the dashboard</p></div>
+    </div>
+
+    <form id="login-form">
+      <label>Username<input type="text" id="username" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus></label>
+      <label>Password<input type="password" id="password" autocomplete="current-password" required></label>
+      <button type="submit" id="login-submit">Sign in</button>
+      <p class="msg" id="login-msg" role="alert"></p>
+    </form>
+
+    <form id="setup-form" hidden>
+      <p class="hint">No account exists yet. Create the first admin. The control token proves you have access to the bot host: it is the contents of <code>data/control.token</code> there.</p>
+      <label>Username<input type="text" id="setup-username" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+      <label>Password (10 characters or more)<input type="password" id="setup-password" autocomplete="new-password" minlength="10" required></label>
+      <label>Repeat the password<input type="password" id="setup-repeat" autocomplete="new-password" minlength="10" required></label>
+      <label>Control token<input type="password" id="setup-token" autocomplete="off" required></label>
+      <button type="submit" id="setup-submit">Create admin and sign in</button>
+      <p class="msg" id="setup-msg" role="alert"></p>
+    </form>
+  </div>
+</main>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+
+/* theme: the same choice as the dashboard, remembered in this browser */
+const currentTheme = () => document.documentElement.dataset.theme === "light" ? "light" : "dark";
+function syncTheme() {
+  const label = currentTheme() === "light" ? "Switch to dark theme" : "Switch to light theme";
+  $("theme-toggle").setAttribute("aria-label", label);
+  $("theme-toggle").title = label;
+}
+$("theme-toggle").onclick = () => {
+  document.documentElement.dataset.theme = currentTheme() === "light" ? "dark" : "light";
+  try { localStorage.setItem("hlbot-theme", currentTheme()); } catch (error) { /* this tab only */ }
+  syncTheme();
+};
+syncTheme();
+
+async function post(path, body) {
+  try {
+    const response = await fetch(path, {method: "POST", cache: "no-store", headers: {"Content-Type": "application/json", "X-Requested-With": "hlbot"}, body: JSON.stringify(body)});
+    const result = await response.json().catch(() => ({}));
+    return response.ok && result.ok ? {ok: true} : {ok: false, error: result.error || "HTTP " + response.status};
+  } catch (error) { return {ok: false, error: "no answer from the bot"}; }
+}
+async function submit(form, button, message, path, body) {
+  $(button).disabled = true;
+  $(message).textContent = "";
+  const result = await post(path, body);
+  if (result.ok) { location.replace("/"); return; }
+  $(button).disabled = false;
+  $(message).textContent = result.error;
+}
+$("login-form").onsubmit = (event) => {
+  event.preventDefault();
+  submit("login-form", "login-submit", "login-msg", "/api/login", {username: $("username").value, password: $("password").value});
+};
+$("setup-form").onsubmit = (event) => {
+  event.preventDefault();
+  if ($("setup-password").value !== $("setup-repeat").value) { $("setup-msg").textContent = "The two passwords differ."; return; }
+  submit("setup-form", "setup-submit", "setup-msg", "/api/setup",
+    {username: $("setup-username").value, password: $("setup-password").value, token: $("setup-token").value});
+};
+
+(async () => {
+  let info = {};
+  try { info = await (await fetch("/api/public", {cache: "no-store"})).json(); } catch (error) { /* the form still works */ }
+  const name = info.name || "hlbot";
+  $("name").textContent = name;
+  document.title = "Sign in · " + name;
+  if (info.setup_required) {
+    $("login-form").hidden = true;
+    $("setup-form").hidden = false;
+    $("lead").textContent = "First-time setup";
+    $("setup-username").focus();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+# Secrets, sessions, credentials (SR-03, SR-04, SR-11)
+.env
+.env.*
+!.env.example
+secrets/
+*.secrets
+*.key
+*.session
+*.session-journal
+
+# Runtime state: database, logs, locks, tokens (NFR-022)
+data/
+logs/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.db
+
+# Python
+__pycache__/
+*.py[co]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

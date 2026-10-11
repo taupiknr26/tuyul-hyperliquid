@@ -1,0 +1,56 @@
+[
+  {
+    "id": "D1", "severity": "Critical", "area": "Operations / host",
+    "title": "The host computer goes to sleep while the bot is running",
+    "found_in": "TC17 (official run)",
+    "evidence": "macOS power log: 'Entering Sleep state due to Idle Sleep' at 16:55:52 local (09:55:52 UTC), then six sleep/wake cycles of about 27 s asleep and 10 s awake until 16:59:56; 52 sleeps in the six hours before the run. The Mac was on battery with idle sleep set to 1 minute. In TC17 the stop-loss request was sent at 09:55:53.676 and its answer never arrived (ReadTimeout); the bot recorded PROTECTED 30.8 s after the fill by the wall clock. The stop was in fact resting on the exchange from the start (resolved by client id). Three take-profit fills were only processed at 10:00:07, after the Mac woke.",
+    "impact": "While the host sleeps the bot manages nothing: no signal is read, no fill is processed, no stop is moved or re-placed, and the kill switch and dashboard do not answer. Orders already resting on the exchange keep working, which is why no position was ever unprotected here.",
+    "reproduce": "Run the bot on a Mac on battery with default power settings and leave the keyboard alone for a minute; watch `pmset -g log | grep -E 'Sleep|Wake'` and the bot's log for 'websocket silent' and 'market_data_stale'.",
+    "fix": "Run the bot on an always-on host (the Docker image or systemd unit on a server). On this Mac, at minimum keep it on mains power and start the bot under `caffeinate -is`, or disable sleep with `sudo pmset -a sleep 0`."
+  },
+  {
+    "id": "D2", "severity": "Medium", "area": "Application",
+    "title": "The bot does not notice that it was suspended",
+    "found_in": "TC17 (official run)",
+    "evidence": "The trade's own metric says 'trade.protected ms: 5989' while 30.8 s passed on the wall clock: the deadlines for protection (soft 3 s, hard 8 s) and the metric run on a clock that stands still during host sleep. The alerts raised afterwards ('market data stream is disconnected or silent', '1 order(s) unresolved past their deadline') describe symptoms, not the cause.",
+    "impact": "After a suspension the operator sees generic stale-data alerts and a time-to-protected figure that understates what happened. The deadlines are not wall-clock guarantees on a host that can sleep.",
+    "reproduce": "Suspend the process or the host for 20 s while a trade is open (`kill -STOP <pid>; sleep 20; kill -CONT <pid>`), then read the audit trail.",
+    "fix": "In the watchdog, compare wall-clock and monotonic time each second; on a jump of more than a few seconds raise a 'host was suspended for N s' alert, run a reconciliation at once, and record wall-clock time-to-protected alongside the monotonic one."
+  },
+  {
+    "id": "D3", "severity": "Medium", "area": "Application / configuration",
+    "title": "Price-point settings and the fixed size are global, not per symbol",
+    "found_in": "Test setup for TC13-TC18",
+    "evidence": "EXEC_BUFFER_VALUE, EXEC_MAX_SLIPPAGE_POINTS, EXEC_MIN_TP_GAP_POINTS, RISK_SL_SLIPPAGE_ALLOWANCE_POINTS, RISK_MAX_SL_DISTANCE and RISK_FIXED_SIZE are single numbers in absolute price or size units. Values tuned for gold (buffer 2.0, slippage 3.0, maximum stop distance 30) mean something entirely different on BTC at 82,000, ETH at 2,500 and SOL at 109, and one fixed size cannot fit three symbols (0.004 is 330 USDC of BTC but 0.44 USDC of SOL, under the 10 USDC minimum). The harness had to start the bot once per symbol with rescaled settings.",
+    "impact": "The bot cannot trade several symbols correctly from one configuration. With HL_SYMBOL_MAP holding more than one symbol, some signals are rejected by risk rules and others are sized or buffered wrongly.",
+    "reproduce": "Set HL_SYMBOL_MAP to BTC and SOL with RISK_SIZING_MODE=fixed and RISK_FIXED_SIZE=0.004, then inject one signal for each.",
+    "fix": "Express these settings as a percentage or basis points of price, or allow per-symbol overrides (for example a JSON map per setting); size by notional or by risk rather than by a single quantity."
+  },
+  {
+    "id": "D4", "severity": "Low", "area": "Exchange adapter",
+    "title": "The first request after an idle period fails with a 5 s read timeout, and read-only queries are classified 'unknown outcome'",
+    "found_in": "TC17 and TC18 (official run); again in the retries with sleep prevented",
+    "evidence": "After about four minutes without a request the next REST call hung until the 5 s timeout: 10:00:15 and 10:04:53 in the official run, 10:25:57 and 10:28:00 in the retry (the Mac was kept awake for the retry, so this is not the sleep problem). The second attempt succeeded at once. The adapter raises OutcomeUnknown for every timeout, including /info reads that cannot change anything.",
+    "impact": "For the running bot the effect is small: it queries every few seconds, and a lost answer to a signed request is resolved correctly by client id (seen in TC17). It costs up to 5 s when it happens on a stop-loss placement. For any tool built on the adapter that idles, the first read fails. This is what turned TC17 and TC18 into failures in the official run.",
+    "reproduce": "Create the adapter, wait 240 s, call get_account().",
+    "fix": "Retry idempotent /info reads once on a fresh connection; classify a read timeout as transient rather than unknown outcome; consider a shorter connect timeout than read timeout."
+  },
+  {
+    "id": "D5", "severity": "Low", "area": "Exchange behaviour (affects cancel logic)",
+    "title": "The exchange accepts a second order with a client order id that is already in use, and the first order then cannot be cancelled by that id",
+    "found_in": "TC20 subtest i (official run and retry)",
+    "evidence": "Two resting ETH buys were accepted under the same client id (order ids 62412703046 and 62412703581). cancelByCloid removed the newer one; a second cancelByCloid answered 'Order was never placed, already canceled, or filled' while 62412703046 was still open. It had to be cancelled by exchange order id. Same result in the retry.",
+    "impact": "The bot derives a unique client id for every order and never reuses one, so this cannot happen in normal operation. If an id were ever reused, the bot, which cancels only by client id, could not remove the older order. This settles open item IV-06 in docs/INTEGRATION_VERIFICATION.md: duplicates are not rejected.",
+    "reproduce": "Place a resting order, place a second with the same cloid, cancel by cloid twice, list open orders.",
+    "fix": "Keep relying on unique ids (already enforced by the database). Add a cancel-by-order-id fallback in the reconciler for an order that the exchange still lists after a cancel by client id reported 'not found', and record the result under IV-06."
+  },
+  {
+    "id": "D6", "severity": "Low", "area": "Exchange adapter",
+    "title": "ExchangeError cannot be copied or pickled",
+    "found_in": "TC20 (official run), through the test harness",
+    "evidence": "copy.deepcopy(ExchangeError(kind, text)) raises AttributeError: 'str' object has no attribute 'value', because the exception passes one formatted string to Exception.__init__ and is rebuilt from it. dataclasses.asdict() on a PlaceResult that carries an error fails the same way. In the official run this stopped the harness from recording the exchange's rejection texts for subtests a-f and h (the orders were rejected; the reasons were captured in the retry).",
+    "impact": "None in the bot today (it never copies these objects). It will bite any code that logs, copies or passes such results between processes.",
+    "reproduce": "python -c \"import copy; from hlbot.exchange.base import ExchangeError, ErrorClass; copy.deepcopy(ExchangeError(list(ErrorClass)[0], 'x'))\"",
+    "fix": "Call super().__init__(kind, text) and build the message in __str__, or define __reduce__ to return (type(self), (self.kind, self.text))."
+  }
+]
