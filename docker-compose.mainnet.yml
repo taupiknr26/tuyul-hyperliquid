@@ -1,0 +1,24 @@
+# Mainnet overlay: REAL FUNDS. Applied on top of the base file, never alone:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.mainnet.yml up -d --build
+#
+# The base file starts `botctl run --quiet`, which runs PAPER even with
+# HL_ENV=mainnet. Mainnet also needs the explicit flag (FR-082) and
+# HL_MAINNET_CONFIRM equal to HL_ACCOUNT_ADDRESS in .env.
+services:
+  hlbot:
+    command: ["run", "--quiet", "--mainnet"]
+    environment:
+      HL_AGENT_KEY_FILE: /secrets/agent-mainnet.key
+      # Reachable from the host through the loopback-only port below.
+      API_HOST: 0.0.0.0
+    ports:
+      - "127.0.0.1:8787:8787"
+    volumes:
+      # A named volume instead of the host directory: the files must be
+      # owned by uid 10001, which a host bind mount cannot guarantee
+      # (Colima's sshfs mounts present every file as the VM user's).
+      - hlbot-secrets:/secrets
+
+volumes:
+  hlbot-secrets:
