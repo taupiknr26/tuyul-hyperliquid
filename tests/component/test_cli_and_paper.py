@@ -1,5 +1,6 @@
 """``botctl`` verbs (FR-093) and the paper adapter (FR-080)."""
 
+import argparse
 import json
 import os
 
@@ -65,6 +66,23 @@ def test_mainnet_flag_without_confirmation_reports_paper(env_file, capsys):
     assert run(env_file, "config", "--mainnet") == 0
     out = capsys.readouterr().out
     assert "mode: PAPER" in out and "HL_MAINNET_CONFIRM" in out
+
+
+def test_verbs_without_the_flag_follow_the_mode_the_bot_last_started_in(env_file):
+    """``orders``, ``trace`` and ``backup`` take no --mainnet flag; they must still read the mainnet database of a bot running there."""
+    address = "0x" + "ab" * 20
+    env_file.write_text(env_file.read_text() + f"HL_ENV=mainnet\nHL_ACCOUNT_ADDRESS={address}\nHL_MAINNET_CONFIRM={address}\nHL_AGENT_KEY_FILE=/nonexistent\n")
+    args = argparse.Namespace(env_file=str(env_file))
+    paper, mainnet = cli._settings(args, mainnet_flag=False), cli._settings(args, mainnet_flag=True)
+    assert (paper.env, mainnet.env) == ("paper", "mainnet")
+    assert cli._settings(args).db_path == paper.db_path  # never started
+    mainnet.data_path.mkdir(parents=True)
+    mainnet.lock_path.write_text("1")
+    os.utime(mainnet.lock_path, (1000, 1000))
+    assert cli._settings(args).db_path == mainnet.db_path and cli._settings(args).mode_note is None
+    paper.lock_path.write_text("1")
+    os.utime(paper.lock_path, (2000, 2000))
+    assert cli._settings(args).db_path == paper.db_path  # started again later without the flag: paper
 
 
 def test_read_only_verbs_before_the_first_start(env_file, capsys):

@@ -39,8 +39,33 @@ EXIT_OK, EXIT_ERROR, EXIT_CONFIG, EXIT_RUNNING = 0, 1, 2, 3
 # ---------------------------------------------------------------------- helpers
 
 
-def _settings(args: argparse.Namespace, *, mainnet_flag: bool = False) -> Settings:
-    return load_settings(env_file=getattr(args, "env_file", ".env"), mainnet_flag=mainnet_flag)
+def _mtime(path: Path) -> float:
+    try:
+        return path.stat().st_mtime
+    except OSError:
+        return 0.0
+
+
+def _settings(args: argparse.Namespace, *, mainnet_flag: Optional[bool] = None) -> Settings:
+    """``run``, ``start`` and ``config`` pass their ``--mainnet`` flag.
+    Every other verb looks at what a bot left behind and sends no order
+    itself, so with HL_ENV=mainnet it follows the mode that bot last
+    started in (the instance lock is rewritten on every start) instead of
+    the paper fallback of a command line without the flag: otherwise
+    ``orders``, ``trace`` and ``backup`` would read the paper database
+    while the bot trades on mainnet."""
+    env_file = getattr(args, "env_file", ".env")
+    if mainnet_flag is not None:
+        return load_settings(env_file=env_file, mainnet_flag=mainnet_flag)
+    settings = load_settings(env_file=env_file)
+    if settings.requested_env == "mainnet" and settings.env != "mainnet":
+        try:
+            flagged = load_settings(env_file=env_file, mainnet_flag=True)
+        except ConfigError:
+            return settings
+        if flagged.env == "mainnet" and _mtime(flagged.lock_path) > _mtime(settings.lock_path):
+            return flagged
+    return settings
 
 
 def _pid(settings: Settings) -> Optional[int]:
