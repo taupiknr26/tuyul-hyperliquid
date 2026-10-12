@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import random
 from collections.abc import Callable
 from typing import Any, Optional, Union
@@ -69,10 +70,16 @@ def build_client(settings: Settings) -> Any:
         raise ConfigError("TELEGRAM_API_ID and TELEGRAM_API_HASH are required")
     # Telethon appends ".session" to a name without that suffix.
     name = str(path)[: -len(".session")] if str(path).endswith(".session") else str(path)
-    return TelegramClient(
-        name, settings.telegram_api_id, settings.telegram_api_hash,
-        connection_retries=3, retry_delay=2, auto_reconnect=True, request_retries=3,
-    )
+    # Telethon creates a missing session file here, under the process
+    # umask. Without this the next start refuses the file it just wrote.
+    old_mask = os.umask(0o077)
+    try:
+        return TelegramClient(
+            name, settings.telegram_api_id, settings.telegram_api_hash,
+            connection_retries=3, retry_delay=2, auto_reconnect=True, request_retries=3,
+        )
+    finally:
+        os.umask(old_mask)
 
 
 class TelegramIngest:

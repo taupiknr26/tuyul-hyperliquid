@@ -17,7 +17,7 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 from typing import Optional
 
-PARSER_VERSION = "1.2.0"
+PARSER_VERSION = "1.2.1"
 
 MESSAGE_TYPES = (
     "signal",
@@ -83,6 +83,17 @@ def _extract_hashtags(text: str) -> list[str]:
     return [f"#{tag}" for tag in _HASHTAG_RE.findall(text)]
 
 
+def _entry_zone(first: str, second: str, action: Optional[str]) -> dict[str, float]:
+    """The two zone bounds as ``low`` / ``high``. A BUY zone is often
+    written from the top down ("Zone 4205- 4200"); both bounds are
+    stated, so ordering them is not a guess. A SELL zone is taken as
+    written."""
+    low, high = float(first), float(second)
+    if action == "BUY" and low > high:
+        low, high = high, low
+    return {"low": low, "high": high}
+
+
 def extract_signal_fields(text: str) -> tuple[dict, list[str]]:
     """Extract structured fields from a "signal" message. Missing fields
     are reported in the returned parse_errors list rather than guessed."""
@@ -101,10 +112,7 @@ def extract_signal_fields(text: str) -> tuple[dict, list[str]]:
     zone_match = _ZONE_RE.search(text)
     entry_zone: Optional[dict[str, float]] = None
     if zone_match:
-        entry_zone = {
-            "low": float(zone_match.group(1)),
-            "high": float(zone_match.group(2)),
-        }
+        entry_zone = _entry_zone(zone_match.group(1), zone_match.group(2), action)
     else:
         parse_errors.append("missing entry_zone (no 'Zone <low>-<high>' found)")
 
@@ -172,10 +180,7 @@ def _extract_signal_fields_entry_limit_channel(text: str) -> tuple[dict, list[st
     entry_match = _ENTRY_LIMIT_RE.search(text)
     entry_zone: Optional[dict[str, float]] = None
     if entry_match:
-        entry_zone = {
-            "low": float(entry_match.group(1)),
-            "high": float(entry_match.group(2)),
-        }
+        entry_zone = _entry_zone(entry_match.group(1), entry_match.group(2), action)
     else:
         parse_errors.append("missing entry_zone (no 'ENTRY <low> Limit <high>' found)")
 

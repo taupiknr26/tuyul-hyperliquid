@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wsl.exe -d Ubuntu-22.04 -- bash -lc 'docker exec tuyul-hyperliquid_hlbot_1 botctl positions 2>&1 | tail -8; docker exec tuyul-hyperliquid_hlbot_1 python -c \" *)",
+      "Bash(wsl.exe -d Ubuntu-22.04 -- bash -lc 'docker exec tuyul-hyperliquid_hlbot_1 python -c \" *)",
+      "Bash(wsl.exe -d Ubuntu-22.04 -- bash -lc 'cd /mnt/c/Users/taupik/TRADE/tuyul-hyperliquid && grep -n -B3 \"TELEGRAM_CHANNEL_PARSERS\" .env.example; docker exec tuyul-hyperliquid_hlbot_1 python -c \" *)"
+    ]
+  }
+}

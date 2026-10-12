@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
 <head>
@@ -2430,3 +2431,1835 @@ loadSession();
 </script>
 </body>
 </html>
+=======
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Dashboard</title>
+<link rel="icon" href="/logo">
+<script>try { var t = localStorage.getItem("hlbot-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+  :root {
+    --bg: #141414;
+    --surface: #1b1b1b;
+    --surface-deep: #0b0b0b;
+    --border: #2a2a2a;
+    --text: #ffffff;
+    --text-muted: #8c8c8c;
+    --lime: #c6eb72;
+    --yellow: #e8d94c;
+    --teal: #4dd9c6;
+    --success: #3fb950;
+    --danger: #ff5c5c;
+    --link: #3a9bff;
+    --gradient-accent: linear-gradient(135deg, var(--teal), var(--lime), var(--yellow));
+    --gradient-header: linear-gradient(135deg, #c5e4f3, #e6de7c 70%, transparent);
+    --gradient-card: linear-gradient(135deg, #2a2e45, #4a3f73);
+    --radius-card: 20px;
+    --radius-inner: 14px;
+    --radius-badge: 5px;
+    --font: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    /* roles the two themes fill differently */
+    --pos: #c6eb72; --neg: #ff5c5c;            /* chart marks: gain / loss */
+    --pos-text: #c6eb72; --neg-text: #ff5c5c;  /* the same, as text */
+    --chart-line: #c6eb72; --area-top: #e8d94c; --area-mid: #c6eb72;
+    --ring-a: #4dd9c6; --ring-b: #c6eb72; --ring-c: #e8d94c;
+    --nav-active: var(--surface-deep); --badge-bad: #ff5c5c; --focus: #c6eb72;
+    --glow-opacity: .34; --shadow: 0 8px 24px rgba(0, 0, 0, .5); --card-ring: none;
+    --series-a: #22a391; --series-b: #5b8def;  /* two lines on one chart: checked for colour-blind separation on this surface */
+    color-scheme: dark;
+  }
+  /* Light mode: the same layout and accents on light surfaces. Lime and yellow cannot carry
+     text or thin lines on white, so marks and coloured text step to a deep teal and a deeper red
+     (a pair that stays distinguishable for red-green colour-blind readers). */
+  :root[data-theme="light"] {
+    --bg: #f3f4f0; --surface: #ffffff; --surface-deep: #f1f2ee; --border: #e1e3dc;
+    --text: #141414; --text-muted: #666b61; --link: #1668cf; --success: #1f9d4c; --danger: #d93838;
+    --pos: #0e8c7c; --neg: #d93838; --pos-text: #0a7466; --neg-text: #c62f2f;
+    --chart-line: #0e8c7c; --area-top: #0e8c7c; --area-mid: #0e8c7c;
+    --ring-a: #0e8c7c; --ring-b: #4fa832; --ring-c: #9bbf1e;
+    --nav-active: #ffffff; --focus: #0e8c7c;
+    --glow-opacity: .85; --shadow: 0 8px 24px rgba(20, 20, 20, .14); --card-ring: 0 0 0 1px var(--border);
+    --gradient-header: linear-gradient(135deg, #a9d8f0, #e9df6a 70%, transparent);
+    --series-a: #0e8c7c; --series-b: #1668cf;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 500 13px/1.45 var(--font); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  code { font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--text); }
+  h1, h2, h3, p { margin: 0; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+
+  /* ---------- three columns: sidebar | main | right rail ---------- */
+  .app { display: grid; grid-template-columns: 216px minmax(0, 1fr) 332px; min-height: 100vh; }
+  .sidebar { padding: 22px 14px; display: flex; flex-direction: column; gap: 22px; position: sticky; top: 0; height: 100vh; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
+  #brand-name { min-width: 0; line-height: 1.2; overflow-wrap: anywhere; }
+  .logo { width: 40px; height: 40px; border-radius: 11px; object-fit: cover; background: var(--surface-deep); flex: none; }
+  nav { display: flex; flex-direction: column; gap: 4px; }
+  nav a, nav .navbtn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; color: var(--text-muted);
+    font: 600 13px/1.45 var(--font); background: none; border: 0; text-align: left; cursor: pointer; white-space: nowrap; }
+  nav a:hover, nav .navbtn:hover { color: var(--text); }
+  nav a.active { background: var(--nav-active); color: var(--text); box-shadow: var(--card-ring); }
+  nav svg { width: 16px; height: 16px; flex: none; }
+  .userchip { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: var(--radius-inner); background: var(--surface); box-shadow: var(--card-ring); min-width: 0; }
+  .userchip .who { min-width: 0; flex: 1; }
+  .userchip .who b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .userchip .who span { color: var(--text-muted); font-size: 11.5px; }
+  .envcard { margin-top: auto; padding: 14px; border-radius: var(--radius-card); border: 2px solid transparent;
+    background: linear-gradient(var(--surface-deep), var(--surface-deep)) padding-box, var(--gradient-accent) border-box; }
+  .envcard .label { color: var(--text-muted); font-size: 11px; margin-bottom: 6px; }
+  .envcard .line { margin-top: 8px; color: var(--text-muted); font-size: 12px; overflow-wrap: anywhere; }
+  .side-foot { display: flex; flex-direction: column; gap: 2px; }
+  .side-foot .userchip { margin-bottom: 8px; }
+  .side-foot a { padding: 8px 12px; border-radius: 12px; color: var(--text-muted); font-weight: 600; }
+  .side-foot a:hover { color: var(--text); }
+
+  main { padding: 22px 22px 40px; min-width: 0; }
+  .rail { padding: 22px 18px 40px 0; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+  /* ---------- header with the sky -> pale-yellow glow ---------- */
+  .pagehead { position: relative; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; padding: 18px 4px 22px; isolation: isolate; }
+  .pagehead::before { content: ""; position: absolute; z-index: -1; left: -30px; top: -60px; width: 460px; max-width: 90%; height: 170px;
+    background: var(--gradient-header); filter: blur(64px); opacity: var(--glow-opacity); pointer-events: none; }
+  .pagehead h1 { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
+  .pagehead p { color: var(--text-muted); margin-top: 4px; }
+  .controls { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  button { font: 700 12px var(--font); padding: 9px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-deep); color: var(--text); cursor: pointer; }
+  button:hover { border-color: #444; }
+  button.primary { background: var(--lime); border-color: var(--lime); color: #101010; }
+  button.danger { color: var(--neg-text); border-color: var(--neg-text); background: transparent; }
+  button:disabled { opacity: .5; cursor: default; }
+  .iconbtn { width: 36px; height: 36px; padding: 0; display: inline-grid; place-items: center; flex: none; }
+  .iconbtn svg { width: 18px; height: 18px; }
+  .linkbtn { background: none; border: 0; padding: 0; color: var(--link); font: 600 12px var(--font); }
+  .linkbtn:hover { text-decoration: underline; }
+
+  /* theme switch: one icon that turns from a crescent moon (dark) into a sun with rays (light) */
+  .themeicon { overflow: visible; transition: transform .5s cubic-bezier(.4, 0, .2, 1); }
+  .themeicon .core, .themeicon .bite, .themeicon .rays { transform-origin: 12px 12px; transition: transform .5s cubic-bezier(.4, 0, .2, 1), opacity .3s ease; }
+  .themeicon .core { transform: scale(1.5); }
+  .themeicon .rays { transform: rotate(-90deg) scale(.3); opacity: 0; }
+  :root[data-theme="light"] .themeicon { transform: rotate(90deg); }
+  :root[data-theme="light"] .themeicon .core { transform: scale(1); }
+  :root[data-theme="light"] .themeicon .bite { transform: translate(14px, -12px); }
+  :root[data-theme="light"] .themeicon .rays { transform: none; opacity: 1; }
+  #theme-toggle:hover .themeicon .core { transform: scale(1.62); }
+  :root[data-theme="light"] #theme-toggle:hover .themeicon .core { transform: scale(1.12); }
+
+  /* what a role may not use is not shown (the server refuses it either way) */
+  :root:not([data-role="operator"]):not([data-role="admin"]) [data-need="operator"] { display: none !important; }
+  :root:not([data-role="admin"]) [data-need="admin"] { display: none !important; }
+  :root[data-role="admin"] .non-admin { display: none; }
+
+  /* ---------- cards ---------- */
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .card { background: var(--surface); border-radius: var(--radius-card); padding: 18px; min-width: 0; box-shadow: var(--card-ring); }
+  .card + .section-title, .grid2 + .section-title, .overview + .section-title { margin-top: 28px; }
+  .label { color: var(--text-muted); font-size: 12px; font-weight: 600; }
+  .hero { font-size: 28px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; font-variant-numeric: tabular-nums; margin-top: 4px; }
+  .hero small { font-size: 12px; font-weight: 600; color: var(--text-muted); letter-spacing: 0; margin-left: 4px; }
+  .sub { color: var(--link); font-size: 12px; font-weight: 600; margin-top: 4px; }
+  .muted { color: var(--text-muted); }
+  .summary { display: flex; gap: 14px; align-items: center; justify-content: space-between; }
+  .summary .figure { flex: none; }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 3px 14px; margin: 12px 0 0; }
+  .kv dt { color: var(--text-muted); } .kv dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .section-title { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 28px 4px 12px; }
+  .section-title h2 { font-size: 20px; font-weight: 800; letter-spacing: -.01em; }
+  .section-title .sub { margin: 0; }
+
+  /* sections that fold: the heading is the switch, the count beside it stays visible when folded */
+  .fold-toggle { font: inherit; letter-spacing: inherit; color: inherit; background: none; border: 0; padding: 0; display: inline-flex; align-items: center; gap: 8px; }
+  .chev { width: 14px; height: 14px; flex: none; color: var(--text-muted); transition: transform .2s ease; }
+  .fold-toggle[aria-expanded="true"] .chev, details[open] > summary .chev, .expander[aria-expanded="true"] .chev { transform: rotate(90deg); }
+  .fold-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .24s ease, visibility .24s; }
+  .fold-inner { overflow: hidden; min-height: 0; padding: 1px; margin: -1px; }
+  .fold.collapsed .fold-body { grid-template-rows: 0fr; visibility: hidden; }
+  .fold.collapsed .section-title { margin-bottom: 0; }
+
+  /* stat cards: 2px gradient border on a deep surface, icon in a rounded dark square */
+  .overview { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 16px; }
+  .stats { display: grid; gap: 16px; align-content: start; }
+  .stat { padding: 16px; border-radius: var(--radius-card); border: 2px solid transparent;
+    background: linear-gradient(var(--surface-deep), var(--surface-deep)) padding-box, linear-gradient(135deg, var(--teal), var(--yellow)) border-box; }
+  .stat .top { display: flex; align-items: center; gap: 10px; }
+  .icon { width: 34px; height: 34px; border-radius: 11px; background: var(--surface); display: grid; place-items: center; flex: none; }
+  .icon svg { width: 16px; height: 16px; }
+  .stat .hero { font-size: 24px; margin-top: 10px; }
+
+  /* badges and chips */
+  .badge { display: inline-block; padding: 2px 7px; border-radius: var(--radius-badge); background: var(--lime); color: #101010;
+    font-size: 10.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
+  .badge.warn { background: var(--yellow); }
+  .badge.bad { background: var(--badge-bad); }
+  .badge.quiet { background: var(--border); color: var(--text); }
+  .seg { display: inline-flex; gap: 6px; margin-left: auto; }
+  .seg button { padding: 6px 12px; border-radius: 10px; background: var(--surface-deep); border-color: transparent; color: var(--text-muted); }
+  .seg button[aria-pressed="true"] { background: var(--lime); color: #101010; }
+
+  /* list rows with a 3px status stripe */
+  .rows { display: grid; gap: 8px; }
+  .row { position: relative; background: var(--surface-deep); border-radius: var(--radius-inner); padding: 12px 14px 12px 18px; overflow: hidden; min-width: 0; }
+  .row::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--success); }
+  .row.warn::before { background: var(--yellow); }
+  .row.bad::before { background: var(--danger); }
+  .row .head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: 700; }
+  .row .head .when { margin-left: auto; color: var(--text-muted); font-weight: 500; font-size: 11.5px; white-space: nowrap; }
+  .row .foot { color: var(--text-muted); font-size: 11.5px; margin-top: 6px; }
+  .row .body { color: var(--text-muted); margin-top: 4px; overflow-wrap: anywhere; white-space: pre-wrap; }
+  .row .body b { color: var(--text); font-weight: 600; }
+  .empty { color: var(--text-muted); padding: 6px 2px; }
+
+  /* tables */
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: 9px 10px; text-align: left; vertical-align: top; white-space: nowrap; }
+  th { color: var(--text-muted); font-size: 11.5px; font-weight: 600; border-bottom: 1px solid var(--border); }
+  td { border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: 0; }
+  td.wrap { white-space: normal; min-width: 180px; overflow-wrap: anywhere; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  /* history: a trade row opens to show its orders */
+  tr.trade-row { cursor: pointer; }
+  tr.trade-row:hover > td { background: var(--surface-deep); }
+  tr.trade-row.open > td { border-bottom-color: transparent; }
+  .expander { background: none; border: 0; padding: 2px; display: inline-grid; place-items: center; vertical-align: middle; }
+  tr.trade-detail > td { padding: 2px 10px 14px; white-space: normal; }
+  .detail-box { background: var(--surface-deep); border-radius: var(--radius-inner); padding: 12px 14px 6px; }
+  .detail-box th, .detail-box td { padding: 7px 10px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 0 10px 8px; color: var(--text-muted); font-size: 12px; }
+  .facts b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .pos { color: var(--pos-text); } .neg { color: var(--neg-text); }
+
+  /* right rail */
+  .statusbar { display: flex; align-items: center; gap: 10px; background: var(--surface); border-radius: var(--radius-card); padding: 12px 14px; box-shadow: var(--card-ring); }
+  .avatar { width: 36px; height: 36px; border-radius: 12px; background: var(--surface-deep); display: grid; place-items: center; font-weight: 800; flex: none; }
+  .statusbar .who { min-width: 0; }
+  .statusbar .who b { display: block; }
+  .statusbar .who span { color: var(--text-muted); font-size: 11.5px; }
+  .statusbar .right { margin-left: auto; text-align: right; }
+  /* the card keeps its dark gradient in both themes, so its text is always light */
+  .market { background: var(--gradient-card); border-radius: var(--radius-card); padding: 18px; color: #fff; }
+  .market + .market { margin-top: 12px; }
+  .market .hero { font-size: 26px; }
+  .market .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .market .pair div span { display: block; color: rgba(255, 255, 255, .62); font-size: 11.5px; }
+  .market .pair div b { font-variant-numeric: tabular-nums; font-size: 14px; }
+  .market .foot { margin-top: 12px; color: rgba(255, 255, 255, .62); font-size: 11.5px; }
+  .rail h3 { font-size: 15px; font-weight: 800; margin: 0 0 10px; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--success); margin-right: 6px; }
+  .dot.off { background: var(--danger); } .dot.idle { background: var(--text-muted); } .dot.slow { background: var(--yellow); }
+  .stale { display: none; }
+
+  /* charts */
+  .chart { position: relative; width: 100%; }
+  .chart svg { display: block; width: 100%; overflow: visible; }
+  .chart text { font: 500 11px var(--font); fill: var(--text-muted); }
+  .chart .endlabel { fill: var(--text); font-weight: 700; }
+  .bar { cursor: default; } .bar:hover, .bar:focus { opacity: .78; outline: none; }
+  /* chart marks take their colour from the theme, so switching themes needs no redraw */
+  .bar.pos { fill: var(--pos); } .bar.neg { fill: var(--neg); }
+  .c-grid { stroke: var(--border); } .c-line { stroke: var(--chart-line); } .c-cross { stroke: var(--text-muted); }
+  .c-dot { fill: var(--chart-line); stroke: var(--surface); }
+  .c-a { stroke: var(--series-a); } .c-b { stroke: var(--series-b); } .f-a { fill: var(--series-a); } .f-b { fill: var(--series-b); }
+  .bar.neutral { fill: var(--series-b); }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-muted); }
+  .legend i { display: inline-block; width: 14px; height: 0; border-top: 2px solid var(--series-a); margin-right: 6px; vertical-align: middle; }
+  .legend i.b { border-top-color: var(--series-b); }
+
+  /* filters, shared by the analytics and the history */
+  .filters { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: flex-end; margin: 0 4px 14px; }
+  .filters label { display: grid; gap: 4px; color: var(--text-muted); font-size: 11.5px; font-weight: 600; }
+  .filters input, .filters select { padding: 7px 10px; border-radius: 10px; width: auto; min-width: 0; }
+  .filters .seg { margin-left: 0; }
+  .filters .push { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  input[type="date"] { font: 500 13px var(--font); border: 1px solid var(--border); background: var(--surface-deep); color: var(--text); }
+  /* key figures */
+  .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 12px; }
+  .kpi { background: var(--surface); border-radius: var(--radius-inner); padding: 12px 14px; box-shadow: var(--card-ring); min-width: 0; }
+  .kpi .label { display: flex; align-items: center; gap: 6px; }
+  .kpi .value { font-size: 20px; font-weight: 800; letter-spacing: -.01em; font-variant-numeric: tabular-nums; margin-top: 4px; overflow-wrap: anywhere; }
+  .kpi .more { color: var(--text-muted); font-size: 11.5px; margin-top: 2px; }
+  .info { position: relative; flex: none; width: 15px; height: 15px; border-radius: 50%; border: 1px solid var(--border); display: inline-grid; place-items: center;
+    font-size: 10px; font-weight: 700; font-style: normal; color: var(--text-muted); cursor: help; }
+  .info:hover::after, .info:focus::after { content: attr(data-tip); position: absolute; z-index: 20; left: -10px; top: calc(100% + 6px); width: max-content; max-width: 230px;
+    background: var(--surface-deep); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; font: 500 12px/1.4 var(--font);
+    box-shadow: var(--shadow); white-space: normal; text-align: left; }
+  .charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+  .charts .wide { grid-column: 1 / -1; }
+  .charts h3 { font-size: 15px; font-weight: 800; margin: 0; }
+  /* loading, empty and error states */
+  .skeleton { border-radius: 8px; min-height: 16px; background: linear-gradient(90deg, var(--surface-deep), var(--border), var(--surface-deep)); background-size: 200% 100%;
+    animation: shimmer 1.3s linear infinite; }
+  @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+  .state { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; margin: 0 0 12px; border-radius: var(--radius-inner); background: var(--surface); box-shadow: var(--card-ring); }
+  .state.err { border-left: 3px solid var(--danger); }
+  .state[hidden] { display: none; }
+  .pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; color: var(--text-muted); font-size: 12px; }
+  .pager .inline { margin: 0; }
+  /* market card: volume */
+  .market .vol { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, .16); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .market .vol div span { display: block; color: rgba(255, 255, 255, .62); font-size: 11.5px; }
+  .market .vol div b { font-variant-numeric: tabular-nums; font-size: 14px; }
+  .market .vol div small { display: block; color: rgba(255, 255, 255, .62); font-size: 11px; margin-top: 1px; }
+  .market .vol .full { grid-column: 1 / -1; }
+  .market .skeleton { background: linear-gradient(90deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .2), rgba(255, 255, 255, .08)); background-size: 200% 100%; height: 34px; }
+  .trend { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(255, 255, 255, .14); color: #fff; white-space: nowrap; }
+  .trend svg { width: 10px; height: 10px; }
+  .trend.up { color: #c6eb72; } .trend.down { color: #ff9a9a; }
+  .trend.high { background: #e8d94c; color: #101010; } .trend.low { background: rgba(255, 255, 255, .28); color: #fff; }
+  .trend.stale { background: #ff5c5c; color: #101010; }
+  .market .linkbtn { color: #9cc8ff; }
+  /* pop-up pages (settings, alerts) */
+  dialog { border: 0; padding: 0; background: var(--surface); color: var(--text); border-radius: var(--radius-card);
+    box-shadow: var(--shadow), var(--card-ring); width: min(720px, calc(100vw - 32px)); max-height: min(86vh, 820px); overflow: hidden; }
+  dialog[open] { display: flex; flex-direction: column; animation: pop .18s ease-out; }
+  dialog::backdrop { background: rgba(0, 0, 0, .55); backdrop-filter: blur(3px); }
+  @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.98); } }
+  .dlg-head { display: flex; align-items: center; gap: 12px; padding: 18px 20px 14px; }
+  .dlg-head h2 { font-size: 18px; font-weight: 800; }
+  .dlg-head .sub { margin: 0; }
+  .dlg-head .iconbtn { margin-left: auto; }
+  .dlg-body { padding: 4px 20px 22px; overflow: auto; }
+  .tabs { display: flex; gap: 6px; padding: 0 20px 14px; border-bottom: 1px solid var(--border); margin-bottom: 14px; overflow-x: auto; }
+  .tabs button { padding: 7px 14px; border-radius: 10px; background: var(--surface-deep); border-color: transparent; color: var(--text-muted); white-space: nowrap; }
+  .tabs button[aria-selected="true"] { background: var(--lime); color: #101010; }
+  .group { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .group:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+  .group h3 { font-size: 14px; font-weight: 800; margin: 0; }
+  .field { display: grid; gap: 6px; margin-top: 12px; max-width: 360px; }
+  .field label { color: var(--text-muted); font-size: 12px; font-weight: 600; }
+  input[type="text"], input[type="password"], select { font: 500 13px var(--font); padding: 9px 12px; border-radius: 12px; border: 1px solid var(--border);
+    background: var(--surface-deep); color: var(--text); width: 100%; min-width: 0; }
+  .inline { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  .inline input { flex: 1 1 170px; width: auto; }
+  .inline select { flex: 0 0 auto; width: auto; }
+  td select { padding: 5px 8px; border-radius: 9px; width: auto; }
+  td .inline { margin: 0; flex-wrap: nowrap; }
+  td button { padding: 5px 10px; border-radius: 9px; }
+  .msg { font-size: 12px; margin-top: 10px; min-height: 1.45em; color: var(--text-muted); }
+  .msg.err { color: var(--neg-text); } .msg.ok { color: var(--pos-text); }
+  /* alerts: each one opens in place */
+  .cardhead { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .cardhead h3 { margin: 0; }
+  button.row { display: block; width: 100%; text-align: left; border: 0; font: 500 13px/1.45 var(--font); color: var(--text); }
+  button.row:hover { filter: brightness(1.12); }
+  details.alert { position: relative; background: var(--surface-deep); border-radius: var(--radius-inner); overflow: hidden; }
+  details.alert + details.alert { margin-top: 8px; }
+  details.alert::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--yellow); }
+  details.alert.bad::before { background: var(--danger); }
+  details.alert summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 12px 14px 12px 18px; font-weight: 700; }
+  details.alert summary::-webkit-details-marker { display: none; }
+  details.alert summary .when { margin-left: auto; color: var(--text-muted); font-weight: 500; font-size: 11.5px; white-space: nowrap; }
+  details.alert .more { padding: 0 14px 14px 40px; color: var(--text-muted); overflow-wrap: anywhere; }
+  details.alert .more p { white-space: pre-wrap; color: var(--text); margin-bottom: 8px; }
+  .toast { position: fixed; z-index: 30; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; max-width: min(520px, calc(100vw - 32px));
+    background: var(--surface-deep); border: 1px solid var(--border); border-left: 3px solid var(--success); border-radius: 12px; padding: 11px 16px; box-shadow: var(--shadow);
+    font-weight: 600; transition: opacity .2s ease, transform .2s ease; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast.bad { border-left-color: var(--danger); }
+  /* settings */
+  .seg.left { margin: 12px 0 0; }
+  .logo-row { display: flex; gap: 16px; align-items: flex-start; margin-top: 12px; flex-wrap: wrap; }
+  .logo-row img { width: 84px; height: 84px; border-radius: 18px; object-fit: cover; background: var(--surface-deep); flex: none; }
+  .logo-row .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hint { color: var(--text-muted); font-size: 12px; margin-top: 10px; max-width: 46ch; }
+  details.tableview { margin-top: 10px; }
+  details.tableview summary { color: var(--link); font-weight: 600; font-size: 12px; cursor: pointer; width: max-content; }
+  .tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface-deep); border: 1px solid var(--border); border-radius: 10px;
+    padding: 8px 10px; box-shadow: var(--shadow); display: none; max-width: 240px; }
+  .tip b { display: block; font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .tip span { display: block; color: var(--text-muted); font-size: 11.5px; margin-top: 2px; }
+  .tip i { display: inline-block; width: 12px; height: 0; border-top: 2px solid var(--chart-line); vertical-align: middle; margin-right: 6px; }
+
+  /* ---------- smaller screens ---------- */
+  @media (max-width: 1240px) {
+    .app { grid-template-columns: 216px minmax(0, 1fr); }
+    .sidebar { grid-row: 1 / span 2; }
+    .rail { grid-column: 2; padding: 0 22px 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: start; }
+  }
+  @media (max-width: 860px) {
+    .app { display: block; }
+    .sidebar { position: static; height: auto; padding: 14px 16px 0; gap: 12px; }
+    nav { flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
+    nav a { white-space: nowrap; }
+    .envcard, .side-foot { display: none; }
+    main { padding: 8px 16px 24px; }
+    .rail { padding: 0 16px 32px; }
+    .grid2, .overview { grid-template-columns: minmax(0, 1fr); }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stats .stat:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .charts { grid-template-columns: minmax(0, 1fr); }
+    .filters .push { margin-left: 0; width: 100%; }
+    .controls { margin-left: 0; width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><img class="logo" id="logo" src="/logo" alt="" width="40" height="40"><span id="brand-name"></span></div>
+    <nav aria-label="Sections">
+      <a href="#overview" class="active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1.2"/><rect x="9" y="2" width="5" height="5" rx="1.2"/><rect x="2" y="9" width="5" height="5" rx="1.2"/><rect x="9" y="9" width="5" height="5" rx="1.2"/></svg>Overview</a>
+      <a href="#analytics"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 13.5V9M6.2 13.5V5M9.8 13.5V7.5M13.5 13.5V2.5"/></svg>Analytics</a>
+      <a href="#positions"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 12l4-4 3 3 5-6"/></svg>Positions</a>
+      <a href="#orders"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h10M3 8h10M3 12h6"/></svg>Orders</a>
+      <a href="#signals"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 8h3l2-5 2 10 2-5h3"/></svg>Signals</a>
+      <a href="#history"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.5 1.5"/></svg>History</a>
+      <button type="button" class="navbtn" id="nav-alerts" aria-haspopup="dialog"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V7a4 4 0 018 0v4l1 1.5H3L4 11zM6.5 14h3"/></svg>Alerts</button>
+      <button type="button" class="navbtn" id="nav-settings" aria-haspopup="dialog"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 4.5h7M12.5 4.5h1M2.5 11.5h1M6.5 11.5h7"/><circle cx="11" cy="4.5" r="1.6"/><circle cx="5" cy="11.5" r="1.6"/></svg>Settings</button>
+    </nav>
+    <div class="envcard">
+      <div class="label">Environment</div>
+      <span id="env" class="badge">…</span>
+      <div class="line" id="account-line">…</div>
+      <div class="line" id="version-line"></div>
+    </div>
+    <div class="side-foot">
+      <div class="userchip">
+        <span class="avatar" id="user-avatar" aria-hidden="true">·</span>
+        <div class="who"><b id="user-name">…</b><span id="user-role"></span></div>
+        <button type="button" class="iconbtn" id="signout" aria-label="Sign out" title="Sign out"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 2.5h-3v11h3M10 5l3 3-3 3M13 8H6.5"/></svg></button>
+      </div>
+      <a href="/metrics">Metrics</a>
+      <a href="/health">Health check</a>
+    </div>
+  </aside>
+
+  <main>
+    <header class="pagehead">
+      <div>
+        <h1>Overview <span id="health-top" class="badge quiet" style="vertical-align:middle;margin-left:6px">…</span></h1>
+        <p id="subtitle">Connecting…</p>
+      </div>
+      <div class="controls">
+        <button type="button" id="theme-toggle" class="iconbtn" aria-label="Switch to light theme" title="Switch to light theme">
+          <svg class="themeicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <mask id="theme-mask"><rect x="-8" y="-8" width="40" height="40" fill="white"/><circle class="bite" cx="17.5" cy="6.5" r="6.5" fill="black"/></mask>
+            <g mask="url(#theme-mask)"><circle class="core" cx="12" cy="12" r="5" fill="currentColor" stroke="none"/></g>
+            <path class="rays" d="M12 1.5V4M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/>
+          </svg>
+        </button>
+        <button type="button" id="pause" data-need="operator">Pause</button>
+        <button type="button" id="resume" class="primary" data-need="operator">Resume</button>
+        <button type="button" id="kill" class="danger" data-need="operator">Kill (flatten)</button>
+      </div>
+    </header>
+
+    <section id="overview" aria-label="Summary">
+      <div class="grid2">
+        <div class="card">
+          <div class="summary">
+            <div>
+              <div class="label">Account value</div>
+              <div class="hero" id="equity">–</div>
+              <div class="sub" id="equity-sub"></div>
+            </div>
+            <div class="figure" id="ring" role="img" aria-label="Margin used"></div>
+          </div>
+          <dl class="kv" id="account-kv"></dl>
+        </div>
+        <div class="card">
+          <div class="label">Day P/L <span class="muted">(UTC, realised)</span></div>
+          <div class="hero" id="daypnl">–</div>
+          <div class="sub" id="day-sub"></div>
+          <div class="chart" id="bars" style="margin-top:12px"></div>
+          <div class="muted" style="font-size:11.5px;margin-top:6px">Net P/L of the latest closed trades, oldest to newest</div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Overview statistic</h2>
+        <span class="sub" id="stats-sub"></span>
+        <div class="seg" role="group" aria-label="Chart range">
+          <button data-range="1h" aria-pressed="false">1H</button>
+          <button data-range="1d" aria-pressed="true">1D</button>
+          <button data-range="1w" aria-pressed="false">1W</button>
+        </div>
+      </div>
+      <div class="overview">
+        <div class="stats">
+          <div class="stat">
+            <div class="top"><span class="icon"><svg viewBox="0 0 16 16" fill="none" style="stroke:var(--pos)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l8-8M6 4h6v6"/></svg></span><span class="label">Gains</span></div>
+            <div class="hero" id="gain-total">–</div>
+            <div class="sub" id="gain-sub"></div>
+          </div>
+          <div class="stat">
+            <div class="top"><span class="icon"><svg viewBox="0 0 16 16" fill="none" style="stroke:var(--neg)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l8 8M6 12h6V6"/></svg></span><span class="label">Losses</span></div>
+            <div class="hero" id="loss-total">–</div>
+            <div class="sub" id="loss-sub"></div>
+          </div>
+          <div class="stat">
+            <div class="top"><span class="icon"><svg viewBox="0 0 16 16" fill="none" style="stroke:var(--text)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M5.6 8.3l1.7 1.7 3.2-3.6"/></svg></span><span class="label">Daily win rate</span></div>
+            <div class="hero" id="day-winrate">–</div>
+            <div class="sub" id="day-winrate-sub"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="label">Account value over time <span class="muted">(USDC)</span></div>
+          <div class="chart" id="line" style="margin-top:10px"></div>
+          <div class="muted" id="range-note" style="font-size:11.5px;margin-top:6px" aria-live="polite"></div>
+          <details class="tableview"><summary>Table view</summary><div class="scroll" id="line-table"></div></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="analytics" class="fold">
+      <div class="section-title"><h2><button type="button" class="fold-toggle" id="analytics-toggle" aria-expanded="true" aria-controls="analytics-body"><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>Analytics</button></h2><span class="sub" id="analytics-sub"></span></div>
+      <div class="fold-body" id="analytics-body"><div class="fold-inner">
+        <form class="filters" id="an-filters" autocomplete="off">
+          <label>From<input type="date" id="an-from"></label>
+          <label>To<input type="date" id="an-to"></label>
+          <div class="seg" role="group" aria-label="Quick date range">
+            <button type="button" data-preset="all" data-for="an" aria-pressed="true">All</button>
+            <button type="button" data-preset="today" data-for="an" aria-pressed="false">Today</button>
+            <button type="button" data-preset="7" data-for="an" aria-pressed="false">7D</button>
+            <button type="button" data-preset="30" data-for="an" aria-pressed="false">30D</button>
+          </div>
+          <label>Symbol<select id="an-symbol"><option value="">All symbols</option></select></label>
+          <label>Signal source<select id="an-source"><option value="">All sources</option></select></label>
+          <label>Direction<select id="an-side"><option value="">Buy and sell</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select></label>
+          <div class="push"><span class="muted" id="an-zone" style="font-size:11.5px"></span></div>
+        </form>
+        <div class="state" id="an-state" role="status" hidden></div>
+        <div class="kpis" id="an-kpis"></div>
+        <div class="charts">
+          <div class="card wide">
+            <div class="cardhead"><h3>Cumulative net P/L</h3><span class="muted" id="an-cumulative-note" style="font-size:11.5px"></span></div>
+            <div class="chart" id="an-cumulative"></div>
+          </div>
+          <div class="card wide">
+            <div class="cardhead"><h3>Equity and balance</h3><div class="legend"><span><i></i>Equity (account value)</span><span><i class="b"></i>Realised balance (derived)</span></div></div>
+            <div class="chart" id="an-equity"></div>
+            <p class="hint" style="max-width:none">For the whole account: only the date range applies here. The balance line is the first account value in the range plus each closed trade's net result; it leaves out open positions, deposits and withdrawals.</p>
+          </div>
+          <div class="card">
+            <div class="cardhead"><h3>Profit and loss by period</h3>
+              <div class="seg" role="group" aria-label="Period"><button type="button" data-period="day" aria-pressed="true">Day</button><button type="button" data-period="week" aria-pressed="false">Week</button><button type="button" data-period="month" aria-pressed="false">Month</button></div></div>
+            <div class="chart" id="an-periods"></div>
+          </div>
+          <div class="card">
+            <div class="cardhead"><h3>Trading activity</h3>
+              <div class="seg" role="group" aria-label="Activity measure"><button type="button" data-activity="trades" aria-pressed="true">Trades</button><button type="button" data-activity="volume" aria-pressed="false">Traded value</button></div></div>
+            <div class="chart" id="an-activity"></div>
+          </div>
+          <div class="card">
+            <div class="cardhead"><h3>Win/loss distribution</h3><span class="muted" style="font-size:11.5px">trades by net result</span></div>
+            <div class="chart" id="an-distribution"></div>
+            <div class="muted" id="an-outcomes" style="font-size:11.5px;margin-top:6px"></div>
+          </div>
+          <div class="card">
+            <div class="cardhead"><h3>Performance by symbol</h3><span class="muted" style="font-size:11.5px">net P/L</span></div>
+            <div class="chart" id="an-symbols"></div>
+            <div class="scroll" id="an-symbols-table" style="margin-top:8px"></div>
+          </div>
+          <div class="card wide">
+            <div class="cardhead"><h3>Performance by signal source and direction</h3></div>
+            <div class="scroll" id="an-sources-table"></div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="positions" class="fold">
+      <div class="section-title"><h2><button type="button" class="fold-toggle" id="positions-toggle" aria-expanded="true" aria-controls="positions-body"><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>Positions</button></h2><span class="sub" id="positions-sub"></span></div>
+      <div class="fold-body" id="positions-body"><div class="fold-inner">
+        <div class="card">
+          <div class="rows" id="trades"></div>
+          <div class="scroll" id="positions-table" style="margin-top:14px"></div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="orders" class="fold">
+      <div class="section-title"><h2><button type="button" class="fold-toggle" id="orders-toggle" aria-expanded="true" aria-controls="orders-body"><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>Open orders</button></h2><span class="sub" id="orders-sub">on the exchange, managed assets only</span></div>
+      <div class="fold-body" id="orders-body"><div class="fold-inner">
+        <div class="card"><div class="scroll" id="orders-table"></div></div>
+      </div></div>
+    </section>
+
+    <section id="signals" class="fold">
+      <div class="section-title"><h2><button type="button" class="fold-toggle" id="signals-toggle" aria-expanded="true" aria-controls="signals-body"><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>Signals</button></h2><span class="sub" id="signals-sub"></span></div>
+      <div class="fold-body" id="signals-body"><div class="fold-inner">
+        <div class="card">
+          <div class="label" style="margin-bottom:8px">Waiting for price</div>
+          <div class="scroll" id="waiting"></div>
+          <div class="label" style="margin:18px 0 8px">Recent</div>
+          <div class="scroll" id="recent-signals"></div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="history" class="fold">
+      <div class="section-title"><h2><button type="button" class="fold-toggle" id="history-toggle" aria-expanded="true" aria-controls="history-body"><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>History</button></h2><span class="sub" id="history-sub">latest trades</span></div>
+      <div class="fold-body" id="history-body"><div class="fold-inner">
+        <form class="filters" id="hi-filters" autocomplete="off">
+          <label>From<input type="date" id="hi-from"></label>
+          <label>To<input type="date" id="hi-to"></label>
+          <div class="seg" role="group" aria-label="Quick date range">
+            <button type="button" data-preset="all" data-for="hi" aria-pressed="true">All</button>
+            <button type="button" data-preset="today" data-for="hi" aria-pressed="false">Today</button>
+            <button type="button" data-preset="7" data-for="hi" aria-pressed="false">7D</button>
+            <button type="button" data-preset="30" data-for="hi" aria-pressed="false">30D</button>
+          </div>
+          <label>Symbol<select id="hi-symbol"><option value="">All symbols</option></select></label>
+          <label>Direction<select id="hi-side"><option value="">Buy and sell</option><option value="BUY">Buy</option><option value="SELL">Sell</option></select></label>
+          <label>Status<select id="hi-status"><option value="all">All</option><option value="closed">Closed</option><option value="open">Open</option></select></label>
+          <div class="push"><button type="button" id="export" class="primary">Export to Excel</button></div>
+        </form>
+        <div class="state" id="hi-state" role="status" hidden></div>
+        <div class="card">
+          <div class="scroll" id="history-table"></div>
+          <div class="pager">
+            <span id="hi-count"></span>
+            <span class="inline"><button type="button" id="hi-prev">Previous</button><span id="hi-page"></span><button type="button" id="hi-next">Next</button></span>
+          </div>
+        </div>
+      </div></div>
+    </section>
+  </main>
+
+  <aside class="rail">
+    <div class="statusbar">
+      <span class="avatar" id="avatar" aria-hidden="true">H</span>
+      <div class="who"><b id="health-text">…</b><span id="age" aria-live="polite">connecting…</span></div>
+      <div class="right"><span id="health" class="badge quiet">…</span><div class="stale" id="stale"><span class="badge bad" role="status">data is stale</span></div></div>
+    </div>
+
+    <div>
+      <div class="cardhead"><h3>Market</h3>
+        <div class="seg" role="group" aria-label="Volume candle size">
+          <button type="button" data-volume="15m" aria-pressed="false">15m</button><button type="button" data-volume="1h" aria-pressed="true">1H</button>
+          <button type="button" data-volume="4h" aria-pressed="false">4H</button><button type="button" data-volume="1d" aria-pressed="false">1D</button>
+        </div></div>
+      <div id="market"></div>
+    </div>
+
+    <div class="card">
+      <h3>Connections</h3>
+      <dl class="kv" id="connections" style="margin-top:0"></dl>
+    </div>
+
+    <div class="card">
+      <h3>Health</h3>
+      <div class="rows" id="conditions"></div>
+    </div>
+
+    <div class="card" id="alerts-card">
+      <div class="cardhead"><h3>Alerts</h3><button type="button" class="linkbtn" id="alerts-open" aria-haspopup="dialog">View all</button></div>
+      <div class="rows" id="alert-rows"></div>
+    </div>
+  </aside>
+</div>
+<div class="tip" id="tip" role="status"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<dialog id="alerts-dialog" aria-labelledby="alerts-title">
+  <div class="dlg-head"><h2 id="alerts-title">Alerts</h2><span class="sub" id="alerts-count"></span>
+    <button type="button" class="iconbtn" data-close aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+  <div class="dlg-body" id="alerts-list"></div>
+</dialog>
+
+<dialog id="settings-dialog" aria-labelledby="settings-title">
+  <div class="dlg-head"><h2 id="settings-title">Settings</h2>
+    <button type="button" class="iconbtn" data-close aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+  <div class="tabs" role="tablist" aria-label="Settings">
+    <button type="button" role="tab" id="tab-appearance" data-tab="appearance" aria-controls="panel-appearance" aria-selected="true">Appearance</button>
+    <button type="button" role="tab" id="tab-account" data-tab="account" aria-controls="panel-account" aria-selected="false">Account</button>
+    <button type="button" role="tab" id="tab-users" data-tab="users" aria-controls="panel-users" aria-selected="false" data-need="admin">Users</button>
+  </div>
+  <div class="dlg-body">
+    <div id="panel-appearance" role="tabpanel" aria-labelledby="tab-appearance">
+      <div class="group">
+        <h3>Theme</h3>
+        <div class="seg left" role="group" aria-label="Theme">
+          <button type="button" data-theme-choice="dark" aria-pressed="true">Dark</button>
+          <button type="button" data-theme-choice="light" aria-pressed="false">Light</button>
+        </div>
+        <p class="hint">Remembered in this browser only.</p>
+      </div>
+      <form class="group" id="name-form" data-need="admin" autocomplete="off">
+        <h3><label for="name-input">Dashboard name</label></h3>
+        <div class="inline">
+          <input type="text" id="name-input" maxlength="40" placeholder="hlbot">
+          <button type="submit" class="primary">Save</button>
+        </div>
+        <p class="msg" id="name-msg" aria-live="polite">Shown in the sidebar, the browser tab and on the sign-in page. Leave it empty for the default.</p>
+      </form>
+      <div class="group" data-need="admin">
+        <h3>Logo</h3>
+        <div class="logo-row">
+          <img id="logo-preview" src="/logo" alt="Current logo" width="84" height="84">
+          <div>
+            <div class="actions">
+              <button type="button" id="logo-pick" class="primary">Change logo…</button>
+              <button type="button" id="logo-reset">Use default</button>
+            </div>
+            <input type="file" id="logo-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+            <p class="hint" id="logo-note" aria-live="polite">PNG, JPEG, WebP or GIF, up to 512 KB. Stored on the bot, so every browser that opens this page sees it.</p>
+          </div>
+        </div>
+      </div>
+      <p class="hint non-admin">The dashboard name and logo are changed by an admin.</p>
+    </div>
+
+    <div id="panel-account" role="tabpanel" aria-labelledby="tab-account" hidden>
+      <div class="group">
+        <h3>Signed in</h3>
+        <p class="hint" id="account-who"></p>
+        <div class="inline"><button type="button" id="signout-2">Sign out</button></div>
+      </div>
+      <form class="group" id="pass-form">
+        <h3>Change password</h3>
+        <div class="field"><label for="pass-current">Current password</label><input type="password" id="pass-current" autocomplete="current-password" required></div>
+        <div class="field"><label for="pass-new">New password (10 characters or more)</label><input type="password" id="pass-new" autocomplete="new-password" minlength="10" required></div>
+        <div class="field"><label for="pass-repeat">Repeat the new password</label><input type="password" id="pass-repeat" autocomplete="new-password" minlength="10" required></div>
+        <div class="inline"><button type="submit" class="primary">Change password</button></div>
+        <p class="msg" id="pass-msg" aria-live="polite"></p>
+      </form>
+    </div>
+
+    <div id="panel-users" role="tabpanel" aria-labelledby="tab-users" hidden>
+      <div class="group">
+        <h3>Accounts</h3>
+        <div class="scroll" id="users-table" style="margin-top:8px"></div>
+        <form id="user-pass" hidden autocomplete="off">
+          <div class="inline">
+            <input type="password" id="user-pass-value" autocomplete="new-password" minlength="10" required aria-labelledby="user-pass-label">
+            <button type="submit" class="primary">Set password</button>
+            <button type="button" id="user-pass-cancel">Cancel</button>
+          </div>
+          <p class="hint" id="user-pass-label"></p>
+        </form>
+        <p class="msg" id="users-msg" aria-live="polite"></p>
+      </div>
+      <form class="group" id="user-add" autocomplete="off">
+        <h3>Add an account</h3>
+        <div class="inline">
+          <input type="text" id="new-user" placeholder="username" aria-label="Username" autocomplete="off" autocapitalize="none" required>
+          <input type="password" id="new-pass" placeholder="password, 10+ characters" aria-label="Password" autocomplete="new-password" minlength="10" required>
+          <select id="new-role" aria-label="Role"><option value="viewer">viewer</option><option value="operator">operator</option><option value="admin">admin</option></select>
+          <button type="submit" class="primary">Add</button>
+        </div>
+        <p class="hint"><b>viewer</b> reads everything. <b>operator</b> can also pause, resume, kill and close. <b>admin</b> can also change these settings and manage accounts.</p>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const isNum = (v) => v !== null && v !== undefined && v !== "" && !Number.isNaN(Number(v));
+const num = (v, d = 2) => isNum(v) ? Number(v).toLocaleString("en-US", {maximumFractionDigits: d}) : "–";
+const money = (v, d = 2) => {
+  if (!isNum(v)) return "–";
+  const text = "$" + Math.abs(Number(v)).toLocaleString("en-US", {minimumFractionDigits: d, maximumFractionDigits: d});
+  return Number(text.replace(/[$,]/g, "")) === 0 ? text : (Number(v) < 0 ? "−" : "+") + text;  // no sign on a zero
+};
+const usd = (v, d = 2) => isNum(v) ? "$" + Number(v).toLocaleString("en-US", {minimumFractionDigits: d, maximumFractionDigits: d}) : "–";
+const signClass = (v) => !isNum(v) || Math.abs(Number(v)) < 0.005 ? "" : Number(v) > 0 ? "pos" : "neg";  // what shows as $0.00 gets no colour
+const strip = (html) => { const el = document.createElement("div"); el.innerHTML = html; return el.textContent || ""; };
+const clock = (iso) => { const d = new Date(iso); return Number.isNaN(d.getTime()) ? "" : d.toLocaleString("en-GB", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false}); };
+function ago(iso) {
+  const t = new Date(iso).getTime();
+  if (Number.isNaN(t)) return "";
+  const s = Math.max(0, (Date.now() - t) / 1000);
+  if (s < 60) return Math.round(s) + " s ago";
+  if (s < 3600) return Math.round(s / 60) + " min ago";
+  if (s < 86400) return Math.round(s / 3600) + " h ago";
+  return Math.round(s / 86400) + " d ago";
+}
+function table(cols, rows, empty) {
+  if (!rows || !rows.length) return `<div class="empty">${esc(empty)}</div>`;
+  const head = cols.map((c) => `<th${c.num ? ' class="num"' : ""}>${esc(c.h)}</th>`).join("");
+  const body = rows.map((r) => "<tr>" + cols.map((c) => `<td class="${c.num ? "num" : ""}${c.wrap ? " wrap" : ""}">${c.f(r)}</td>`).join("") + "</tr>").join("");
+  return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
+/* ------------------------------------------------------------------ tooltip (text only: values are data, never markup) */
+const tip = $("tip");
+function showTip(x, y, value, label, keyed) {
+  tip.textContent = "";
+  const strong = document.createElement("b");
+  if (keyed) strong.appendChild(document.createElement("i"));
+  strong.appendChild(document.createTextNode(value));
+  const small = document.createElement("span");
+  small.textContent = label;
+  tip.append(strong, small);
+  tip.style.display = "block";
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + "px";
+  tip.style.top = Math.max(8, y - h - 12) + "px";
+}
+const hideTip = () => { tip.style.display = "none"; };
+
+/* ------------------------------------------------------------------ charts */
+
+function ring(el, fraction, caption) {
+  const f = isNum(fraction) ? Math.max(0, Math.min(1, Number(fraction))) : null;
+  const r = 34, c = 2 * Math.PI * r;
+  el.innerHTML = `<svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true">
+    <defs><linearGradient id="ring-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--ring-a)"/><stop offset=".55" style="stop-color:var(--ring-b)"/><stop offset="1" style="stop-color:var(--ring-c)"/></linearGradient></defs>
+    <circle cx="48" cy="48" r="${r}" fill="none" class="c-grid" stroke-width="8"/>
+    ${f === null || f === 0 ? "" : `<circle cx="48" cy="48" r="${r}" fill="none" stroke="url(#ring-g)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${(c * f).toFixed(2)} ${c.toFixed(2)}" transform="rotate(-90 48 48)"/>`}
+    <text x="48" y="46" text-anchor="middle" style="font:800 16px var(--font);fill:var(--text)">${f === null ? "–" : Math.round(f * 100) + "%"}</text>
+    <text x="48" y="61" text-anchor="middle" style="font:600 9.5px var(--font);fill:var(--text-muted)">${esc(caption)}</text></svg>`;
+  el.setAttribute("aria-label", f === null ? caption + ": unknown" : `${caption}: ${Math.round(f * 100)}%`);
+}
+
+function niceStep(span, count) {
+  const raw = span / Math.max(1, count), mag = Math.pow(10, Math.floor(Math.log10(raw))), n = raw / mag;
+  return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * mag;
+}
+function axisLabel(v, step) {
+  if (Math.abs(v) < Math.abs(step) / 1e6) v = 0;  // never "-0.0"
+  if (Math.abs(v) >= 1000 && step >= 100) return (v / 1000).toLocaleString("en-US", {maximumFractionDigits: 1}) + "K";
+  const decimals = Math.max(0, Math.min(4, -Math.floor(Math.log10(step) + 1e-9)));
+  return v.toLocaleString("en-US", {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+}
+
+/* Account value: one series, so no legend; the card label names it. 2px line, area fading to nothing, labelled endpoint. */
+const RANGES = {
+  "1h": {name: "Last hour", tick: 15 * 60e3},
+  "1d": {name: "Last 24 hours", tick: 6 * 3600e3},
+  "1w": {name: "Last 7 days", tick: 24 * 3600e3},
+};
+/* Tick positions on local-time boundaries inside [from, to], and their labels (a date at midnight, a time otherwise). */
+function timeTicks(from, to, tick) {
+  const shift = new Date(to).getTimezoneOffset() * 60e3, ticks = [];
+  for (let local = Math.ceil((from - shift) / tick) * tick; local + shift <= to; local += tick) {
+    const d = new Date(local + shift), midnight = d.getHours() === 0 && d.getMinutes() === 0;
+    ticks.push({t: local + shift, label: midnight || tick >= 24 * 3600e3
+      ? d.toLocaleDateString("en-GB", {day: "2-digit", month: "short"})
+      : d.toLocaleTimeString("en-GB", {hour: "2-digit", minute: "2-digit", hour12: false})});
+  }
+  return ticks;
+}
+
+function lineChart(el, points, win) {
+  const W = Math.max(280, el.clientWidth || 600), H = window.innerWidth > 860 ? 300 : 230, m = {l: 56, r: 18, t: 16, b: 26};
+  if (!points || points.length < 2) {
+    el.innerHTML = `<div class="empty" style="height:${H}px;display:grid;place-items:center;text-align:center">No history in this range yet. A point is stored about once a minute while the bot runs.</div>`;
+    return;
+  }
+  const xs = points.map((p) => new Date(p.at).getTime()), ys = points.map((p) => Number(p.value));
+  let lo = Math.min(...ys), hi = Math.max(...ys);
+  if (hi - lo < 1e-9) { const pad = Math.max(1, Math.abs(hi) * 0.005); lo -= pad; hi += pad; }
+  const step = niceStep(hi - lo, 3);
+  lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+  // The time axis is the window that was asked for, not just where the data happens to be:
+  // choosing 1H, 1D or 1W changes the span even when the stored history is short.
+  const x0 = win && isNum(win.from) ? Math.min(win.from, xs[0]) : xs[0];
+  const x1 = win && isNum(win.to) ? Math.max(win.to, xs[xs.length - 1]) : (xs[xs.length - 1] === xs[0] ? xs[0] + 1 : xs[xs.length - 1]);
+  const px = (t) => m.l + (t - x0) / (x1 - x0) * (W - m.l - m.r), py = (v) => m.t + (hi - v) / (hi - lo) * (H - m.t - m.b);
+  const coords = points.map((p, i) => [px(xs[i]), py(ys[i])]);
+  const path = coords.map((c, i) => (i ? "L" : "M") + c[0].toFixed(1) + " " + c[1].toFixed(1)).join(" ");
+  const base = (H - m.b).toFixed(1);
+  let grid = "";
+  for (let v = lo; v <= hi + step / 2; v += step) {
+    const y = py(v).toFixed(1);
+    grid += `<line x1="${m.l}" x2="${W - m.r}" y1="${y}" y2="${y}" class="c-grid" stroke-width="1"/><text x="${m.l - 8}" y="${y}" dy="3.5" text-anchor="end">${esc(axisLabel(v, step))}</text>`;
+  }
+  const all = timeTicks(x0, x1, (RANGES[win && win.key] || {tick: (x1 - x0) / 4}).tick);
+  const stride = Math.max(1, Math.ceil(all.length / Math.max(2, Math.floor((W - m.l - m.r) / 64))));
+  let axis = "";
+  all.forEach((tick, i) => {
+    const x = px(tick.t);
+    axis += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${H - m.b}" y2="${H - m.b + 4}" class="c-grid" stroke-width="1"/>`;
+    if ((all.length - 1 - i) % stride === 0) axis += `<text x="${x.toFixed(1)}" y="${H - 6}" text-anchor="${x > W - m.r - 18 ? "end" : x < m.l + 18 ? "start" : "middle"}">${esc(tick.label)}</text>`;
+  });
+  const last = coords[coords.length - 1], lastText = usd(ys[ys.length - 1]);
+  // The endpoint label sits up and to the left of the last point. When the whole line is a narrow
+  // sliver at the right of a long window, there is no room above it: step clear to the left instead.
+  const sliver = last[0] - coords[0][0] < 76;
+  const labelX = sliver ? Math.max(m.l + 60, coords[0][0] - 10) : Math.min(W - m.r - 2, last[0] - 8);
+  const labelY = sliver ? last[1] + 4 : Math.max(m.t + 4, last[1] - 10);
+  el.innerHTML = `<svg height="${H}" viewBox="0 0 ${W} ${H}" tabindex="0" role="img" aria-label="Account value, ${esc(((RANGES[win && win.key] || {}).name || "selected range").toLowerCase())}: data from ${esc(clock(points[0].at))} to ${esc(clock(points[points.length - 1].at))}, latest ${esc(lastText)}">
+    <defs><linearGradient id="area-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--area-top)" stop-opacity=".30"/><stop offset=".45" style="stop-color:var(--area-mid)" stop-opacity=".12"/><stop offset="1" style="stop-color:var(--area-mid)" stop-opacity="0"/></linearGradient></defs>
+    ${grid}
+    ${axis}
+    <path d="${path} L${last[0].toFixed(1)} ${base} L${coords[0][0].toFixed(1)} ${base} Z" fill="url(#area-g)"/>
+    <path d="${path}" fill="none" class="c-line" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <line id="cross" y1="${m.t}" y2="${base}" class="c-cross" stroke-width="1" visibility="hidden"/>
+    <circle id="cross-dot" r="4" class="c-dot" stroke-width="2" visibility="hidden"/>
+    <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="4" class="c-dot" stroke-width="2"/>
+    <text class="endlabel" x="${labelX.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="end">${esc(lastText)}</text>
+    <rect x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent"/></svg>`;
+  const svg = el.querySelector("svg"), cross = svg.querySelector("#cross"), dot = svg.querySelector("#cross-dot");
+  let index = coords.length - 1;
+  const point = (i, clientX, clientY) => {
+    index = Math.max(0, Math.min(coords.length - 1, i));
+    const [cx, cy] = coords[index];
+    cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.setAttribute("visibility", "visible");
+    dot.setAttribute("cx", cx); dot.setAttribute("cy", cy); dot.setAttribute("visibility", "visible");
+    const box = svg.getBoundingClientRect();
+    showTip(clientX ?? box.left + cx * box.width / W, clientY ?? box.top + cy, usd(ys[index]), clock(points[index].at), true);
+  };
+  const leave = () => { cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); hideTip(); };
+  svg.addEventListener("pointermove", (e) => {
+    const box = svg.getBoundingClientRect(), x = (e.clientX - box.left) * W / box.width;
+    let best = 0;
+    for (let i = 1; i < coords.length; i++) if (Math.abs(coords[i][0] - x) < Math.abs(coords[best][0] - x)) best = i;
+    point(best, e.clientX, e.clientY);
+  });
+  svg.addEventListener("pointerleave", leave);
+  svg.addEventListener("blur", leave);
+  svg.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") { point(index - 1); e.preventDefault(); }
+    if (e.key === "ArrowRight") { point(index + 1); e.preventDefault(); }
+  });
+}
+
+/* Net P/L per closed trade. Direction from the zero line carries the sign; colour repeats it. */
+function barChart(el, trades) {
+  const W = Math.max(220, el.clientWidth || 360), H = 96, pad = 4;
+  if (!trades || !trades.length) {
+    el.innerHTML = `<div class="empty" style="height:${H}px;display:grid;place-items:center">No closed trades yet</div>`;
+    return;
+  }
+  const values = trades.map((t) => Number(t.net_pnl || 0));
+  const top = Math.max(0, ...values), bottom = Math.min(0, ...values), span = (top - bottom) || 1;
+  const zero = pad + top / span * (H - 2 * pad);
+  const slot = W / trades.length, bw = Math.max(4, Math.min(24, slot - 2));
+  let bars = "";
+  trades.forEach((t, i) => {
+    const v = values[i], h = Math.max(2, Math.abs(v) / span * (H - 2 * pad)), x = i * slot + (slot - bw) / 2, r = Math.min(4, bw / 2, h);
+    const d = v >= 0
+      ? `M${x} ${zero} V${zero - h + r} Q${x} ${zero - h} ${x + r} ${zero - h} H${x + bw - r} Q${x + bw} ${zero - h} ${x + bw} ${zero - h + r} V${zero} Z`
+      : `M${x} ${zero} V${zero + h - r} Q${x} ${zero + h} ${x + r} ${zero + h} H${x + bw - r} Q${x + bw} ${zero + h} ${x + bw} ${zero + h - r} V${zero} Z`;
+    bars += `<path class="bar ${v >= 0 ? "pos" : "neg"}" data-i="${i}" tabindex="0" d="${d}"/>`;
+  });
+  el.innerHTML = `<svg height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Net profit and loss of the latest ${trades.length} closed trades">${bars}<line x1="0" x2="${W}" y1="${zero}" y2="${zero}" class="c-grid" stroke-width="1"/></svg>`;
+  el.querySelectorAll(".bar").forEach((bar) => {
+    const t = trades[Number(bar.dataset.i)];
+    const show = (x, y) => showTip(x, y, money(t.net_pnl), `Trade #${t.id} · ${t.coin} ${t.side} · ${t.outcome || "closed"}`);
+    bar.addEventListener("pointermove", (e) => show(e.clientX, e.clientY));
+    bar.addEventListener("pointerleave", hideTip);
+    bar.addEventListener("focus", () => { const b = bar.getBoundingClientRect(); show(b.left + b.width / 2, b.top); });
+    bar.addEventListener("blur", hideTip);
+  });
+}
+
+/* ------------------------------------------------------------------ talking to the bot */
+/* Every request rides on the sign-in cookie. A lost session goes back to the sign-in page. */
+async function api(path, {method = "GET", json, body, headers = {}} = {}) {
+  const init = {method, cache: "no-store", headers: {"X-Requested-With": "hlbot", ...headers}};
+  if (json !== undefined) { init.headers["Content-Type"] = "application/json"; init.body = JSON.stringify(json); }
+  else if (body !== undefined) init.body = body;
+  const response = await fetch(path, init);
+  if (response.status === 401) { location.assign("/login"); throw new Error("signed out"); }
+  return response;
+}
+/* Send something and read the JSON answer; {ok: false, error} on any failure. */
+async function send(path, options) {
+  try {
+    const response = await api(path, options);
+    const result = await response.json().catch(() => ({}));
+    return response.ok && result.ok !== false ? {ok: true, ...result} : {ok: false, error: result.error || "HTTP " + response.status};
+  } catch (error) { return {ok: false, error: "no answer from the bot"}; }
+}
+let toastTimer = 0;
+function toast(text, bad) {
+  $("toast").textContent = text;
+  $("toast").className = "toast show" + (bad ? " bad" : "");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { $("toast").className = "toast"; }, 4500);
+}
+const note = (id, text, kind) => { $(id).textContent = text; $(id).className = "msg" + (kind ? " " + kind : ""); };
+
+/* ------------------------------------------------------------------ render */
+const TRADE_CLASS = {PROTECTED: "", REDUCING: "", CLOSING: "warn", ENTERING: "warn", UNRECONCILED: "warn", OPEN_UNPROTECTED: "bad", FLATTENING: "bad", HALTED_MANUAL: "bad"};
+const SIGNAL_BADGE = {TRADED: "", WAITING_PRICE: "warn", ENTERING: "warn", EXPIRED: "quiet", DUPLICATE: "quiet", NOT_A_SIGNAL: "quiet", INVALID: "bad", REJECTED_RISK: "bad", FAILED: "bad"};
+const badge = (text, cls) => `<span class="badge${cls ? " " + cls : ""}">${esc(text)}</span>`;
+let lastOk = 0, lastStatus = null, lastEquity = null;
+
+function render(d) {
+  lastStatus = d;
+  const live = d.live || {}, stats = d.stats || {}, day = d.day || {}, acct = live.exchange_account;
+  const state = d.health.state, control = d.health.control;
+
+  $("env").textContent = live.env || "?";
+  $("account-line").textContent = live.account_address ? "Account " + live.account_address : "Simulated account";
+  $("version-line").textContent = live.version ? "hlbot " + live.version : "";
+  $("subtitle").textContent = [live.env, live.account_address || "simulated account", live.entries_enabled === false ? "entries disabled" : null, live.mode_note].filter(Boolean).join(" · ");
+  $("avatar").textContent = (live.env || "H").slice(0, 1);
+  $("health-text").textContent = {HEALTHY: "All systems normal", DEGRADED: "Entries limited", PAUSED: "Paused", HALTED: "Halted — action needed"}[state] || state;
+  for (const id of ["health", "health-top"]) {
+    $(id).textContent = state;
+    $(id).className = "badge" + ({HEALTHY: "", DEGRADED: " warn", PAUSED: " warn", HALTED: " bad"}[state] ?? " quiet");
+  }
+
+  /* summary: account value with a margin ring */
+  const dexes = acct ? Object.values(acct.by_dex) : [];
+  const value = dexes.reduce((s, a) => s + Number(a.account_value || 0), 0);
+  const used = dexes.reduce((s, a) => s + Number(a.margin_used || 0), 0);
+  const free = dexes.reduce((s, a) => s + Number(a.withdrawable || 0), 0);
+  $("equity").innerHTML = acct ? `${esc(usd(value))}<small>USDC</small>` : "–";
+  $("equity-sub").textContent = acct ? `snapshot ${num(acct.age_ms / 1000, 1)} s old` : "no exchange snapshot yet";
+  ring($("ring"), acct && value > 0 ? used / value : null, "margin used");
+  $("account-kv").innerHTML = acct
+    ? `<dt>Margin used</dt><dd>${esc(usd(used))}</dd><dt>Withdrawable</dt><dd>${esc(usd(free))}</dd><dt>Fee rate in sizing</dt><dd>${live.fee_rate == null ? "–" : (live.fee_rate * 100).toFixed(3) + " %"}</dd>`
+    : `<dt>Account</dt><dd class="muted">waiting for the first reconciliation</dd>`;
+
+  /* summary: day P/L with the latest closed trades */
+  const dayPnl = Number(day.realized || 0) - Number(day.fees || 0) + Number(day.funding || 0);
+  $("daypnl").innerHTML = `<span class="${signClass(dayPnl)}">${esc(money(dayPnl))}</span>`;
+  $("day-sub").textContent = `fees ${usd(day.fees || 0)} · funding ${money(day.funding || 0)} · day start ${isNum(day.start_equity) ? usd(day.start_equity) : "–"}`;
+  barChart($("bars"), stats.recent_closed);
+
+  /* overview statistic */
+  $("gain-total").innerHTML = `<span class="${signClass(stats.gain_total)}">${esc(money(stats.gain_total || 0))}</span>`;
+  $("gain-sub").textContent = `${stats.gain_count || 0} winning trade${stats.gain_count === 1 ? "" : "s"}`;
+  $("loss-total").innerHTML = `<span class="${signClass(stats.loss_total)}">${esc(money(stats.loss_total || 0))}</span>`;
+  $("loss-sub").textContent = `${stats.loss_count || 0} losing trade${stats.loss_count === 1 ? "" : "s"}`;
+  const today = stats.today || {};
+  $("day-winrate").textContent = today.win_rate == null ? "–" : Math.round(today.win_rate * 100) + "%";
+  $("day-winrate-sub").textContent = today.closed
+    ? `${today.wins} won · ${today.losses} lost today (UTC)`
+    : "no closed trades today (UTC)";
+  $("stats-sub").textContent = stats.closed
+    ? `${stats.closed} closed · win rate ${stats.win_rate == null ? "–" : Math.round(stats.win_rate * 100) + "%"} · net ${money(stats.net_total)}`
+    : "no closed trades yet";
+
+  /* positions: bot trades as striped rows, then the exchange's own view */
+  const trades = d.open_trades || [];
+  $("positions-sub").textContent = `${trades.length} open trade${trades.length === 1 ? "" : "s"}`;
+  $("trades").innerHTML = trades.length ? trades.map((t) => {
+    const cls = TRADE_CLASS[t.state] ?? "warn";
+    return `<div class="row ${cls}"><div class="head"><span>${esc(t.coin)}</span>${badge(t.side, "quiet")}${badge(t.state, cls)}<span class="when">trade #${esc(t.id)}${t.opened_at ? " · opened " + esc(ago(t.opened_at)) : ""}</span></div>
+      <div class="body">size <b>${num(t.remaining_size, 6)}</b> of ${num(t.filled_size, 6)} · entry <b>${num(t.avg_entry, 4)}</b> · stop <b>${num(t.sl_price, 4)}</b></div></div>`;
+  }).join("") : `<div class="empty">No open trades.</div>`;
+  $("positions-table").innerHTML = table([
+    {h: "Coin", f: (p) => `<code>${esc(p.coin)}</code>`}, {h: "Size", num: 1, f: (p) => num(p.szi, 6)},
+    {h: "Entry", num: 1, f: (p) => num(p.entry_px, 4)}, {h: "uPnL", num: 1, f: (p) => `<span class="${signClass(p.unrealized_pnl)}">${esc(money(p.unrealized_pnl))}</span>`},
+    {h: "Leverage", num: 1, f: (p) => num(p.leverage, 0) + "×"}, {h: "Liq. price", num: 1, f: (p) => num(p.liquidation_px, 2)},
+    {h: "Margin", num: 1, f: (p) => usd(p.margin_used)}, {h: "Funding", num: 1, f: (p) => num(p.cum_funding, 4)},
+  ], acct ? acct.positions : [], "Flat on every managed asset.");
+
+  $("orders-table").innerHTML = table([
+    {h: "Coin", f: (o) => `<code>${esc(o.coin)}</code>`}, {h: "Side", f: (o) => badge(o.is_buy ? "BUY" : "SELL", "quiet")},
+    {h: "Type", f: (o) => esc(o.order_type || (o.is_trigger ? "Trigger" : "Limit"))},
+    {h: "Price", num: 1, f: (o) => num(o.is_trigger ? o.trigger_px : o.price, 4)}, {h: "Size", num: 1, f: (o) => num(o.size, 6)},
+    {h: "Reduce-only", f: (o) => o.reduce_only ? "yes" : badge("no", "bad")}, {h: "Owner", f: (o) => o.cloid ? "bot" : badge("foreign", "warn")},
+  ], live.exchange_open_orders, "No open orders on managed assets.");
+  $("orders-sub").textContent = `${(live.exchange_open_orders || []).length} on the exchange, managed assets only`;
+
+  /* signals */
+  const waiting = d.waiting_signals || [];
+  $("signals-sub").textContent = `${waiting.length} waiting · ${(d.recent_signals || []).length} recent`;
+  $("waiting").innerHTML = table([
+    {h: "#", f: (s) => esc(s.id)}, {h: "Signal", f: (s) => `<code>${esc(s.content_id)}</code>`}, {h: "Coin", f: (s) => `<code>${esc(s.coin)}</code>`},
+    {h: "Entry range", num: 1, f: (s) => num(s.effective_low, 4) + " – " + num(s.effective_high, 4)}, {h: "Stop", num: 1, f: (s) => num(s.sl, 4)},
+    {h: "Attempts", num: 1, f: (s) => num(s.attempts, 0)}, {h: "Expires", f: (s) => esc(clock(s.expires_at))}, {h: "Note", wrap: 1, f: (s) => esc(s.reason || "")},
+  ], waiting, "No signals waiting for price.");
+  $("recent-signals").innerHTML = table([
+    {h: "#", f: (s) => esc(s.id)}, {h: "Channel", f: (s) => esc(s.channel_ref)},
+    {h: "Signal", f: (s) => `<code>${esc(s.content_id || (s.symbol || "?") + " " + (s.side || "?"))}</code>`},
+    {h: "State", f: (s) => badge(s.state, SIGNAL_BADGE[s.state] ?? "quiet")}, {h: "Reason", wrap: 1, f: (s) => esc(s.reason || "")}, {h: "Time", f: (s) => esc(clock(s.signal_time))},
+  ], d.recent_signals, "No signals received yet.");
+
+  /* history */
+
+  /* right rail: market card(s) */
+  const quotes = Object.entries(live.quotes || {});
+  $("market").innerHTML = quotes.length ? quotes.map(([coin, q]) => `<div class="market">
+      <div class="label" style="color:rgba(255,255,255,.72)">${esc(coin)} · mark</div>
+      <div class="hero">${num(q.mark, 4)} ${dayChange(q)}</div>
+      <div class="pair"><div><span>Bid</span><b>${num(q.bid, 4)}</b></div><div><span>Ask</span><b>${num(q.ask, 4)}</b></div></div>
+      ${volumeBlock(coin, q)}
+      <div class="foot">oracle ${num(q.oracle, 4)} · quote ${q.age_ms == null ? "–" : num(q.age_ms / 1000, 1) + " s old"}</div></div>`).join("")
+    : `<div class="card"><div class="empty">No market data.</div></div>`;
+
+  const stream = live.stream || {}, tg = live.telegram || {}, latency = live.latency || {};
+  // Round-trip time with a dot that repeats the number: under 400 ms good, under 1.5 s slow, beyond that bad.
+  const lag = (ms) => !isNum(ms) ? `<span class="dot idle"></span>not measured` : `<span class="dot${ms < 400 ? "" : ms < 1500 ? " slow" : " off"}"></span>${num(ms, 0)} ms`;
+  $("connections").innerHTML =
+    `<dt>Market stream</dt><dd><span class="dot${stream.connected ? "" : " off"}"></span>${stream.connected ? "connected" : "down"} · ${num(stream.reconnects, 0)} reconnects</dd>` +
+    `<dt>Stream ping</dt><dd>${lag(latency.ws_ping_ms)}</dd>` +
+    `<dt>API latency</dt><dd>${lag(latency.rest_ms)}${isNum(latency.rest_avg_ms) ? ` · avg ${num(latency.rest_avg_ms, 0)} ms` : ""}</dd>` +
+    `<dt>Telegram</dt><dd><span class="dot${!tg.enabled ? " idle" : tg.connected ? "" : " off"}"></span>${!tg.enabled ? "disabled" : tg.connected ? "connected" : "disconnected"}</dd>` +
+    `<dt>Reconciled</dt><dd>${(live.reconciler || {}).last_ok_at ? esc(ago(live.reconciler.last_ok_at)) : "–"}</dd>` +
+    `<dt>Notifications</dt><dd>${num(d.outbox_pending, 0)} pending</dd>`;
+
+  const conds = d.health.conditions.map((c) => ({...c}));
+  if (control.mode !== "RUNNING") conds.unshift({key: "operator", level: "pause", reason: control.reason || "operator pause", auto_resume: 0, set_at: control.set_at});
+  $("conditions").innerHTML = conds.length ? conds.map((c) => `<div class="row ${c.level === "block" ? "warn" : "bad"}">
+      <div class="head"><code>${esc(c.key)}</code>${badge(c.level, c.level === "block" ? "warn" : "bad")}<span class="when">${esc(ago(c.set_at))}</span></div>
+      <div class="body">${esc(c.reason)}\n${c.auto_resume ? "Clears automatically." : "Needs a manual resume."}</div></div>`).join("")
+    : `<div class="row"><div class="head">All clear</div><div class="body">Entries are allowed.</div></div>`;
+
+  renderAlerts(d.alerts || []);
+}
+
+/* History: one row per trade. A row opens to show that trade's orders: entry, stop-loss, every take-profit, close. */
+const CHEVRON = '<svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>';
+const OUTCOME_BADGE = {WIN_ALL: "", WIN_PARTIAL: "", LOSS_ALL: "bad", LIQUIDATED: "bad", FLATTENED: "warn", MANUAL: "quiet"};
+const ORDER_BADGE = {FILLED: "", PARTIALLY_FILLED: "warn", RESTING: "warn", TRIGGERED: "warn", CANCEL_REQUESTED: "warn", MODIFY_REQUESTED: "warn",
+  INTENT: "warn", SUBMITTING: "warn", CANCELED: "quiet", NOT_PLACED: "quiet", REJECTED: "bad", NOT_ACCEPTED: "bad", UNKNOWN: "bad", UNRECONCILED: "bad"};
+// What the exchange said about an order, where that adds something to the state.
+const EXCHANGE_NOTE = {reduceOnlyCanceled: "removed by the exchange when the position closed", marginCanceled: "cancelled by the exchange: not enough margin",
+  selfTradeCanceled: "cancelled by the exchange: self-trade", liquidatedCanceled: "cancelled by the exchange: liquidation", openInterestCapCanceled: "cancelled by the exchange: open interest cap"};
+const QUIET_STATUS = new Set(["", "filled", "open", "resting", "canceled", "triggered"]);
+const openTrades = new Set();
+let historyShown = "";
+function orderRows(t) {
+  const orders = (t.orders || []).map((o) => ({...o}));
+  const name = (o) => (o.role === "SL" ? "Stop loss" : o.role === "TP" ? "TP" + o.leg : o.role === "ENTRY" ? "Entry" : "Close") + (o.attempt > 1 ? ` · attempt ${o.attempt}` : "");
+  // The plan, for anything that never reached the exchange: the stop and every take-profit level are always listed.
+  const planned = [];
+  if (!orders.some((o) => o.role === "SL") && isNum(t.sl_price)) planned.push({role: "SL", leg: 0, attempt: 1, type: "trigger", trigger_price: t.sl_price, size: t.filled_size || t.planned_size, state: "NOT_PLACED"});
+  let plan = [];
+  try { plan = JSON.parse(t.tp_plan || "[]"); } catch (error) { /* shown without the plan */ }
+  for (const level of Array.isArray(plan) ? plan : []) {
+    if (!orders.some((o) => o.role === "TP" && o.leg === level.level)) planned.push({role: "TP", leg: level.level, attempt: 1, type: "", price: level.price, size: level.size, state: "NOT_PLACED"});
+  }
+  const rank = {ENTRY: 0, SL: 1, TP: 2, CLOSE: 3};
+  return [...orders, ...planned].sort((a, b) => rank[a.role] - rank[b.role] || a.leg - b.leg || (a.id || 0) - (b.id || 0)).map((o) => ({
+    name: name(o),
+    kind: o.state === "NOT_PLACED" ? "–" : o.type === "trigger" ? (o.role === "SL" ? "Stop market" : "Trigger market") : "Limit" + (o.tif === "Ioc" ? " · IOC" : ""),
+    side: o.side, price: o.type === "trigger" ? o.trigger_price : o.price, size: o.size, filled: o.filled_size, fill: o.avg_fill_price, state: o.state,
+    note: o.error_text || EXCHANGE_NOTE[o.exchange_status] || (QUIET_STATUS.has(String(o.exchange_status || "")) ? "" : o.exchange_status), at: o.updated_at,
+  }));
+}
+function tradeDetail(t) {
+  const fact = (label, value) => `<span>${esc(label)} <b>${esc(value)}</b></span>`;
+  const facts = [fact("Opened", t.opened_at ? clock(t.opened_at) : "–"), fact("Protected", t.protected_at ? clock(t.protected_at) : "–"),
+    fact("Closed", t.closed_at ? clock(t.closed_at) : "–"), fact("Planned size", num(t.planned_size, 6)), fact("Stop", num(t.sl_price, 4)),
+    t.close_reason ? fact("Close reason", t.close_reason) : "",
+    t.realized_pnl == null ? "" : fact("Realised", money(t.realized_pnl)), t.fees == null ? "" : fact("Fees", usd(t.fees)), t.funding == null ? "" : fact("Funding", money(t.funding))];
+  const rows = orderRows(t);
+  const cols = [
+    {h: "Order", f: (o) => `<b>${esc(o.name)}</b>`}, {h: "Type", f: (o) => esc(o.kind)}, {h: "Side", f: (o) => o.side ? badge(o.side, "quiet") : "–"},
+    {h: "Price", num: 1, f: (o) => num(o.price, 4)}, {h: "Size", num: 1, f: (o) => num(o.size, 6)},
+    {h: "Filled", num: 1, f: (o) => o.state === "NOT_PLACED" ? "–" : num(o.filled || 0, 6)}, {h: "Fill price", num: 1, f: (o) => num(o.fill, 4)},
+    {h: "State", f: (o) => badge(o.state, ORDER_BADGE[o.state] ?? "quiet")},
+    {h: "Updated", f: (o) => o.at ? esc(clock(o.at)) : "–"},
+  ];
+  // The note column takes room, so it is there only when an order has something to say.
+  if (rows.some((o) => o.note)) cols.push({h: "Note", wrap: 1, f: (o) => esc(o.note || "")});
+  return `<div class="detail-box"><div class="facts">${facts.join("")}</div><div class="scroll">${table(cols, rows, "No orders were created for this trade.")}</div></div>`;
+}
+function renderHistory(trades, meta) {
+  const total = meta ? meta.total : trades.length, pages = meta ? meta.pages : 1, page = meta ? meta.page : 1;
+  $("history-sub").textContent = `${total} trade${total === 1 ? "" : "s"}` + (pages > 1 ? ` · page ${page} of ${pages}` : "");
+  $("hi-count").textContent = total ? `Showing ${(page - 1) * (meta ? meta.page_size : trades.length) + 1} to ${(page - 1) * (meta ? meta.page_size : trades.length) + trades.length} of ${total}` : "";
+  $("hi-page").textContent = `Page ${page} of ${pages}`;
+  $("hi-prev").disabled = page <= 1;
+  $("hi-next").disabled = page >= pages;
+  // Redrawn only when something changed, so an opened trade stays put and keeps the keyboard focus.
+  const shown = JSON.stringify(trades);
+  if (shown === historyShown) return;
+  historyShown = shown;
+  if (!trades.length) { $("history-table").innerHTML = `<div class="empty">${meta && meta.filtered ? "No trades match these filters." : "No trades yet."}</div>`; return; }
+  const cols = [["", ""], ["#", ""], ["Coin", ""], ["Side", ""], ["State", ""], ["Outcome", ""], ["Size", "num"], ["Entry", "num"], ["Stop", "num"], ["Net P/L", "num"], ["Closed", ""]];
+  const body = trades.map((t) => {
+    const id = esc(t.id), open = openTrades.has(String(t.id));
+    return `<tr class="trade-row${open ? " open" : ""}" data-trade="${id}">
+      <td><button type="button" class="expander" aria-expanded="${open}" aria-controls="trade-detail-${id}" aria-label="Orders of trade ${id}">${CHEVRON}</button></td>
+      <td>${id}</td><td><code>${esc(t.coin)}</code></td><td>${badge(t.side, "quiet")}</td><td>${esc(t.state)}</td>
+      <td>${t.outcome ? badge(t.outcome, OUTCOME_BADGE[t.outcome] ?? "quiet") : "–"}</td>
+      <td class="num">${num(t.filled_size, 6)}</td><td class="num">${num(t.avg_entry, 4)}</td><td class="num">${num(t.sl_price, 4)}</td>
+      <td class="num">${t.net_pnl == null ? "–" : `<span class="${signClass(t.net_pnl)}">${esc(money(t.net_pnl))}</span>`}</td>
+      <td>${t.closed_at ? esc(clock(t.closed_at)) : "–"}</td></tr>
+      <tr class="trade-detail" id="trade-detail-${id}"${open ? "" : " hidden"}><td colspan="${cols.length}">${tradeDetail(t)}</td></tr>`;
+  }).join("");
+  $("history-table").innerHTML = `<table><thead><tr>${cols.map(([h, c]) => `<th${c ? ` class="${c}"` : ""}>${esc(h)}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table>`;
+}
+function toggleTrade(id, row) {
+  const key = String(id), open = !openTrades.has(key);
+  if (open) openTrades.add(key); else openTrades.delete(key);
+  if (!row) { historyShown = ""; return; }  // no row at hand: the next draw shows it
+  row.classList.toggle("open", open);
+  row.querySelector(".expander").setAttribute("aria-expanded", String(open));
+  row.nextElementSibling.hidden = !open;
+}
+$("history-table").addEventListener("click", (event) => {
+  if (event.target.closest("tr.trade-detail")) return;  // reading or selecting inside the detail does not close it
+  const row = event.target.closest("tr.trade-row");
+  if (row) toggleTrade(row.dataset.trade, row);
+});
+
+/* Alerts: the three newest in the side column; all of them in the pop-up, each opening in place. */
+const openAlerts = new Set();
+let alertsShown = "";
+function alertParts(a) {
+  const lines = strip(a.text).split("\n").filter((l) => l.trim());
+  // The stored text is the Telegram message: drop its "[ENV] <icon>" prefix, which the page already shows.
+  const title = (lines[0] || "Alert").replace(/^\[[A-Z]+\]\s*/, "").replace(/^[^A-Za-z0-9]+/, "");
+  const delivery = a.sent_at ? "delivered" : a.dropped_at ? (a.last_error || "not sent") : "delivery pending";
+  return {title, body: lines.slice(1).join("\n"), delivery};
+}
+function renderAlerts(alerts) {
+  $("alert-rows").innerHTML = alerts.length ? alerts.slice(0, 3).map((a) => {
+    const p = alertParts(a);
+    return `<button type="button" class="row ${a.critical ? "bad" : "warn"}" data-alert="${esc(a.id)}"><span class="head"><span>${esc(p.title)}</span>${a.critical ? badge("critical", "bad") : ""}</span>
+      <span class="foot" style="display:block">${esc(ago(a.created_at))} · ${esc(p.delivery)}</span></button>`;
+  }).join("") : `<div class="empty">No alerts.</div>`;
+  $("alerts-open").textContent = alerts.length > 3 ? `View all ${alerts.length}` : "Open";
+  $("alerts-open").hidden = !alerts.length;
+  $("alerts-count").textContent = alerts.length ? `latest ${alerts.length}` : "";
+  // Redrawn only when something changed, so an alert being read does not close under the reader.
+  const shown = JSON.stringify(alerts.map((a) => [a.id, a.sent_at, a.dropped_at, a.attempts]));
+  if (shown === alertsShown) return;
+  alertsShown = shown;
+  $("alerts-list").innerHTML = alerts.length ? alerts.map((a) => {
+    const p = alertParts(a);
+    return `<details class="alert${a.critical ? " bad" : ""}" data-alert="${esc(a.id)}"${openAlerts.has(String(a.id)) ? " open" : ""}>
+      <summary><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg><span>${esc(p.title)}</span>${a.critical ? badge("critical", "bad") : ""}<span class="when">${esc(clock(a.created_at))}</span></summary>
+      <div class="more">${p.body ? `<p>${esc(p.body)}</p>` : ""}Raised ${esc(clock(a.created_at))} · Telegram: ${esc(p.delivery)}${Number(a.attempts) > 1 ? ` after ${esc(a.attempts)} attempts` : ""}</div></details>`;
+  }).join("") : `<div class="empty">No alerts.</div>`;
+}
+
+function renderEquity(data) {
+  lastEquity = data;
+  const points = (data && data.points) || [];
+  const win = {key: data && data.range, from: data && data.from ? Date.parse(data.from) : null, to: data && data.to ? Date.parse(data.to) : null};
+  lineChart($("line"), points, win);
+  // Say what the chart covers, and be plain when the history is shorter than the range.
+  const name = (RANGES[win.key] || {}).name || "";
+  let note = name;
+  if (points.length) {
+    const first = Date.parse(points[0].at), span = (win.to || 0) - (win.from || 0);
+    note += ` · ${points.length} point${points.length === 1 ? "" : "s"}`;
+    if (span > 0 && first - win.from > span * 0.05) note += ` · history starts ${clock(points[0].at)}`;
+  }
+  $("range-note").textContent = note;
+  const step = Math.max(1, Math.ceil(points.length / 12));
+  const sample = points.filter((_, i) => i % step === 0 || i === points.length - 1);
+  $("line-table").innerHTML = table([{h: "Time", f: (p) => esc(clock(p.at))}, {h: "Account value", num: 1, f: (p) => esc(usd(p.value))}], sample, "No data in this range.");
+}
+
+/* ------------------------------------------------------------------ polling */
+let range = "1d";
+async function refresh() {
+  try {
+    const response = await api("/api/status");
+    if (!response.ok) throw new Error(response.status);
+    render(await response.json());
+    lastOk = Date.now();
+  } catch (error) { /* shown through the staleness indicator */ }
+}
+async function refreshEquity() {
+  try {
+    const response = await api("/api/equity?range=" + range);
+    if (response.ok) renderEquity(await response.json());
+  } catch (error) { /* keeps the last chart */ }
+}
+document.querySelectorAll(".seg button[data-range]").forEach((button) => {
+  button.onclick = () => {
+    range = button.dataset.range;
+    document.querySelectorAll(".seg button[data-range]").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+    refreshEquity();
+  };
+});
+setInterval(() => {
+  const age = lastOk ? (Date.now() - lastOk) / 1000 : null;
+  $("age").textContent = age === null ? "connecting…" : `updated ${age.toFixed(0)} s ago`;
+  $("stale").style.display = age !== null && age > 5 ? "block" : "none";
+}, 500);
+setInterval(refresh, 3000);
+setInterval(refreshEquity, 30000);
+refresh();
+refreshEquity();
+let resizeTimer = 0;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { if (lastStatus) render(lastStatus); if (lastEquity) renderEquity(lastEquity); if (lastAnalytics) renderAnalytics(lastAnalytics); }, 150);
+});
+
+/* ------------------------------------------------------------------ small formatting and filter helpers */
+const compact = (v, d = 1) => {
+  if (!isNum(v)) return "–";
+  const n = Number(v), a = Math.abs(n);
+  if (a >= 1e9) return (n / 1e9).toFixed(d) + "B";
+  if (a >= 1e6) return (n / 1e6).toFixed(d) + "M";
+  if (a >= 1e3) return (n / 1e3).toFixed(d) + "K";
+  return n.toLocaleString("en-US", {maximumFractionDigits: a >= 100 ? 0 : a >= 1 ? 2 : 4});
+};
+const pct = (v, d = 0) => isNum(v) ? (Number(v) * 100).toFixed(d) + "%" : "–";
+const ratio = (v) => isNum(v) ? Number(v).toFixed(2) : "–";
+const signedPct = (v) => { if (!isNum(v)) return "–"; const r = Math.round(Number(v)); return (r > 0 ? "+" : r < 0 ? "−" : "") + Math.abs(r) + "%"; };
+const tzMinutes = -new Date().getTimezoneOffset();  // the viewer's zone: days and date filters follow it
+const localDay = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const FILTER_FIELDS = {an: ["from", "to", "symbol", "source", "side"], hi: ["from", "to", "symbol", "side", "status"]};
+function filterQuery(prefix) {
+  const query = new URLSearchParams({tz: String(tzMinutes)});
+  for (const field of FILTER_FIELDS[prefix]) {
+    const value = $(`${prefix}-${field}`).value;
+    if (value && value !== "all") query.set(field, value);
+  }
+  return query;
+}
+const filtered = (prefix) => FILTER_FIELDS[prefix].some((field) => { const v = $(`${prefix}-${field}`).value; return v && v !== "all"; });
+/* Offer only what occurs in the history; rebuilt only when the choices change, so an open drop-down is not disturbed. */
+function fillSelect(id, values, allLabel) {
+  const el = $(id), signature = values.join("\u0001");
+  if (el.dataset.signature === signature) return;
+  const keep = el.value;
+  el.dataset.signature = signature;
+  el.innerHTML = `<option value="">${esc(allLabel)}</option>` + values.map((v) => `<option value="${esc(v)}">${esc(v)}</option>`).join("");
+  el.value = values.includes(keep) ? keep : "";
+}
+/* One line above a panel for loading, empty and error states; an error offers a retry. */
+function showState(id, kind, text, retry) {
+  const el = $(id);
+  el.hidden = !kind;
+  if (!kind) { el.textContent = ""; return; }
+  el.className = "state" + (kind === "error" ? " err" : "");
+  el.textContent = text;
+  if (retry) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Try again";
+    button.onclick = retry;
+    el.append(button);
+  }
+}
+
+/* ------------------------------------------------------------------ charts for the analytics */
+/* Lines over time on one value axis: one series, or two with a legend above and a labelled end point each. */
+function plotLines(el, series, {fmt = usd, zero = false, name = "Chart"} = {}) {
+  const drawn = series.filter((s) => s.points.length);
+  const all = drawn.flatMap((s) => s.points);
+  const W = Math.max(280, el.clientWidth || 600), H = 220, m = {l: 58, r: 74, t: 14, b: 26};
+  if (all.length < 2) {
+    el.innerHTML = `<div class="empty" style="height:${H}px;display:grid;place-items:center;text-align:center">${all.length ? "One point so far (" + esc(fmt(all[0].value)) + "). A line needs two." : "No data for this selection."}</div>`;
+    return;
+  }
+  const xs = all.map((p) => Date.parse(p.at)), ys = all.map((p) => Number(p.value));
+  const x0 = Math.min(...xs), x1 = Math.max(...xs) === x0 ? x0 + 1 : Math.max(...xs);
+  let lo = Math.min(...ys, ...(zero ? [0] : [])), hi = Math.max(...ys, ...(zero ? [0] : []));
+  if (hi - lo < 1e-9) { const pad = Math.max(1, Math.abs(hi) * 0.005); lo -= pad; hi += pad; }
+  const step = niceStep(hi - lo, 4);
+  lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+  const X = (t) => m.l + (t - x0) / (x1 - x0) * (W - m.l - m.r), Y = (v) => m.t + (hi - v) / (hi - lo) * (H - m.t - m.b);
+  let grid = "";
+  for (let v = lo; v <= hi + step / 2; v += step) {
+    grid += `<line x1="${m.l}" x2="${W - m.r}" y1="${Y(v)}" y2="${Y(v)}" class="c-grid" stroke-width="1"/><text x="${m.l - 8}" y="${Y(v) + 4}" text-anchor="end">${esc(axisLabel(v, step))}</text>`;
+  }
+  let marks = "", lastY = null;
+  drawn.forEach((s) => {
+    const d = s.points.map((p, i) => (i ? "L" : "M") + X(Date.parse(p.at)).toFixed(1) + " " + Y(Number(p.value)).toFixed(1)).join(" ");
+    const end = s.points[s.points.length - 1], ex = X(Date.parse(end.at)), ey = Y(Number(end.value));
+    let ly = ey + 4;
+    if (lastY !== null && Math.abs(ly - lastY) < 13) ly = lastY + (ly >= lastY ? 13 : -13);  // two end labels never sit on each other
+    lastY = ly;
+    marks += `<path d="${d}" fill="none" class="c-${s.cls}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>` +
+      `<circle cx="${ex}" cy="${ey}" r="4" class="f-${s.cls}" style="stroke:var(--surface)" stroke-width="2"/><text class="endlabel" x="${ex + 8}" y="${ly}">${esc(fmt(end.value))}</text>`;
+  });
+  el.innerHTML = `<svg height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(name)}: ${drawn.map((s) => `${s.name} ends at ${fmt(s.points[s.points.length - 1].value)}`).join("; ")}">` +
+    `${grid}${marks}<text x="${m.l}" y="${H - 6}">${esc(clock(new Date(x0).toISOString()))}</text><text x="${W - m.r}" y="${H - 6}" text-anchor="end">${esc(clock(new Date(x1).toISOString()))}</text>` +
+    `<rect class="hit" x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent"/></svg>`;
+  const hit = el.querySelector(".hit");
+  hit.addEventListener("pointermove", (event) => {
+    const box = hit.getBoundingClientRect(), t = x0 + (event.clientX - box.left) / box.width * (x1 - x0);
+    const near = drawn.map((s) => [s, s.points.reduce((best, p) => Math.abs(Date.parse(p.at) - t) < Math.abs(Date.parse(best.at) - t) ? p : best)]);
+    showTip(event.clientX, event.clientY, near.map(([s, p]) => (drawn.length > 1 ? s.name + " " : "") + fmt(p.value)).join(" · "), clock(near[0][1].at));
+  });
+  hit.addEventListener("pointerleave", hideTip);
+}
+/* Bars for periods, bins or categories. A result takes the gain / loss colour; a count or a volume takes one neutral colour. */
+function plotBars(el, items, {signed = true, fmt = money, name = "Chart", empty = "No data for this selection."} = {}) {
+  const W = Math.max(240, el.clientWidth || 420), H = 190, m = {l: 52, r: 8, t: 10, b: 24};
+  if (!items.length) { el.innerHTML = `<div class="empty" style="height:${H}px;display:grid;place-items:center;text-align:center">${esc(empty)}</div>`; return; }
+  const values = items.map((item) => Number(item.value || 0));
+  let hi = Math.max(0, ...values), lo = Math.min(0, ...values);
+  if (hi === lo) hi = lo + 1;
+  const step = niceStep(hi - lo, 3);
+  hi = Math.ceil(hi / step) * step; lo = Math.floor(lo / step) * step;
+  const Y = (v) => m.t + (hi - v) / (hi - lo) * (H - m.t - m.b), zero = Y(0);
+  const slot = (W - m.l - m.r) / items.length, bw = Math.max(3, Math.min(36, slot - 2));
+  let grid = "", bars = "", labels = "";
+  for (let v = lo; v <= hi + step / 2; v += step) {
+    grid += `<line x1="${m.l}" x2="${W - m.r}" y1="${Y(v)}" y2="${Y(v)}" class="c-grid" stroke-width="1"/><text x="${m.l - 8}" y="${Y(v) + 4}" text-anchor="end">${esc(axisLabel(v, step))}</text>`;
+  }
+  const every = Math.max(1, Math.ceil(items.length / Math.max(2, Math.floor((W - m.l - m.r) / 78))));
+  items.forEach((item, i) => {
+    const v = values[i], h = Math.max(v === 0 ? 0 : 2, Math.abs(Y(v) - zero)), x = m.l + i * slot + (slot - bw) / 2, r = Math.min(4, bw / 2, h);
+    const cls = item.cls || (signed ? (v >= 0 ? "pos" : "neg") : "neutral");
+    const d = v >= 0
+      ? `M${x} ${zero} V${zero - h + r} Q${x} ${zero - h} ${x + r} ${zero - h} H${x + bw - r} Q${x + bw} ${zero - h} ${x + bw} ${zero - h + r} V${zero} Z`
+      : `M${x} ${zero} V${zero + h - r} Q${x} ${zero + h} ${x + r} ${zero + h} H${x + bw - r} Q${x + bw} ${zero + h} ${x + bw} ${zero + h - r} V${zero} Z`;
+    if (h > 0) bars += `<path class="bar ${cls}" data-i="${i}" tabindex="0" d="${d}"/>`;
+    if (i % every === 0 || items.length <= 6) labels += `<text x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${esc(item.label)}</text>`;
+  });
+  el.innerHTML = `<svg height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(name)}: ${items.length} bar${items.length === 1 ? "" : "s"}">${grid}${bars}` +
+    `<line x1="${m.l}" x2="${W - m.r}" y1="${zero}" y2="${zero}" class="c-cross" stroke-width="1"/>${labels}</svg>`;
+  el.querySelectorAll(".bar").forEach((bar) => {
+    const item = items[Number(bar.dataset.i)];
+    const show = (x, y) => showTip(x, y, fmt(item.value), item.tip || item.label);
+    bar.addEventListener("pointermove", (event) => show(event.clientX, event.clientY));
+    bar.addEventListener("pointerleave", hideTip);
+    bar.addEventListener("focus", () => { const b = bar.getBoundingClientRect(); show(b.left + b.width / 2, b.top); });
+    bar.addEventListener("blur", hideTip);
+  });
+}
+
+/* ------------------------------------------------------------------ market volume */
+/* Base volume is in the coin and exact. Quote volume is exact for 24 hours and an estimate (≈) for a candle. Tick volume is the number of trades. */
+let volumeInterval = "1h", lastVolume = null, volumeProblem = null;
+const ARROW_UP = '<svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M5 1.5l4 6H1z"/></svg>';
+const ARROW_DOWN = '<svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M5 8.5l4-6H1z"/></svg>';
+function dayChange(q) {
+  if (!isNum(q.mark) || !isNum(q.prev_day_price) || Number(q.prev_day_price) <= 0) return "";
+  const change = (Number(q.mark) / Number(q.prev_day_price) - 1) * 100, up = change >= 0;
+  return `<span class="trend ${up ? "up" : "down"}" title="Against the price 24 hours ago">${up ? ARROW_UP : ARROW_DOWN}${(up ? "+" : "−") + Math.abs(change).toFixed(2)}% 24h</span>`;
+}
+function volumeBlock(coin, q) {
+  const unit = esc(String(coin).split(":").pop());
+  const day = `<div class="full"><span>24h volume</span><b>${isNum(q.day_volume_base) ? compact(q.day_volume_base, 2) + " " + unit : "–"}</b>` +
+    `<small>${isNum(q.day_volume_quote) ? "$" + compact(q.day_volume_quote, 2) + " quote volume" : "not reported yet"}</small></div>`;
+  const v = lastVolume && lastVolume.interval === volumeInterval ? lastVolume.symbols[coin] : null;
+  if (!v && !volumeProblem) return `<div class="vol"><div class="full skeleton" role="status" aria-label="Loading volume"></div>${day}</div>`;
+  if (!v || (!v.current && !v.last_closed)) {
+    const why = v && v.error ? "Not available: " + v.error + "." : volumeProblem || "No candles for this symbol yet.";
+    return `<div class="vol"><div class="full"><span>${esc(volumeInterval)} candle volume</span><b>–</b><small>${esc(why)} <button type="button" class="linkbtn" data-volume-retry>Try again</button></small></div>${day}</div>`;
+  }
+  const now = v.current, average = v.average, last = v.last_closed;
+  const versus = v.vs_average_pct == null ? "" :
+    `<span class="trend ${v.vs_average_pct >= 0 ? "up" : "down"}">${v.vs_average_pct >= 0 ? ARROW_UP : ARROW_DOWN}${signedPct(v.vs_average_pct)} vs average</span>`;
+  const level = v.level === "unusually_high" ? `<span class="trend high">unusually high</span>` : v.level === "unusually_low" ? `<span class="trend low">unusually low</span>` : "";
+  const stale = v.stale ? `<span class="trend stale" title="${esc(v.error || "not refreshed lately")}">stale</span>` : "";
+  const trend = v.trend ? `${v.trend} against the candle before (${signedPct(v.change_pct)})` : "";
+  const pace = now && v.pace_vs_average_pct != null ? ` · pace ${signedPct(v.pace_vs_average_pct)} vs average` : "";
+  return `<div class="vol">
+      <div><span>Now · ${esc(v.interval)} candle</span><b>${now ? compact(now.volume_base, 2) + " " + unit : "–"}</b>
+        <small>${now ? `≈ $${compact(now.volume_quote_est)} · ${num(now.trades, 0)} trades · ${num(now.elapsed_pct, 0)}% through` : "no candle forming"}</small></div>
+      <div><span>Average of ${average ? average.candles : 0}</span><b>${average ? compact(average.volume_base, 2) + " " + unit : "–"}</b>
+        <small>${average ? `≈ $${compact(average.volume_quote_est)} · ${num(average.trades, 0)} trades` : "not enough history"}</small></div>
+      <div class="full"><span>Last closed candle</span><b>${last ? compact(last.volume_base, 2) + " " + unit : "–"}</b> ${versus} ${level} ${stale}<small>${esc(trend)}${esc(pace)}</small></div>
+      ${day}</div>`;
+}
+async function refreshVolume() {
+  try {
+    const response = await api("/api/market/volume?interval=" + volumeInterval);
+    if (!response.ok) throw new Error((await response.json().catch(() => ({}))).error || "HTTP " + response.status);
+    lastVolume = await response.json();
+    volumeProblem = null;
+  } catch (error) { volumeProblem = "volume not available: " + (error.message || "no answer from the bot"); }
+  if (lastStatus) render(lastStatus);
+}
+document.querySelectorAll("[data-volume]").forEach((button) => {
+  button.onclick = () => {
+    volumeInterval = button.dataset.volume;
+    document.querySelectorAll("[data-volume]").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+    if (lastStatus) render(lastStatus);  // the loading state at once, the figures when they arrive
+    refreshVolume();
+  };
+});
+$("market").addEventListener("click", (event) => { if (event.target.closest("[data-volume-retry]")) refreshVolume(); });
+
+/* ------------------------------------------------------------------ analytics */
+const KPI_CARDS = [
+  ["Total trades", (k) => num(k.total_trades, 0), (k) => k.open_trades ? `${k.open_trades} still open, not counted` : "closed trades", "Closed trades in the selection. A trade counts once, however many orders and fills it had."],
+  ["Win rate", (k) => pct(k.win_rate), (k) => `${k.wins} won · ${k.losses} lost${k.breakeven ? ` · ${k.breakeven} flat` : ""}`, "Winning trades divided by winning plus losing trades. A win is a net result above zero, after fees and funding."],
+  ["Net P/L", (k) => money(k.net_pnl), (k) => `${money(k.expectancy)} per trade on average`, "Realised profit and loss, minus fees, plus funding, summed over the closed trades.", (k) => k.net_pnl],
+  ["Gross profit", (k) => money(k.gross_profit), (k) => `${k.wins} winning trade${k.wins === 1 ? "" : "s"}`, "The sum of the winning trades' net results."],
+  ["Gross loss", (k) => money(k.gross_loss), (k) => `${k.losses} losing trade${k.losses === 1 ? "" : "s"}`, "The sum of the losing trades' net results."],
+  ["Profit factor", (k) => ratio(k.profit_factor), () => "gross profit ÷ gross loss", "Gross profit divided by the size of the gross loss. Above 1, the wins outweigh the losses. Empty when no trade lost."],
+  ["Average win", (k) => money(k.avg_win), () => "per winning trade", "Gross profit divided by the number of winning trades."],
+  ["Average loss", (k) => money(k.avg_loss), (k) => `payoff ratio ${ratio(k.payoff_ratio)}`, "Gross loss divided by the number of losing trades. The payoff ratio is the average win over the size of the average loss."],
+  ["Avg planned R:R", (k) => ratio(k.avg_planned_rr), () => "from the signals' levels", "Reward to risk as the signal planned it: the size-weighted distance from the entry to the take-profits, divided by the distance to the stop."],
+  ["Max drawdown", (k) => isNum(k.max_drawdown) && k.max_drawdown > 0 ? "−" + usd(k.max_drawdown) : usd(0), (k) => k.max_drawdown_pct ? pct(k.max_drawdown_pct, 2) + " of the account" : "of the cumulative net P/L", "The largest fall of the cumulative net result from its highest point so far."],
+  ["Fees", (k) => usd(k.fees), (k) => `funding ${money(k.funding)}`, "Trading fees paid on these trades, and funding received (+) or paid (−). The exchange charges no separate commission or swap."],
+  ["Account equity", (k) => k.account ? usd(k.account.equity) : "–", (k) => k.account ? `withdrawable ${usd(k.account.withdrawable)}` : "no snapshot stored yet", "The latest account value from the exchange, open positions included. The filters do not change it."],
+];
+let analyticsPeriod = "day", analyticsActivity = "trades", lastAnalytics = null, analyticsLoading = false;
+const PERIOD_NAME = {day: "day", week: "week starting", month: "month"};
+function renderAnalytics(d) {
+  lastAnalytics = d;
+  const k = d.kpis;
+  fillSelect("an-symbol", d.options.symbols, "All symbols");
+  fillSelect("an-source", d.options.sources, "All sources");
+  $("analytics-sub").textContent = `${k.total_trades} closed trade${k.total_trades === 1 ? "" : "s"} · net ${money(k.net_pnl)}`;
+  $("an-zone").textContent = `Days and dates in ${d.filter.tz}`;
+  showState("an-state", k.total_trades ? null : "empty", filtered("an") ? "No closed trades match these filters." : "No closed trades yet. Figures appear after the first trade closes.");
+  $("an-kpis").innerHTML = KPI_CARDS.map(([label, value, more, tip, sign]) =>
+    `<div class="kpi"><div class="label"><span>${esc(label)}</span><i class="info" tabindex="0" role="note" aria-label="${esc(tip)}" data-tip="${esc(tip)}">i</i></div>` +
+    `<div class="value ${sign ? signClass(sign(k)) : ""}">${esc(value(k))}</div><div class="more">${esc(more(k))}</div></div>`).join("");
+  const startsAt = d.cumulative_start && d.cumulative.length && d.cumulative_start.at < d.cumulative[0].at ? [d.cumulative_start] : [];
+  plotLines($("an-cumulative"), [{name: "Cumulative net P/L", cls: "a", points: [...startsAt, ...d.cumulative]}], {fmt: money, zero: true, name: "Cumulative net profit and loss"});
+  $("an-cumulative-note").textContent = d.cumulative.length ? `after each of ${d.cumulative.length} closed trade${d.cumulative.length === 1 ? "" : "s"}` : "";
+  plotLines($("an-equity"), [{name: "Equity", cls: "a", points: d.equity}, {name: "Balance", cls: "b", points: d.balance}], {fmt: usd, name: "Account equity and realised balance"});
+  const periods = d.periods[analyticsPeriod] || [];
+  plotBars($("an-periods"), periods.map((p) => ({label: p.key, value: p.net, tip: `${PERIOD_NAME[analyticsPeriod]} ${p.key} · ${p.trades} trade${p.trades === 1 ? "" : "s"} · win rate ${pct(p.win_rate)}`})),
+    {name: `Net profit and loss by ${analyticsPeriod}`});
+  plotBars($("an-activity"), periods.map((p) => ({label: p.key, value: analyticsActivity === "trades" ? p.trades : p.volume, tip: `${PERIOD_NAME[analyticsPeriod]} ${p.key}`})),
+    {signed: false, fmt: analyticsActivity === "trades" ? (v) => `${num(v, 0)} trade${Number(v) === 1 ? "" : "s"}` : (v) => "$" + compact(v, 2), name: `Trading activity by ${analyticsPeriod}`});
+  plotBars($("an-distribution"), d.distribution.map((b) => ({label: axisLabel(b.from, Math.abs(b.to - b.from) || 1), value: b.count, cls: b.to <= 0 ? "neg" : "pos",
+    tip: `net result from ${money(b.from)} to ${money(b.to)}`})), {signed: false, fmt: (v) => `${num(v, 0)} trade${Number(v) === 1 ? "" : "s"}`, name: "Trades by net result"});
+  $("an-outcomes").textContent = d.outcomes.length ? "Outcomes: " + d.outcomes.map((o) => `${o.key} ${o.trades}`).join(" · ") : "";
+  plotBars($("an-symbols"), d.by_symbol.map((g) => ({label: g.key, value: g.net, tip: `${g.key} · ${g.trades} trade${g.trades === 1 ? "" : "s"} · win rate ${pct(g.win_rate)}`})), {name: "Net profit and loss by symbol"});
+  const groupCols = (first) => [
+    {h: first, f: (g) => `<code>${esc(g.key)}</code>`}, {h: "Trades", num: 1, f: (g) => num(g.trades, 0)}, {h: "Won / lost", num: 1, f: (g) => `${g.wins} / ${g.losses}`},
+    {h: "Win rate", num: 1, f: (g) => pct(g.win_rate)}, {h: "Net P/L", num: 1, f: (g) => `<span class="${signClass(g.net)}">${esc(money(g.net))}</span>`},
+    {h: "Fees", num: 1, f: (g) => esc(usd(g.fees))}, {h: "Traded value", num: 1, f: (g) => "$" + esc(compact(g.volume, 2))},
+  ];
+  $("an-symbols-table").innerHTML = table(groupCols("Symbol"), d.by_symbol, "No closed trades in this selection.");
+  $("an-sources-table").innerHTML = table(groupCols("Source / direction"), [...d.by_source, ...d.by_side], "No closed trades in this selection.");
+}
+async function refreshAnalytics() {
+  if (analyticsLoading) return;
+  analyticsLoading = true;
+  if (!lastAnalytics) { showState("an-state", "loading", "Loading the analytics…"); $("an-kpis").innerHTML = Array(6).fill('<div class="kpi"><div class="skeleton" style="height:58px"></div></div>').join(""); }
+  try {
+    const response = await api("/api/analytics?" + filterQuery("an"));
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "HTTP " + response.status);
+    renderAnalytics(data);
+  } catch (error) {
+    showState("an-state", "error", "The analytics could not be loaded: " + (error.message || "no answer from the bot") + ". ", refreshAnalytics);
+    if (!lastAnalytics) $("an-kpis").innerHTML = "";
+  } finally { analyticsLoading = false; }
+}
+document.querySelectorAll("[data-period]").forEach((button) => {
+  button.onclick = () => {
+    analyticsPeriod = button.dataset.period;
+    document.querySelectorAll("[data-period]").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+    if (lastAnalytics) renderAnalytics(lastAnalytics);
+  };
+});
+document.querySelectorAll("[data-activity]").forEach((button) => {
+  button.onclick = () => {
+    analyticsActivity = button.dataset.activity;
+    document.querySelectorAll("[data-activity]").forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+    if (lastAnalytics) renderAnalytics(lastAnalytics);
+  };
+});
+
+/* ------------------------------------------------------------------ history: filters, pages, export */
+let historyPage = 1, historyLoading = false;
+async function refreshHistory() {
+  if (historyLoading) return;
+  historyLoading = true;
+  try {
+    const response = await api(`/api/trades?${filterQuery("hi")}&page=${historyPage}&page_size=20`);
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "HTTP " + response.status);
+    historyPage = data.page;
+    fillSelect("hi-symbol", data.options.symbols, "All symbols");
+    showState("hi-state", null);
+    renderHistory(data.trades, {...data, filtered: filtered("hi")});
+  } catch (error) {
+    showState("hi-state", "error", "The history could not be loaded: " + (error.message || "no answer from the bot") + ". ", refreshHistory);
+  } finally { historyLoading = false; }
+}
+$("hi-prev").onclick = () => { historyPage = Math.max(1, historyPage - 1); refreshHistory(); };
+$("hi-next").onclick = () => { historyPage += 1; refreshHistory(); };
+const FILTER_LOADERS = {an: () => refreshAnalytics(), hi: () => { historyPage = 1; refreshHistory(); }};
+for (const prefix of Object.keys(FILTER_FIELDS)) {
+  $(`${prefix}-filters`).addEventListener("submit", (event) => event.preventDefault());
+  $(`${prefix}-filters`).addEventListener("change", (event) => {
+    if (event.target.type === "date") document.querySelectorAll(`[data-preset][data-for="${prefix}"]`).forEach((b) => b.setAttribute("aria-pressed", "false"));
+    const from = $(`${prefix}-from`).value, to = $(`${prefix}-to`).value;
+    if (from && to && from > to) { showState(`${prefix}-state`, "error", "The start date is after the end date."); return; }
+    FILTER_LOADERS[prefix]();
+  });
+}
+document.querySelectorAll("[data-preset]").forEach((button) => {
+  button.onclick = () => {
+    const prefix = button.dataset.for, preset = button.dataset.preset, today = new Date();
+    const start = new Date(today);
+    if (preset !== "all" && preset !== "today") start.setDate(today.getDate() - (Number(preset) - 1));
+    $(`${prefix}-from`).value = preset === "all" ? "" : localDay(start);
+    $(`${prefix}-to`).value = preset === "all" ? "" : localDay(today);
+    document.querySelectorAll(`[data-preset][data-for="${prefix}"]`).forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+    FILTER_LOADERS[prefix]();
+  };
+});
+/* Everything the history filters select, not just the page on screen. */
+$("export").onclick = async () => {
+  const button = $("export"), label = button.textContent;
+  button.disabled = true;
+  button.textContent = "Preparing the file…";
+  try {
+    const response = await api("/api/export/trades.xlsx?" + filterQuery("hi"));
+    if (!response.ok) throw new Error((await response.json().catch(() => ({}))).error || "HTTP " + response.status);
+    const rows = Number(response.headers.get("X-Export-Rows") || 0);
+    const name = /filename="([^"]+)"/.exec(response.headers.get("Content-Disposition") || "");
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(await response.blob());
+    link.download = name ? name[1] : "trade-history.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 60000);
+    toast(rows ? `Exported ${rows} trade${rows === 1 ? "" : "s"} to ${link.download}.` : `No trades match these filters: ${link.download} has the headers only.`);
+  } catch (error) {
+    toast("The export failed: " + (error.message || "no answer from the bot"), true);
+  } finally { button.disabled = false; button.textContent = label; }
+};
+
+/* ------------------------------------------------------------------ sections that fold */
+const FOLDED_BY_DEFAULT = {analytics: false, positions: false, orders: false, signals: true, history: true};
+const FOLD_LOADERS = {analytics: refreshAnalytics, history: refreshHistory};  // a section loads its data when it is opened, not before
+const folded = {...FOLDED_BY_DEFAULT};
+try { Object.assign(folded, JSON.parse(localStorage.getItem("hlbot-folded") || "{}")); } catch (error) { /* defaults */ }
+function setFolded(id, value, remember = true) {
+  folded[id] = Boolean(value);
+  $(id).classList.toggle("collapsed", folded[id]);
+  $(id + "-toggle").setAttribute("aria-expanded", String(!folded[id]));
+  $(id + "-body").inert = folded[id];  // nothing inside a folded section takes focus
+  if (remember) { try { localStorage.setItem("hlbot-folded", JSON.stringify(folded)); } catch (error) { /* this tab only */ } }
+  if (!folded[id] && FOLD_LOADERS[id]) FOLD_LOADERS[id]();
+}
+for (const id of Object.keys(FOLDED_BY_DEFAULT)) {
+  setFolded(id, folded[id], false);
+  $(id + "-toggle").onclick = () => setFolded(id, !folded[id]);
+}
+/* Refreshed only while its section is open and the tab is in view: no request is made for something nobody is looking at. */
+setInterval(() => { if (!document.hidden && !folded.analytics) refreshAnalytics(); }, 60000);
+setInterval(() => { if (!document.hidden && !folded.history) refreshHistory(); }, 15000);
+setInterval(() => { if (!document.hidden) refreshVolume(); }, 30000);
+refreshVolume();
+
+/* ------------------------------------------------------------------ the active menu item */
+/* A clicked item is active at once and stays so until the reader scrolls again; otherwise the item
+   follows the section under the top third of the window, and the last one at the end of the page
+   (a short last section can never reach the top third). */
+const links = [...document.querySelectorAll('nav a[href^="#"]')];
+const sectionIds = links.map((a) => a.getAttribute("href").slice(1));
+let pinned = null, pinSettled = false, pinTimer = 0;
+function setActive(id) {
+  links.forEach((a) => {
+    const on = a.getAttribute("href") === "#" + id;
+    a.classList.toggle("active", on);
+    if (on) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+  });
+}
+function sectionInView() {
+  const line = window.innerHeight * 0.3;
+  let current = sectionIds[0];
+  for (const id of sectionIds) if ($(id).getBoundingClientRect().top <= line) current = id;
+  const page = document.documentElement;
+  if (window.scrollY > 0 && window.innerHeight + window.scrollY >= page.scrollHeight - 2) current = sectionIds[sectionIds.length - 1];
+  return current;
+}
+function pin(id) {
+  pinned = id; pinSettled = false;
+  setActive(id);
+  clearTimeout(pinTimer);
+  pinTimer = setTimeout(() => { pinSettled = true; }, 900);  // the jump itself is over by then
+}
+window.addEventListener("scroll", () => {
+  if (pinned && !pinSettled) { clearTimeout(pinTimer); pinTimer = setTimeout(() => { pinSettled = true; }, 160); return; }
+  pinned = null;
+  if (sectionIds.length) setActive(sectionInView());
+}, {passive: true});
+links.forEach((a) => {
+  a.addEventListener("click", () => {
+    const id = a.getAttribute("href").slice(1);
+    if (id in folded) setFolded(id, false);
+    pin(id);
+  });
+});
+if (sectionIds.includes(location.hash.slice(1))) {
+  const id = location.hash.slice(1);
+  if (id in folded) setFolded(id, false);
+  pin(id);
+}
+
+/* ------------------------------------------------------------------ pop-up pages */
+function openDialog(id) { const d = $(id); if (!d.open) d.showModal(); }
+for (const id of ["alerts-dialog", "settings-dialog"]) {
+  const d = $(id);
+  d.addEventListener("click", (event) => { if (event.target === d || event.target.closest("[data-close]")) d.close(); });  // the backdrop or the close button
+}
+function showAlert(id) {
+  openDialog("alerts-dialog");
+  if (id === undefined) return;
+  openAlerts.add(String(id));
+  const item = $("alerts-list").querySelector(`details[data-alert="${CSS.escape(String(id))}"]`);
+  if (item) { item.open = true; item.scrollIntoView({block: "nearest"}); item.querySelector("summary").focus(); }
+}
+$("nav-alerts").onclick = () => showAlert();
+$("alerts-open").onclick = () => showAlert();
+$("alert-rows").addEventListener("click", (event) => { const row = event.target.closest("[data-alert]"); if (row) showAlert(row.dataset.alert); });
+$("alerts-list").addEventListener("toggle", (event) => {
+  const id = event.target.dataset && event.target.dataset.alert;
+  if (id) { if (event.target.open) openAlerts.add(id); else openAlerts.delete(id); }
+}, true);
+
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+function showTab(name) {
+  tabs.forEach((tab) => {
+    const on = tab.dataset.tab === name;
+    tab.setAttribute("aria-selected", String(on));
+    $("panel-" + tab.dataset.tab).hidden = !on;
+  });
+  if (name === "users") loadUsers();
+}
+tabs.forEach((tab) => { tab.onclick = () => showTab(tab.dataset.tab); });
+$("nav-settings").onclick = () => { showTab("appearance"); openDialog("settings-dialog"); };
+
+/* ------------------------------------------------------------------ commands: a confirmation, then the answer as a notice */
+const DONE = {
+  pause: () => "Paused: no new entries. Open trades are still managed.",
+  resume: () => "Resumed: entries are allowed again.",
+  kill: (r) => (r.remaining || []).length ? `Kill sent, ${r.remaining.length} position(s) still open. Check Positions.` : "Killed: flat and paused.",
+};
+async function command(name, body, question) {
+  if (!window.confirm(question)) return;
+  const result = await send("/api/control/" + name, {method: "POST", json: body});
+  toast(result.ok ? DONE[name](result) : "Not done: " + result.error, !result.ok);
+  refresh();
+}
+$("pause").onclick = () => command("pause", {reason: "dashboard"}, "Pause new entries? Open trades keep being managed.");
+$("resume").onclick = () => command("resume", {}, "Resume entries and clear every condition that needs a manual resume?");
+$("kill").onclick = () => command("kill", {confirm: "KILL"}, "KILL: close every bot position at market (reduce-only), cancel bot orders, and stay paused. Continue?");
+
+/* ------------------------------------------------------------------ settings: theme (this browser) */
+const currentTheme = () => document.documentElement.dataset.theme === "light" ? "light" : "dark";
+function syncTheme() {
+  const theme = currentTheme(), label = theme === "light" ? "Switch to dark theme" : "Switch to light theme";
+  document.querySelectorAll("[data-theme-choice]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.themeChoice === theme)));
+  $("theme-toggle").setAttribute("aria-label", label);
+  $("theme-toggle").title = label;
+}
+function setTheme(theme) {
+  document.documentElement.dataset.theme = theme === "light" ? "light" : "dark";
+  try { localStorage.setItem("hlbot-theme", currentTheme()); } catch (error) { /* private window: applies until the tab closes */ }
+  syncTheme();
+}
+document.querySelectorAll("[data-theme-choice]").forEach((button) => { button.onclick = () => setTheme(button.dataset.themeChoice); });
+$("theme-toggle").onclick = () => setTheme(currentTheme() === "light" ? "dark" : "light");
+syncTheme();
+
+/* ------------------------------------------------------------------ settings: name and logo (stored on the bot, admin) */
+const DEFAULT_NAME = "hlbot";
+function applyName(name) {
+  const shown = name || DEFAULT_NAME;
+  $("brand-name").textContent = shown;
+  document.title = shown + " dashboard";
+  $("name-input").value = shown === DEFAULT_NAME ? "" : shown;
+}
+applyName("");
+$("name-form").onsubmit = async (event) => {
+  event.preventDefault();
+  const result = await send("/api/settings", {method: "POST", json: {name: $("name-input").value}});
+  if (result.ok) { applyName(result.name); note("name-msg", "Saved.", "ok"); } else note("name-msg", "Not saved: " + result.error, "err");
+};
+
+const LOGO_MAX_BYTES = 512 * 1024;
+const logoNote = (text) => { $("logo-note").textContent = text; };
+function reloadLogo() {
+  const url = "/logo?v=" + Date.now();
+  $("logo").src = url;
+  $("logo-preview").src = url;
+}
+$("logo-pick").onclick = () => $("logo-file").click();
+$("logo-file").onchange = async () => {
+  const file = $("logo-file").files[0];
+  $("logo-file").value = "";
+  if (!file) return;
+  if (file.size > LOGO_MAX_BYTES) { logoNote(`That file is ${Math.ceil(file.size / 1024)} KB. The limit is 512 KB.`); return; }
+  const result = await send("/api/settings/logo", {method: "POST", headers: {"Content-Type": file.type || "application/octet-stream"}, body: file});
+  if (result.ok) { reloadLogo(); logoNote("Logo updated."); } else logoNote("Not changed: " + result.error);
+};
+$("logo-reset").onclick = async () => {
+  const result = await send("/api/settings/logo", {method: "DELETE"});
+  if (result.ok) { reloadLogo(); logoNote("Back to the default logo."); } else logoNote("Not changed: " + result.error);
+};
+
+/* ------------------------------------------------------------------ account: who is signed in, password, sign out */
+let me = null;
+async function loadSession() {
+  let response;
+  try { response = await api("/api/session"); } catch (error) { return; }
+  if (!response.ok) return;
+  me = await response.json();
+  document.documentElement.dataset.role = me.role;  // shows the controls this role may use
+  $("user-name").textContent = me.user;
+  $("user-role").textContent = me.role;
+  $("user-avatar").textContent = me.user.slice(0, 1).toUpperCase();
+  $("account-who").textContent = `${me.user} · ${me.role}`;
+  applyName(me.name);
+}
+async function signOut() {
+  await send("/api/logout", {method: "POST"});
+  location.assign("/login");
+}
+$("signout").onclick = signOut;
+$("signout-2").onclick = signOut;
+$("pass-form").onsubmit = async (event) => {
+  event.preventDefault();
+  if ($("pass-new").value !== $("pass-repeat").value) { note("pass-msg", "The two new passwords differ.", "err"); return; }
+  const result = await send("/api/account/password", {method: "POST", json: {current: $("pass-current").value, new: $("pass-new").value}});
+  if (result.ok) { $("pass-form").reset(); note("pass-msg", "Password changed. Other browsers signed in to this account were signed out.", "ok"); }
+  else note("pass-msg", "Not changed: " + result.error, "err");
+};
+
+/* ------------------------------------------------------------------ users (admin) */
+const ROLE_NAMES = ["viewer", "operator", "admin"];
+let passwordFor = null;
+function renderUsers(users) {
+  $("users-table").innerHTML = table([
+    {h: "User", f: (u) => `<b>${esc(u.username)}</b>${me && u.username === me.user ? ' <span class="muted">(you)</span>' : ""}`},
+    {h: "Role", f: (u) => `<select data-act="role" data-user="${esc(u.username)}" aria-label="Role of ${esc(u.username)}">${ROLE_NAMES.map((r) => `<option${r === u.role ? " selected" : ""}>${r}</option>`).join("")}</select>`},
+    {h: "Status", f: (u) => u.disabled ? badge("disabled", "quiet") : badge("active", "")},
+    {h: "Last sign-in", f: (u) => u.last_login_at ? esc(clock(u.last_login_at)) : "never"},
+    {h: "", f: (u) => `<span class="inline"><button type="button" data-act="pass" data-user="${esc(u.username)}">Password…</button>` +
+      `<button type="button" data-act="${u.disabled ? "enable" : "disable"}" data-user="${esc(u.username)}">${u.disabled ? "Enable" : "Disable"}</button>` +
+      `<button type="button" class="danger" data-act="remove" data-user="${esc(u.username)}">Remove</button></span>`},
+  ], users, "No accounts.");
+}
+async function loadUsers() {
+  const result = await send("/api/users");
+  if (result.ok) renderUsers(result.users); else note("users-msg", "Could not load the accounts: " + result.error, "err");
+}
+async function changeUser(name, options, done) {
+  const result = await send("/api/users/" + encodeURIComponent(name), options);
+  note("users-msg", result.ok ? done : "Not done: " + result.error, result.ok ? "ok" : "err");
+  await loadUsers();  // also puts a refused change back as it was
+  if (me && name === me.user) loadSession();
+}
+function askPassword(name) {
+  passwordFor = name;
+  $("user-pass").hidden = !name;
+  $("user-pass-value").value = "";
+  if (name) { $("user-pass-label").textContent = `New password for ${name}, 10 characters or more. That account is signed out everywhere.`; $("user-pass-value").focus(); }
+}
+$("users-table").addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-act]");
+  if (!button) return;
+  const name = button.dataset.user, act = button.dataset.act;
+  if (act === "pass") askPassword(name);
+  else if (act === "disable") changeUser(name, {method: "POST", json: {disabled: true}}, `${name} is disabled and signed out.`);
+  else if (act === "enable") changeUser(name, {method: "POST", json: {disabled: false}}, `${name} can sign in again.`);
+  else if (act === "remove" && window.confirm(`Remove the account ${name}? This cannot be undone.`)) changeUser(name, {method: "DELETE"}, `${name} was removed.`);
+});
+$("users-table").addEventListener("change", (event) => {
+  const select = event.target.closest('select[data-act="role"]');
+  if (select) changeUser(select.dataset.user, {method: "POST", json: {role: select.value}}, `${select.dataset.user} is now ${select.value}.`);
+});
+$("user-pass").onsubmit = async (event) => {
+  event.preventDefault();
+  const name = passwordFor;
+  await changeUser(name, {method: "POST", json: {password: $("user-pass-value").value}}, `Password of ${name} changed.`);
+  askPassword(null);
+};
+$("user-pass-cancel").onclick = () => askPassword(null);
+$("user-add").onsubmit = async (event) => {
+  event.preventDefault();
+  const result = await send("/api/users", {method: "POST", json: {username: $("new-user").value, password: $("new-pass").value, role: $("new-role").value}});
+  note("users-msg", result.ok ? `${result.username} was added as ${result.role}.` : "Not added: " + result.error, result.ok ? "ok" : "err");
+  if (result.ok) { $("user-add").reset(); loadUsers(); }
+};
+
+loadSession();
+</script>
+</body>
+</html>
+>>>>>>> a98f46a (fixing parser buy)

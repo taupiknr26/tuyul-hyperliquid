@@ -12,6 +12,7 @@ from hlbot.domain.parser import (
     extract_tp_update_fields,
     parse_message,
 )
+from hlbot.domain.validator import validate_signal
 
 
 SIGNAL_TEXT = (
@@ -40,6 +41,19 @@ SIGNAL_TEXT_MISSING_SL = (
     "Gold sell Zone 4286- 4289\n\n"
     "TP1 : 4283\n"
     "TP2 : 4280\n"
+    "#Vip_Signals"
+)
+
+BUY_SIGNAL_TEXT_ZONE_TOP_DOWN = (
+    "#GOLD BUY NOW\n"
+    "Gold buy Zone 4205- 4200\n\n"
+    "SL : 4195\n\n"
+    "TP1 : 4210\n"
+    "TP2 : 4215\n"
+    "TP3 : 4220\n"
+    "TP4 : 4225\n"
+    "TP5 : 4230\n\n"
+    "or set your stop loss according to your margin\n"
     "#Vip_Signals"
 )
 
@@ -151,6 +165,49 @@ class TestExtractSignalFields(unittest.TestCase):
         self.assertEqual(parsed["symbol"], "GOLD")
         self.assertEqual(parsed["action"], "SELL")
         self.assertEqual(parsed["entry_zone"], {"low": 4286.0, "high": 4289.0})
+
+
+class TestBuyZoneWrittenTopDown(unittest.TestCase):
+    """Not in the baseline. The channel writes a BUY zone from the top
+    down ("Zone 4205- 4200"); taken by position that gave low > high and
+    the validator refused the signal."""
+
+    def test_buy_zone_written_high_first_is_ordered(self):
+        parsed, errors = extract_signal_fields(BUY_SIGNAL_TEXT_ZONE_TOP_DOWN)
+
+        self.assertEqual(errors, [])
+        self.assertEqual(parsed["action"], "BUY")
+        self.assertEqual(parsed["entry_zone"], {"low": 4200.0, "high": 4205.0})
+        self.assertEqual(validate_signal(parsed, errors), (True, []))
+
+    def test_buy_zone_written_low_first_is_unchanged(self):
+        text = BUY_SIGNAL_TEXT_ZONE_TOP_DOWN.replace("4205- 4200", "4200- 4205")
+        parsed, errors = extract_signal_fields(text)
+        self.assertEqual(parsed["entry_zone"], {"low": 4200.0, "high": 4205.0})
+
+    def test_sell_zone_is_taken_as_written(self):
+        text = SIGNAL_TEXT.replace("4286- 4289", "4289- 4286")
+        parsed, errors = extract_signal_fields(text)
+
+        self.assertEqual(parsed["entry_zone"], {"low": 4289.0, "high": 4286.0})
+        valid, validation_errors = validate_signal(parsed, errors)
+        self.assertFalse(valid)
+        self.assertTrue(any("entry_zone.low must be less than" in e for e in validation_errors))
+
+    def test_buy_stop_loss_on_the_wrong_side_is_still_refused(self):
+        text = BUY_SIGNAL_TEXT_ZONE_TOP_DOWN.replace("SL : 4195", "SL : 4203")
+        parsed, errors = extract_signal_fields(text)
+        valid, validation_errors = validate_signal(parsed, errors)
+        self.assertFalse(valid)
+        self.assertIn("stop_loss must be below entry_zone for a BUY", validation_errors)
+
+    def test_entry_limit_format_buy_written_high_first_is_ordered(self):
+        text = "#XAUUSD buy ENTRY 4205 Limit 4200\n\n✔️TP::::4210\n✔️TP::::4215\n\n\U0001f6abSL:::4195"
+        parsed, errors = extract_signal_fields_for_channel(ENTRY_LIMIT_CHANNEL, text)
+
+        self.assertEqual(errors, [])
+        self.assertEqual(parsed["entry_zone"], {"low": 4200.0, "high": 4205.0})
+        self.assertEqual(validate_signal(parsed, errors), (True, []))
 
 
 class TestEntryLimitChannelFormat(unittest.TestCase):

@@ -18,7 +18,7 @@ longer exists; the successor coverage is named).
 
 | Baseline file | Tests | Here | Notes |
 |---|---|---|---|
-| `test_signal_parser.py` | 26 | `tests/unit/test_parser_ported.py` | Import path only. The entry-limit channel id is now set with `configure_channel_parsers()` in `setUpModule`, because the mapping moved from source to configuration (LIM-21). `PARSER_VERSION` is 1.2.0; the tests compare against the constant |
+| `test_signal_parser.py` | 26 | `tests/unit/test_parser_ported.py` | Import path only. The entry-limit channel id is now set with `configure_channel_parsers()` in `setUpModule`, because the mapping moved from source to configuration (LIM-21). `PARSER_VERSION` is 1.2.1; the tests compare against the constant. Added `TestBuyZoneWrittenTopDown` (not in the baseline) |
 | `test_signal_validator.py` | 10 | `tests/unit/test_validator_ported.py` | Import path only |
 | `test_execution_plan.py` | 32 of 40 | `tests/unit/test_planning_ported.py` | Effective range, executable price, signal id, expiry, TP allocation and buffer, slippage, level validation. `build_signal_id` is kept as an alias of `build_content_id` |
 
