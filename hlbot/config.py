@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Any, Optional, Union
 from urllib.parse import urlsplit
 
+from hlbot.domain.outlook import DEFAULT_SESSIONS, OutlookConfig, build_registry, check_sessions
 from hlbot.domain.parser import PARSER_FORMATS
 from hlbot.domain.risk import RiskConfig
 
@@ -180,6 +181,8 @@ class Settings:
     api_port: int = 8787
     # Addresses a reverse proxy or tunnel publishes the dashboard at, e.g. ("https://bot.example.com",)
     api_public_origins: tuple[str, ...] = ()
+    # ---- scenario outlook (dashboard only; never read by the trading engine)
+    outlook: OutlookConfig = field(default_factory=OutlookConfig)
     warnings: tuple[str, ...] = ()
 
     # ------------------------------------------------------------ derived
@@ -540,6 +543,7 @@ def load_settings(
     if notify_enabled and not chat_id:
         r.errors.append("TELEGRAM_NOTIFY_ENABLED is true but TELEGRAM_NOTIFY_CHAT_ID is not set")
 
+    outlook = _load_outlook(r, symbol_map, warnings)
     public_origins = r.origins("API_PUBLIC_ORIGINS")
     for origin in public_origins:
         if origin.startswith("http://"):
@@ -599,11 +603,69 @@ def load_settings(
         api_host=r.raw("API_HOST") or "127.0.0.1",
         api_port=r.integer("API_PORT", 8787, minimum=1, maximum=65535),
         api_public_origins=public_origins,
+        outlook=outlook,
         warnings=tuple(warnings),
     )
     if r.errors:
         raise ConfigError("invalid configuration:\n  - " + "\n  - ".join(r.errors))
     return settings
+
+
+def _load_outlook(r: _Reader, symbol_map: Mapping[str, str], warnings: list[str]) -> OutlookConfig:
+    """Scenario outlook settings (docs/outlook.md). Session times and the
+    source registry are configuration, never code: sessions shift with
+    daylight saving, and a source is added or switched off here."""
+    enabled = r.boolean("OUTLOOK_ENABLED", True)
+    coins = list(dict.fromkeys(symbol_map.values()))
+    coin = r.raw("OUTLOOK_COIN") or next((c for c in coins if c.upper().endswith("GOLD")), None)
+    if enabled and coin not in coins:
+        if r.raw("OUTLOOK_COIN"):
+            warnings.append(f"OUTLOOK_COIN={coin} is not a coin in HL_SYMBOL_MAP: the scenario outlook is off")
+        enabled = False
+
+    sessions: dict[str, tuple[str, str]] = dict(DEFAULT_SESSIONS)
+    raw_sessions = r.raw("OUTLOOK_SESSIONS")
+    if raw_sessions:
+        try:
+            sessions = check_sessions(json.loads(raw_sessions))
+        except (ValueError, TypeError, AttributeError) as exc:
+            r.errors.append(f'OUTLOOK_SESSIONS must be JSON like {{"asia": ["06:45", "07:00"], "london": [...], "newyork": [...]}}: {exc}')
+
+    def names(key: str) -> tuple[str, ...]:
+        return tuple(part.strip() for part in (r.raw(key) or "").split(",") if part.strip())
+
+    extra: list[Any] = []
+    sources_file = r.raw("OUTLOOK_SOURCES_FILE")
+    if sources_file:
+        try:
+            extra = json.loads(Path(os.path.expanduser(sources_file)).read_text(encoding="utf-8"))
+            if not isinstance(extra, list):
+                raise ValueError("it must hold a JSON list of sources")
+        except (OSError, ValueError) as exc:
+            r.errors.append(f"OUTLOOK_SOURCES_FILE {sources_file}: {exc}")
+            extra = []
+    sources = build_registry()
+    try:
+        sources = build_registry(extra, names("OUTLOOK_SOURCES_ENABLE"), names("OUTLOOK_SOURCES_DISABLE"))
+    except ValueError as exc:
+        r.errors.append(f"scenario outlook sources (OUTLOOK_SOURCES_FILE, OUTLOOK_SOURCES_ENABLE, OUTLOOK_SOURCES_DISABLE): {exc}")
+    return OutlookConfig(
+        enabled=enabled,
+        coin=coin or "",
+        instrument=(r.raw("OUTLOOK_INSTRUMENT") or "XAUUSD").upper()[:12],
+        sessions=sessions,
+        tz_name=(r.raw("OUTLOOK_TZ_NAME") or "WIB")[:8],
+        tz_offset_minutes=r.integer("OUTLOOK_TZ_OFFSET_MINUTES", 420, minimum=-720, maximum=840),
+        confluence_tolerance=r.number("OUTLOOK_CONFLUENCE_TOLERANCE", 5.0, minimum=0, exclusive_min=True),
+        carry_distance=r.number("OUTLOOK_CARRY_DISTANCE", 50.0, minimum=0, exclusive_min=True),
+        min_level_sources=r.integer("OUTLOOK_MIN_LEVEL_SOURCES", 2, minimum=1, maximum=20),
+        history_days=r.integer("OUTLOOK_HISTORY_DAYS", 365, minimum=0),
+        no_trade_before_min=r.integer("OUTLOOK_NO_TRADE_BEFORE_MIN", 15, minimum=0, maximum=240),
+        no_trade_after_min=r.integer("OUTLOOK_NO_TRADE_AFTER_MIN", 15, minimum=0, maximum=240),
+        event_refresh_delay_min=r.integer("OUTLOOK_EVENT_REFRESH_DELAY_MIN", 5, minimum=0, maximum=120),
+        manual_refresh_cooldown_s=r.integer("OUTLOOK_REFRESH_COOLDOWN_S", 300, minimum=30, maximum=86400),
+        sources=sources,
+    )
 
 
 def load_agent_key(settings: Settings) -> str:

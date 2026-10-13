@@ -29,8 +29,8 @@ def fresh_db(tmp_path, clock=None):
 
 def test_migrations_are_forward_only_and_idempotent(tmp_path):
     db = fresh_db(tmp_path)
-    assert db.schema_version() == 3
-    assert db.migrate() == 3  # nothing to do the second time
+    assert db.schema_version() == 4
+    assert db.migrate() == 4  # nothing to do the second time
     assert db.scalar("PRAGMA journal_mode") == "wal"
     assert db.scalar("PRAGMA synchronous") == 2  # FULL: intents are durable before the request leaves (NFR-008)
     assert db.one("SELECT mode FROM control_state")["mode"] == "RUNNING"
@@ -990,7 +990,7 @@ async def test_dashboard_script_renders_a_real_status_payload_and_escapes_what_i
     # dark unless chosen; the choice is remembered; anything that is not "light" is dark
     assert out["themes"] == ["dark", "Switch to light theme", "light", "Switch to dark theme", "light", "dark", "dark"]
     # positions and orders start open, the two long lists start folded; a change is remembered
-    assert out["folds"][:4] == [{"analytics": False, "positions": False, "orders": False, "signals": True, "history": True}, "false", "true", True]
+    assert out["folds"][:4] == [{"outlook": False, "analytics": False, "positions": False, "orders": False, "signals": True, "history": True}, "false", "true", True]
     assert out["folds"][4:6] == ["true", False] and json.loads(out["folds"][6])["history"] is False
     # the dashboard name is written as text, never as markup; empty means the default
     assert out["named"] == ["<b>Desk</b>", "", "<b>Desk</b> dashboard", "<b>Desk</b>", "hlbot", ""]

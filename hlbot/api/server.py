@@ -27,6 +27,7 @@ from hlbot import __version__
 from hlbot.api import analytics, export, readmodel
 from hlbot.api.auth import ROLES, Auth, AuthError, Principal
 from hlbot.api.market import VolumeService
+from hlbot.api.outlook import OutlookApi
 from hlbot.config import short_address
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -74,6 +75,7 @@ class ApiServer:
         self._runner: Any = None
         self._auth: Optional[Auth] = None
         self._volume = VolumeService(app)
+        self._outlook = OutlookApi(app, lambda request: request[PRINCIPAL].name)
         self._public_hosts = frozenset(urlsplit(origin).netloc for origin in app.s.api_public_origins)
 
     @property
@@ -121,6 +123,7 @@ class ApiServer:
                 web.delete("/api/users/{name}", admin(self.delete_user)),
             ]
         )
+        application.add_routes(self._outlook.routes(viewer, operator))
         self._runner = web.AppRunner(application, access_log=None)
         await self._runner.setup()
         site = web.TCPSite(self._runner, self.bot.s.api_host, self.bot.s.api_port)
@@ -312,6 +315,8 @@ class ApiServer:
 
     async def delete_user(self, request: web.Request) -> web.Response:
         self.auth.delete_user(request.match_info["name"], by=request[PRINCIPAL].name)
+        if self.bot.outlook is not None:
+            self.bot.outlook.forget_user(request.match_info["name"].strip().lower())
         return web.json_response({"ok": True})
 
     # ------------------------------------------------------------ read

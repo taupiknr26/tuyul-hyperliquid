@@ -344,6 +344,73 @@
   .tip span { display: block; color: var(--text-muted); font-size: 11.5px; margin-top: 2px; }
   .tip i { display: inline-block; width: 12px; height: 0; border-top: 2px solid var(--chart-line); vertical-align: middle; margin-right: 6px; }
 
+  /* ---------- scenario outlook ---------- */
+  .ol-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  .ol-head h3 { font-size: 17px; font-weight: 800; }
+  .ol-id { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+  .ol-tag { font-size: 11px; font-weight: 700; color: var(--text-muted); border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+  .ol-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .ol-actions .seg { margin-left: 0; }
+  .ol-meta { flex-basis: 100%; color: var(--text-muted); font-size: 12px; }
+  .ol-meta b { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+  #ol-banners .state { margin: 0 0 12px; }
+  .state.warnline { border-left: 3px solid var(--yellow); }
+  .ol-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+  .ol-grid h3, .ol-foot h3 { font-size: 15px; font-weight: 800; margin: 0; }
+  .ol-scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 16px; }
+  .ol-scenarios[hidden] { display: none; }
+  .ol-scenarios .skeleton { height: 190px; border-radius: var(--radius-card); }
+  /* context beside the levels only where the levels table fits; otherwise one under the other */
+  .ol-grid.top { grid-template-columns: repeat(auto-fit, minmax(min(470px, 100%), 1fr)); }
+  .ol-drivers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 8px; margin-top: 8px; }
+  #ol-levels th, #ol-levels td { padding: 8px; }
+  .ol-card { background: var(--surface); border-radius: var(--radius-card); padding: 16px 18px; box-shadow: var(--card-ring); border: 2px solid transparent; min-width: 0; transition: opacity .2s ease; }
+  /* the scenario whose trigger price has met: the signature gradient as its outline */
+  .ol-card.active { background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--gradient-accent) border-box; box-shadow: none; }
+  .ol-card.invalid { opacity: .6; }
+  .ol-stale .ol-card { opacity: .45; }
+  .ol-card .head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ol-card h4 { margin: 0 auto 0 0; font-size: 15px; font-weight: 800; }
+  .ol-card .idea { color: var(--text-muted); margin-top: 8px; }
+  .ol-card dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 12px; margin: 12px 0 0; }
+  .ol-card dt { color: var(--text-muted); font-size: 12px; }
+  .ol-card dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .ol-card .foot { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  .ol-card .foot button { padding: 6px 12px; border-radius: 10px; }
+  .ol-form { display: grid; gap: 8px; margin-top: 12px; }
+  .ol-form label { display: grid; gap: 4px; color: var(--text-muted); font-size: 11.5px; font-weight: 600; }
+  .ol-form .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ol-form .msg { margin: 0; min-height: 0; }
+  input[type="number"], textarea { font: 500 13px var(--font); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-deep); color: var(--text); width: 100%; min-width: 0; }
+  textarea { resize: vertical; min-height: 64px; }
+  .ol-price { font-size: 26px; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.15; }
+  .ol-price small { font-size: 12px; font-weight: 600; letter-spacing: 0; margin-left: 6px; }
+  .ol-bias { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; margin-top: 12px; }
+  .ol-views { color: var(--text-muted); font-size: 12px; margin: 6px 0 0; padding-left: 16px; }
+  .ol-context .rows { margin-top: 12px; }
+  /* where a number or a claim comes from */
+  .src { display: inline-block; font-size: 10.5px; font-weight: 700; color: var(--text-muted); border: 1px solid var(--border); border-radius: var(--radius-badge); padding: 1px 6px; margin: 3px 4px 0 0; white-space: nowrap; }
+  a.src:hover { color: var(--text); border-color: var(--text-muted); }
+  tr.nearest > td { background: var(--surface-deep); font-weight: 700; }
+  #ol-levels td.wrap { min-width: 130px; }
+  .ol-add { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+  .ol-add input[type="number"] { flex: 0 1 110px; width: auto; }
+  .ol-add input[type="text"] { flex: 1 1 140px; width: auto; padding: 8px 10px; border-radius: 10px; }
+  .ol-add select { flex: 0 0 auto; width: auto; padding: 8px 10px; border-radius: 10px; }
+  .ol-track { position: relative; height: 10px; border-radius: 999px; background: var(--surface-deep); margin: 12px 0 4px; overflow: hidden; }
+  .ol-track .win { position: absolute; top: 0; bottom: 0; background: var(--danger); opacity: .6; min-width: 3px; }
+  .ol-track .now { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--text); }
+  .ol-track-legend { display: flex; justify-content: space-between; gap: 10px; color: var(--text-muted); font-size: 11px; }
+  .ol-window { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; color: var(--text-muted); font-size: 12px; margin-top: 12px; }
+  .ol-window input { width: 62px; padding: 5px 8px; }
+  .ol-foot { margin-top: 16px; }
+  .ol-disclaimer { color: var(--text-muted); font-size: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .oh-tables { display: grid; gap: 14px; margin-top: 10px; }
+  .oh-tables h4 { margin: 0 0 4px; font-size: 12px; font-weight: 700; color: var(--text-muted); }
+  .oh-note { display: grid; gap: 8px; margin-top: 10px; }
+  .oh-note .inline { margin: 0; }
+  #ol-history-dialog { width: min(860px, calc(100vw - 32px)); }
+
   /* ---------- smaller screens ---------- */
   @media (max-width: 1240px) {
     .app { grid-template-columns: 216px minmax(0, 1fr); }
@@ -352,13 +419,22 @@
   }
   @media (max-width: 860px) {
     .app { display: block; }
-    .sidebar { position: static; height: auto; padding: 14px 16px 0; gap: 12px; }
-    nav { flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
-    nav a { white-space: nowrap; }
+    /* The menu stays at the top of the screen while the page scrolls. A sticky element only sticks
+       inside its parent, and the sidebar is as short as the menu itself, so on a phone the sidebar
+       steps aside (its children are laid out in the page) and the menu sticks to the page instead.
+       The brand scrolls away; the menu row scrolls sideways when it is wider than the screen. */
+    html { scroll-padding-top: 68px; }  /* a section jumped to lands below the menu, not under it */
+    .sidebar { display: contents; }
+    .brand { padding: 14px 16px 0; }
+    nav { position: sticky; top: 0; z-index: 25; flex-direction: row; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
+      margin-top: 6px; padding: 8px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    nav::-webkit-scrollbar { display: none; }
+    nav a, nav .navbtn { flex: none; padding: 9px 12px; }
     .envcard, .side-foot { display: none; }
     main { padding: 8px 16px 24px; }
     .rail { padding: 0 16px 32px; }
-    .grid2, .overview { grid-template-columns: minmax(0, 1fr); }
+    .grid2, .overview, .ol-grid { grid-template-columns: minmax(0, 1fr); }
+    .ol-actions { margin-left: 0; width: 100%; }
     .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .stats .stat:last-child:nth-child(odd) { grid-column: 1 / -1; }
     .charts { grid-template-columns: minmax(0, 1fr); }
@@ -377,6 +453,7 @@
     <div class="brand"><img class="logo" id="logo" src="/logo" alt="" width="40" height="40"><span id="brand-name"></span></div>
     <nav aria-label="Sections">
       <a href="#overview" class="active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1.2"/><rect x="9" y="2" width="5" height="5" rx="1.2"/><rect x="2" y="9" width="5" height="5" rx="1.2"/><rect x="9" y="9" width="5" height="5" rx="1.2"/></svg>Overview</a>
+      <a href="#outlook"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h12M2 11h12"/><path d="M3 13l3.5-5 3 2.5L13 3"/></svg>Outlook</a>
       <a href="#analytics"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 13.5V9M6.2 13.5V5M9.8 13.5V7.5M13.5 13.5V2.5"/></svg>Analytics</a>
       <a href="#positions"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 12l4-4 3 3 5-6"/></svg>Positions</a>
       <a href="#orders"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h10M3 8h10M3 12h6"/></svg>Orders</a>
@@ -478,6 +555,70 @@
           <details class="tableview"><summary>Table view</summary><div class="scroll" id="line-table"></div></details>
         </div>
       </div>
+    </section>
+
+    <section id="outlook" class="fold">
+      <div class="section-title"><h2><button type="button" class="fold-toggle" id="outlook-toggle" aria-expanded="true" aria-controls="outlook-body"><svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>Scenario outlook</button></h2><span class="sub" id="outlook-sub"></span></div>
+      <div class="fold-body" id="outlook-body"><div class="fold-inner">
+        <div class="state" id="ol-state" role="status" hidden></div>
+        <div class="ol-scenarios" id="ol-skeleton" aria-hidden="true"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+        <div id="ol-banners"></div>
+        <div id="ol-root" hidden>
+          <div class="card ol-head">
+            <div class="ol-id">
+              <h3 id="ol-title">Scenario Outlook</h3>
+              <span class="badge quiet" id="ol-session">–</span>
+              <span class="badge quiet" id="ol-status" role="status">–</span>
+              <span class="ol-tag" id="ol-label">Scenario outlook, not news</span>
+            </div>
+            <div class="ol-actions">
+              <div class="seg" role="group" aria-label="Version shown">
+                <button type="button" id="ol-show-generated" aria-pressed="true">Generated</button>
+                <button type="button" id="ol-show-mine" aria-pressed="false">My Version</button>
+              </div>
+              <button type="button" id="ol-history-open" aria-haspopup="dialog">History</button>
+              <button type="button" id="ol-refresh" data-need="operator">Refresh outlook</button>
+            </div>
+            <div class="ol-meta"><span id="ol-generated"></span> · <span id="ol-countdown"></span></div>
+          </div>
+
+          <div class="ol-grid top">
+            <div class="card ol-context">
+              <div class="cardhead"><h3>Context</h3><span class="muted" style="font-size:11.5px">price from the live market feed</span></div>
+              <div class="ol-price" id="ol-price">–</div>
+              <div id="ol-context"></div>
+            </div>
+            <div class="card">
+              <div class="cardhead"><h3>Key levels</h3><span class="muted" id="ol-levels-note" style="font-size:11.5px"></span></div>
+              <div class="scroll" id="ol-levels"></div>
+              <div id="ol-levels-mine"></div>
+            </div>
+          </div>
+
+          <div class="ol-scenarios" id="ol-scenarios"></div>
+
+          <div class="ol-grid">
+            <div class="card">
+              <div class="cardhead"><h3>Event risk</h3><span class="muted" id="ol-next-event" style="font-size:11.5px" aria-live="off"></span></div>
+              <div id="ol-events"></div>
+              <div class="ol-window">No-trade window around high-impact events:
+                <label for="ol-before">before</label><input type="number" id="ol-before" min="0" max="240" step="5" inputmode="numeric">
+                <label for="ol-after">after</label><input type="number" id="ol-after" min="0" max="240" step="5" inputmode="numeric"> minutes
+              </div>
+            </div>
+            <div class="card">
+              <div class="cardhead"><h3>Risk notes</h3></div>
+              <div class="rows" id="ol-notes"></div>
+            </div>
+          </div>
+
+          <div class="card ol-foot">
+            <div class="cardhead"><h3>Sources</h3><span class="muted" id="ol-sources-count" style="font-size:11.5px"></span></div>
+            <div class="scroll" id="ol-sources"></div>
+            <p class="ol-disclaimer" id="ol-disclaimer">Not financial advice. Trading gold with leverage carries a high risk of loss.</p>
+          </div>
+        </div>
+      </div></div>
     </section>
 
     <section id="analytics" class="fold">
@@ -634,6 +775,28 @@
   <div class="dlg-head"><h2 id="alerts-title">Alerts</h2><span class="sub" id="alerts-count"></span>
     <button type="button" class="iconbtn" data-close aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
   <div class="dlg-body" id="alerts-list"></div>
+</dialog>
+
+<dialog id="ol-history-dialog" aria-labelledby="ol-history-title">
+  <div class="dlg-head"><h2 id="ol-history-title">Outlook history</h2><span class="sub" id="oh-count"></span>
+    <button type="button" class="iconbtn" data-close aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+  <div class="dlg-body">
+    <form class="filters" id="oh-filters" autocomplete="off" style="margin-left:0;margin-right:0">
+      <label>From<input type="date" id="oh-from"></label>
+      <label>To<input type="date" id="oh-to"></label>
+      <label>Session<select id="oh-session"><option value="">All sessions</option><option value="asia">Asia</option><option value="london">London</option><option value="newyork">New York</option></select></label>
+    </form>
+    <div class="state" id="oh-state" role="status" hidden></div>
+    <div class="group">
+      <h3>Outcome summary</h3>
+      <p class="hint" id="oh-caption" style="max-width:none"><b>Past outcomes do not predict future results.</b> Counts only: how often each scenario triggered, reached its first target or was invalidated.</p>
+      <div class="oh-tables" id="oh-summary"></div>
+    </div>
+    <div class="group">
+      <h3>Past outlooks</h3>
+      <div id="oh-list" style="margin-top:10px"></div>
+    </div>
+  </div>
 </dialog>
 
 <dialog id="settings-dialog" aria-labelledby="settings-title">
@@ -1067,6 +1230,7 @@ function render(d) {
     : `<div class="row"><div class="head">All clear</div><div class="body">Entries are allowed.</div></div>`;
 
   renderAlerts(d.alerts || []);
+  renderOutlookLive();  // the outlook's price and distances follow the same quote
 }
 
 /* History: one row per trade. A row opens to show that trade's orders: entry, stop-loss, every take-profit, close. */
@@ -1568,9 +1732,440 @@ $("export").onclick = async () => {
   } finally { button.disabled = false; button.textContent = label; }
 };
 
+/* ------------------------------------------------------------------ scenario outlook */
+/* A level-based brief for each session: context, key levels, if/then scenarios with an invalidation.
+   A scenario outlook, not news and not a signal: nothing here places an order. The price is the one
+   the market card already shows; every other number comes from the brief and names its sources. */
+let olData = null, olMine = null, olVersion = "generated", olEditing = null, olDraft = null, olErrors = {}, olLoading = false, olLevelNote = "";
+try { if (localStorage.getItem("hlbot-outlook-version") === "mine") olVersion = "mine"; } catch (error) { /* the default */ }
+const OL_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const OL_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const OL_STATUS = {fresh: ["Fresh", ""], aging: ["Aging", " warn"], stale: ["Stale", " bad"]};
+const OL_BIAS = {bullish: "", bearish: "bad", neutral: "quiet", mixed: "warn"};
+const OL_STATE = {watching: ["Watching", "quiet"], triggered: ["Active", "warn"], target: ["Target hit", ""], invalidated: ["Invalidated", "bad"]};
+const OL_OUTCOME = {target: "", invalidation: "bad", expired_open: "warn", not_triggered: "quiet"};
+const OL_IMPACT = {high: "bad", medium: "warn", low: "quiet"};
+const OL_UNAVAILABLE = '<span class="muted">Unavailable</span>';
+const olTz = () => (olData && olData.tz) || {name: "UTC", offsetMinutes: 0};
+const olMs = (iso) => new Date(iso).getTime();
+/* Every time is shown in the outlook's own zone (WIB by default), whatever zone the browser is in. */
+function olTime(iso, withDate = true) {
+  const t = olMs(iso), tz = olTz();
+  if (Number.isNaN(t)) return "–";
+  const d = new Date(t + tz.offsetMinutes * 60000);
+  const clockText = String(d.getUTCHours()).padStart(2, "0") + ":" + String(d.getUTCMinutes()).padStart(2, "0");
+  return (withDate ? `${OL_DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${OL_MONTHS[d.getUTCMonth()]} ` : "") + clockText + " " + tz.name;
+}
+function olSpan(ms) {
+  const s = Math.max(0, Math.floor(ms / 1000)), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
+  if (d) return `${d} d ${h} h`;
+  if (h) return `${h} h ${String(m).padStart(2, "0")} m`;
+  return m ? `${m} m ${String(s % 60).padStart(2, "0")} s` : `${s} s`;
+}
+const olPx = (v) => isNum(v) ? Number(v).toLocaleString("en-US", {maximumFractionDigits: 2}) : "Unavailable";
+const olZone = (z) => Array.isArray(z) && z.length === 2 ? `${olPx(z[0])} – ${olPx(z[1])}` : "Unavailable";
+/* The live price: the same quote the market card shows. No second feed. */
+function olPrice() {
+  const quotes = lastStatus && lastStatus.live ? lastStatus.live.quotes : null;
+  const q = quotes && olData ? quotes[olData.coin] : null;
+  if (!q) return null;
+  if (isNum(q.bid) && isNum(q.ask)) return (Number(q.bid) + Number(q.ask)) / 2;
+  return isNum(q.mark) ? Number(q.mark) : null;
+}
+function olStatus(o) {
+  const now = Date.now(), from = olMs(o.generatedAt), until = olMs(o.validUntil);
+  if (o.stale || now >= until) return "stale";
+  return until > from && (now - from) / (until - from) >= 0.75 ? "aging" : "fresh";
+}
+/* Source badges: each links to the page the source publishes. Only https links are made clickable. */
+function olSources(ids) {
+  const known = olData && olData.outlook ? olData.outlook.sources : [];
+  return (ids || []).map((id) => {
+    const source = known.find((s) => s.id === id);
+    const title = source ? source.title : id;
+    return source && String(source.url || "").startsWith("https://")
+      ? `<a class="src" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer" title="${esc(source.type)} source">${esc(title)}</a>`
+      : `<span class="src">${esc(title)}</span>`;
+  }).join("");
+}
+const olEdited = (key) => olVersion === "mine" && olMine && olMine.scenarios ? olMine.scenarios[key] : null;
+
+function olBanners(d) {
+  const o = d.outlook, lines = [];
+  if (d.failure) lines.push(["err", `The latest brief could not be published (${d.failure.sourcesAvailable} of ${d.failure.sourcesTotal} sources answered): ${(d.failure.problems || []).slice(0, 2).join("; ")}. ` +
+    (o ? `Showing the last outlook, fetched ${olTime(o.generatedAt)}.` : "The bot keeps trying.")]);
+  if (d.marketClosed) {
+    const g = d.recap ? d.recap.generated : null;
+    const row = g && g.total ? g.bySession.reduce((sum, r) => ({target: sum.target + r.target, invalidation: sum.invalidation + r.invalidation, expired_open: sum.expired_open + r.expired_open, not_triggered: sum.not_triggered + r.not_triggered}),
+      {target: 0, invalidation: 0, expired_open: 0, not_triggered: 0}) : null;
+    lines.push(["warnline", `Market closed for the weekend. Next brief: ${d.nextBrief.sessionName}, ${olTime(d.nextBrief.at)}. ` + (row
+      ? `This week's recap: ${g.total} scenarios settled — ${row.target} hit target, ${row.invalidation} hit invalidation, ${row.expired_open} expired open, ${row.not_triggered} not triggered. Past outcomes do not predict future results.`
+      : "No scenario settled this week.")]);
+  }
+  if (o && olStatus(o) === "stale") lines.push(["err", "Outlook expired. " + (o.stale && o.stale.kind !== "expired" ? o.stale.reason + " " : "") + (d.marketClosed ? "" : `Next brief: ${d.nextBrief.sessionName}, ${olTime(d.nextBrief.at)}.`)]);
+  if (o && o.flags.lowConfidence) lines.push(["warnline", `Low confidence: only ${o.levelSourcesAvailable} level source${o.levelSourcesAvailable === 1 ? " was" : "s were"} available (minimum ${o.settings.minLevelSources}).`]);
+  if (o && o.flags.thinLiquidity) lines.push(["warnline", "Holiday / thin liquidity: moves can be erratic and levels less reliable."]);
+  $("ol-banners").innerHTML = lines.map(([cls, text]) => `<div class="state ${cls}" role="status">${esc(text)}</div>`).join("");
+}
+
+function olContext(o) {
+  const bias = o.bias || {};
+  const views = (bias.views || []).length > 1 ? `<ul class="ol-views">${bias.views.map((v) => `<li><b>${esc(v.direction)}</b>: ${esc(v.reason)} ${olSources(v.sources)}</li>`).join("")}</ul>` : "";
+  const drivers = (o.drivers || []).length ? o.drivers.map((d) => `<div class="row warn"><div class="head"><span>${esc(d.label)}</span></div>
+      <div class="body">${d.url && String(d.url).startsWith("https://") ? `<a href="${esc(d.url)}" target="_blank" rel="noopener noreferrer"><b>${esc(d.text)}</b></a>` : `<b>${esc(d.text)}</b>`}</div>
+      <div class="foot">${olSources(d.sources)}</div></div>`).join("")
+    : `<div class="empty">Drivers: Unavailable. No calendar or news source supplied one for this brief.</div>`;
+  $("ol-context").innerHTML = `<div class="ol-bias"><span class="label">Bias</span>${bias.direction ? badge(bias.direction, OL_BIAS[bias.direction] ?? "quiet") : OL_UNAVAILABLE}
+      <span>${esc(bias.reason || "")}</span></div><div>${bias.direction ? olSources(bias.sources) : ""}</div>${views}
+    <div class="label" style="margin-top:14px">Top drivers</div><div class="ol-drivers">${drivers}</div>`;
+}
+
+/* What moves with the live price: the price itself, each level's distance and which level is nearest. */
+function renderOutlookLive() {
+  const o = olData && olData.outlook;
+  if (!o) return;
+  const price = olPrice(), from = o.price ? Number(o.price.value) : null;
+  if (price === null) $("ol-price").innerHTML = OL_UNAVAILABLE;
+  else {
+    const change = from ? price - from : null;
+    $("ol-price").innerHTML = `${esc(olPx(price))}<small class="${change === null ? "muted" : signClass(change) || "muted"}">${change === null ? "" : `${change > 0 ? "+" : change < 0 ? "−" : ""}${esc(olPx(Math.abs(change)))} (${(Math.abs(change) / from * 100).toFixed(2)}%) since the brief`}</small>`;
+  }
+  const mine = olVersion === "mine" && olMine ? olMine.customLevels.map((l) => ({...l, origin: "mine", role: l.note || "My level", timeframe: "–", sources: []})) : [];
+  const levels = [...o.levels, ...mine].sort((a, b) => b.price - a.price);
+  let nearest = null;
+  if (price !== null) for (const l of levels) if (nearest === null || Math.abs(l.price - price) < Math.abs(nearest.price - price)) nearest = l;
+  const tag = (l) => l.origin === "mine" ? badge("Mine", "warn") : l.confluence ? badge("Confluence", "") : badge("Single source", "quiet");
+  const distance = (l) => {
+    if (price === null) return "–";
+    const gap = l.price - price;
+    return `${gap > 0 ? "+" : "−"}${esc(olPx(Math.abs(gap)))} <span class="muted">(${(Math.abs(gap) / price * 100).toFixed(2)}%)</span>`;
+  };
+  $("ol-levels").innerHTML = levels.length ? `<table><thead><tr><th class="num">Level</th><th class="num">From price</th><th>Role</th><th>Timeframe</th><th>Sources</th>${mine.length ? "<th></th>" : ""}</tr></thead><tbody>` +
+    levels.map((l) => `<tr class="${l === nearest ? "nearest" : ""}"><td class="num">${esc(olPx(l.price))}</td><td class="num">${distance(l)}</td>
+      <td class="wrap">${badge(l.type, l.type === "resistance" ? "bad" : "")} ${esc(l.role)}${l === nearest ? ' <span class="muted">· nearest</span>' : ""}</td><td>${esc(l.timeframe)}</td>
+      <td>${l.origin === "mine" ? "" : esc(l.sourceCount) + " "}${tag(l)}</td>
+      ${mine.length ? `<td>${l.origin === "mine" ? `<button type="button" data-ol="drop-level" data-id="${esc(l.id)}" aria-label="Remove my level at ${esc(olPx(l.price))}">Remove</button>` : ""}</td>` : ""}</tr>`).join("") + "</tbody></table>"
+    : `<div class="empty">Key levels: Unavailable.</div>`;
+  $("ol-levels-note").textContent = `sources agree within ${olPx(o.settings.confluenceTolerance)}`;
+}
+
+function olScenarioForm(s) {
+  const v = olDraft || {trigger: s.trigger, low: s.entryZone[0], high: s.entryZone[1], stop: s.stop, targets: s.targets.join(", "), invalidation: s.invalidationRule.price};
+  const field = (name, label, value, attrs) => `<label>${label}<input ${attrs} data-ol-field="${name}" value="${esc(value ?? "")}">${olErrors[name] ? `<span class="msg err">${esc(olErrors[name])}</span>` : ""}</label>`;
+  const number = 'type="number" step="any" inputmode="decimal"';
+  return `<form class="ol-form" data-ol-form="${esc(s.key)}" autocomplete="off">
+    ${field("trigger", "Trigger", v.trigger, 'type="text" maxlength="200"')}
+    <div class="pair">${field("low", "Entry zone from", v.low, number)}${field("high", "to", v.high, number)}</div>
+    ${olErrors.entryZone ? `<span class="msg err">${esc(olErrors.entryZone)}</span>` : ""}
+    <div class="pair">${field("stop", "Stop", v.stop, number)}${field("invalidation", `Invalidation (${esc(s.invalidationRule.timeframe)} close ${s.direction === "long" ? "below" : "above"})`, v.invalidation, number)}</div>
+    ${field("targets", "Targets, comma-separated (one to three)", v.targets, 'type="text"')}
+    ${olErrors.edit ? `<span class="msg err">${esc(olErrors.edit)}</span>` : ""}
+    <div class="foot"><button type="submit" class="primary">Save my version</button><button type="button" data-ol="cancel">Cancel</button></div>
+    <span class="msg">Saved as My Version. The generated scenario stays as it is.</span></form>`;
+}
+function olScenarioCard(generated, editable) {
+  if (!generated.available) return `<div class="ol-card"><div class="head"><h4>${esc(generated.key)}. ${esc(generated.name)}</h4>${badge("Unavailable", "quiet")}</div>
+    <p class="idea">${esc(generated.reason || "The sources did not supply what this scenario needs.")}</p></div>`;
+  const edited = olEdited(generated.key), s = edited || generated;
+  const [stateText, stateClass] = OL_STATE[s.state] || OL_STATE.watching;
+  const outcome = s.outcome && olData.outcomeText[s.outcome] ? badge(olData.outcomeText[s.outcome], OL_OUTCOME[s.outcome]) : "";
+  const head = `<div class="head"><h4>${esc(s.key)}. ${esc(s.name)}</h4>${badge(s.direction, "quiet")}${edited ? badge("Edited", "warn") : ""}${outcome || badge(stateText, stateClass)}</div>`;
+  if (olEditing === s.key && editable) return `<div class="ol-card">${head}${olScenarioForm(s)}</div>`;
+  const rows = [["Trigger", esc(s.trigger)], s.retest ? ["Retest", esc(s.retest)] : null, ["Entry zone", esc(olZone(s.entryZone))], ["Stop", esc(olPx(s.stop))],
+    ["Target" + (s.targets.length > 1 ? "s" : ""), s.targets.length ? esc(s.targets.map(olPx).join(" · ")) : OL_UNAVAILABLE], ["Invalidation", esc(s.invalidation)],
+    ["Risk : reward", isNum(s.riskReward) ? "1 : " + esc(Number(s.riskReward).toFixed(2)) + ' <span class="muted">to the first target</span>' : OL_UNAVAILABLE]].filter(Boolean);
+  const actions = olVersion === "mine" ? `<div class="foot">${editable ? `<button type="button" data-ol="edit" data-key="${esc(s.key)}">Edit</button>` : ""}
+    ${edited && editable ? `<button type="button" data-ol="reset" data-key="${esc(s.key)}">Reset</button>` : ""}${editable ? "" : '<span class="muted">This brief is no longer current: it cannot be edited.</span>'}</div>` : "";
+  return `<div class="ol-card${s.state === "triggered" ? " active" : s.state === "invalidated" ? " invalid" : ""}">${head}
+    <p class="idea">${esc(s.idea)}</p><dl>${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl><div>${olSources(s.sources)}</div>${actions}</div>`;
+}
+function olScenarios(o) {
+  $("ol-scenarios").innerHTML = o.scenarios.map((s) => olScenarioCard(s, olStatus(o) !== "stale")).join("");
+}
+
+function olWindow() {
+  const fallback = (olData && olData.noTradeDefault) || {before: 15, after: 15};
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem("hlbot-outlook-window") || "{}") || {}; } catch (error) { /* the default */ }
+  const pick = (v, d) => isNum(v) && Number(v) >= 0 && Number(v) <= 240 ? Number(v) : d;
+  return {before: pick(saved.before, fallback.before), after: pick(saved.after, fallback.after)};
+}
+function olEvents(o) {
+  const win = olWindow(), now = Date.now(), from = olMs(o.generatedAt), until = olMs(o.validUntil), span = Math.max(1, until - from);
+  const at = (t) => Math.max(0, Math.min(100, (t - from) / span * 100));
+  const high = o.events.filter((e) => e.impact === "high");
+  const marks = high.map((e) => {
+    const start = olMs(e.timeUtc) - win.before * 60000, end = olMs(e.timeUtc) + win.after * 60000;
+    return end < from || start > until ? "" : `<span class="win" style="left:${at(start).toFixed(2)}%;width:${Math.max(0.6, at(end) - at(start)).toFixed(2)}%" title="${esc(e.name)}"></span>`;
+  }).join("");
+  const rows = o.events.length ? o.events.map((e) => {
+    const t = olMs(e.timeUtc), start = t - win.before * 60000, end = t + win.after * 60000, inside = e.impact === "high" && now >= start && now <= end;
+    return `<div class="row ${e.impact === "high" ? "bad" : e.impact === "medium" ? "warn" : ""}"><div class="head"><span>${esc(e.name)}</span>${badge(e.impact, OL_IMPACT[e.impact] ?? "quiet")}
+        ${e.timeConfirmed ? "" : `<span class="badge quiet" title="${esc(e.timeNote || "")}">Time unconfirmed</span>`}${inside ? badge("No-trade window now", "bad") : ""}<span class="when">${esc(olTime(e.timeUtc))}</span></div>
+      ${e.impact === "high" ? `<div class="body">No-trade window <b>${esc(olTime(new Date(start).toISOString(), false))}</b> to <b>${esc(olTime(new Date(end).toISOString(), false))}</b></div>` : ""}
+      <div class="foot">${olSources(e.sources)}${e.timeConfirmed ? "" : `<span class="muted">${esc(e.timeNote || "")}</span>`}</div></div>`;
+  }).join("") : `<div class="empty">No scheduled release from the calendar sources falls within this brief.</div>`;
+  $("ol-events").innerHTML = `<div class="ol-track" role="img" aria-label="This brief's validity with the no-trade windows shaded">${marks}${now >= from && now <= until ? `<span class="now" style="left:${at(now).toFixed(2)}%"></span>` : ""}</div>
+    <div class="ol-track-legend"><span>${esc(olTime(o.generatedAt, false))}</span><span>shaded: no-trade window · line: now</span><span>${esc(olTime(o.validUntil, false))}</span></div>
+    <div class="rows" style="margin-top:12px">${rows}</div>`;
+  $("ol-before").value = win.before;
+  $("ol-after").value = win.after;
+}
+
+function olFooter(o) {
+  $("ol-notes").innerHTML = (o.riskNotes || []).map((n) => `<div class="row ${n.kind === "sizing" ? "" : "warn"}"><div class="head"><span>${esc({liquidity: "Liquidity", spread: "Spread and slippage", sizing: "Position sizing"}[n.kind] || n.kind)}</span></div>
+    <div class="body">${esc(n.text)}</div>${(n.sources || []).length ? `<div class="foot">${olSources(n.sources)}</div>` : ""}</div>`).join("") || `<div class="empty">Unavailable.</div>`;
+  $("ol-sources-count").textContent = `${o.sourcesAvailable} of ${o.sourcesTotal} sources available`;
+  $("ol-sources").innerHTML = table([
+    {h: "Source", f: (s) => String(s.url || "").startsWith("https://") ? `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--link)">${esc(s.title)}</a>` : esc(s.title)},
+    {h: "Type", f: (s) => esc(s.type)}, {h: "Fetched", f: (s) => esc(olTime(s.fetchedAt))},
+    {h: "Status", f: (s) => s.ok ? badge("ok", "") : badge("unavailable", "bad") + " " + esc(s.error || "")},
+    {h: "Terms", wrap: 1, f: (s) => `<span class="muted">${esc(s.license || "")}</span>`},
+  ], o.sources, "No source is enabled.");
+  $("ol-disclaimer").textContent = o.disclaimer;
+}
+
+function olMineBlock(o) {
+  const editable = olStatus(o) !== "stale";
+  if (olVersion !== "mine") { $("ol-levels-mine").innerHTML = ""; return; }
+  const archived = olMine ? olMine.archivedLevels : [];
+  $("ol-levels-mine").innerHTML = `<form class="ol-add" id="ol-add-form" autocomplete="off">
+      <input type="number" step="any" inputmode="decimal" placeholder="Price" aria-label="Level price" data-ol-level="price" required>
+      <select aria-label="Level type" data-ol-level="type"><option value="support">Support</option><option value="resistance">Resistance</option></select>
+      <input type="text" maxlength="200" placeholder="Note (optional)" aria-label="Note" data-ol-level="note">
+      <button type="submit" class="primary">Add my level</button></form>
+    <p class="msg${olLevelNote ? " err" : ""}" aria-live="polite">${esc(olLevelNote || `Your levels carry over to the next brief while they stay within ${olPx(o.settings.carryDistance)} of price; others are archived.${editable ? "" : " This brief has expired, but your levels are your own and can still be changed."}`)}</p>
+    ${archived.length ? `<details class="tableview"><summary>Archived levels (${archived.length})</summary>${table([{h: "Level", num: 1, f: (l) => esc(olPx(l.price))}, {h: "Type", f: (l) => esc(l.type)},
+      {h: "Note", wrap: 1, f: (l) => esc(l.note)}, {h: "Archived", f: (l) => esc(olTime(l.archivedAt))}], archived, "")}<div class="inline"><button type="button" data-ol="clear-archived">Clear archived levels</button></div></details>` : ""}`;
+}
+
+function renderOutlook() {
+  const d = olData;
+  $("ol-skeleton").hidden = true;
+  if (!d || !d.enabled) {
+    $("ol-root").hidden = true;
+    $("ol-banners").innerHTML = "";
+    $("outlook-sub").textContent = "switched off";
+    showState("ol-state", "empty", "The scenario outlook is switched off on this bot (OUTLOOK_ENABLED, OUTLOOK_COIN).");
+    return;
+  }
+  const o = d.outlook;
+  olBanners(d);
+  if (!o) {
+    $("ol-root").hidden = true;
+    $("outlook-sub").textContent = "no brief yet";
+    showState("ol-state", "empty", d.marketClosed ? "No brief has been published yet." : `No brief has been published yet. The bot is preparing one; the next scheduled brief is ${d.nextBrief.sessionName}, ${olTime(d.nextBrief.at)}.`);
+    return;
+  }
+  showState("ol-state", null);
+  $("ol-root").hidden = false;
+  $("ol-title").textContent = "Scenario Outlook: " + d.display;
+  $("ol-session").textContent = o.sessionName;
+  $("ol-label").textContent = o.label;
+  $("ol-generated").textContent = `Generated ${olTime(o.generatedAt)} · valid until ${olTime(o.validUntil)}` + (o.trigger === "scheduled" ? "" : ` · ${{event: "refreshed after a release", manual: "manual refresh", catchup: "generated late"}[o.trigger] || o.trigger}`);
+  $("ol-show-generated").setAttribute("aria-pressed", String(olVersion === "generated"));
+  $("ol-show-mine").setAttribute("aria-pressed", String(olVersion === "mine"));
+  olContext(o);
+  renderOutlookLive();
+  olMineBlock(o);
+  if (olEditing === null) olScenarios(o);  // a form that is being filled in is left alone
+  olEvents(o);
+  olFooter(o);
+  olTick();
+}
+/* Once a second: the validity countdown, the status chip and the time to the next high-impact event. */
+function olTick() {
+  const o = olData && olData.outlook;
+  if (!o) return;
+  const status = olStatus(o), now = Date.now(), [text, cls] = OL_STATUS[status];
+  $("ol-status").textContent = text;
+  $("ol-status").className = "badge" + cls;
+  $("ol-root").classList.toggle("ol-stale", status === "stale");
+  $("ol-countdown").innerHTML = status === "stale" ? "<b>Outlook expired</b>" : `valid for <b>${esc(olSpan(olMs(o.validUntil) - now))}</b>`;
+  $("outlook-sub").textContent = `${o.sessionName} · ${text.toLowerCase()}`;
+  const next = o.nextHighImpact;
+  $("ol-next-event").textContent = !next ? "no high-impact release in the calendar sources"
+    : olMs(next.timeUtc) > now ? `next high-impact: ${next.name} in ${olSpan(olMs(next.timeUtc) - now)}` : `${next.name} was due ${olTime(next.timeUtc)}`;
+}
+
+async function olLoadMine() {
+  const o = olData && olData.outlook;
+  if (!o) return;
+  try {
+    const response = await api(`/api/outlook/${encodeURIComponent(o.id)}/mine`);
+    if (response.ok) olMine = await response.json();
+  } catch (error) { /* keeps the last copy */ }
+}
+async function refreshOutlook() {
+  if (olLoading) return;
+  olLoading = true;
+  try {
+    const response = await api("/api/outlook/latest");
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "HTTP " + response.status);
+    const changed = !olData || !olData.outlook || !data.outlook || olData.outlook.id !== data.outlook.id;
+    olData = data;
+    if (changed) { olMine = null; olEditing = null; olDraft = null; olErrors = {}; }
+    if (data.outlook && (olVersion === "mine" || changed)) await olLoadMine();
+    renderOutlook();
+  } catch (error) {
+    $("ol-skeleton").hidden = true;
+    if (!olData) showState("ol-state", "error", "The scenario outlook could not be loaded: " + (error.message || "no answer from the bot") + ". ", refreshOutlook);
+  } finally { olLoading = false; }
+}
+/* Save part of My Version. The answer is the whole layer; a refusal names each field at fault. */
+async function olSave(body, done) {
+  const o = olData && olData.outlook;
+  if (!o) return null;
+  let result = {};
+  try {
+    const response = await api(`/api/outlook/${encodeURIComponent(o.id)}/mine`, {method: "PUT", json: body});
+    result = await response.json().catch(() => ({}));
+    if (!response.ok) result.ok = false;
+  } catch (error) { result = {ok: false, error: "no answer from the bot"}; }
+  if (result.ok) { olMine = result; if (done) toast(done); }
+  return result;
+}
+function olSetVersion(version) {
+  olVersion = version === "mine" ? "mine" : "generated";
+  olEditing = null; olDraft = null; olErrors = {}; olLevelNote = "";
+  try { localStorage.setItem("hlbot-outlook-version", olVersion); } catch (error) { /* this tab only */ }
+  if (olVersion === "mine" && !olMine) olLoadMine().then(renderOutlook); else renderOutlook();
+}
+$("ol-show-generated").onclick = () => olSetVersion("generated");
+$("ol-show-mine").onclick = () => olSetVersion("mine");
+$("ol-refresh").onclick = async () => {
+  const button = $("ol-refresh"), label = button.textContent;
+  button.disabled = true;
+  button.textContent = "Reading the sources…";
+  const result = await send("/api/outlook/refresh", {method: "POST"});
+  button.disabled = false;
+  button.textContent = label;
+  toast(result.ok ? "A fresh outlook was published." : "Not refreshed: " + result.error, !result.ok);
+  refreshOutlook();
+};
+$("ol-scenarios").addEventListener("click", async (event) => {
+  const button = event.target.closest("button[data-ol]");
+  if (!button || !olData || !olData.outlook) return;
+  const act = button.dataset.ol, key = button.dataset.key;
+  if (act === "edit") { olEditing = key; olDraft = null; olErrors = {}; olScenarios(olData.outlook); }
+  else if (act === "cancel") { olEditing = null; olDraft = null; olErrors = {}; olScenarios(olData.outlook); }
+  else if (act === "reset") {
+    const result = await send(`/api/outlook/${encodeURIComponent(olData.outlook.id)}/mine/scenarios/${encodeURIComponent(key)}`, {method: "DELETE"});
+    if (result.ok) { olMine = result; toast(`Scenario ${key} is back to the generated values.`); } else toast("Not reset: " + result.error, true);
+    olScenarios(olData.outlook);
+  }
+});
+$("ol-scenarios").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target.closest("form[data-ol-form]");
+  if (!form) return;
+  const key = form.dataset.olForm, read = (name) => form.querySelector(`[data-ol-field="${name}"]`).value.trim();
+  const numeric = (text) => text === "" ? null : Number(text);
+  olDraft = {trigger: read("trigger"), low: read("low"), high: read("high"), stop: read("stop"), targets: read("targets"), invalidation: read("invalidation")};
+  const result = await olSave({scenarioEdits: [{key, trigger: olDraft.trigger, entryZone: [numeric(olDraft.low), numeric(olDraft.high)], stop: numeric(olDraft.stop),
+    targets: olDraft.targets.split(/[,\s]+/).filter(Boolean).map(Number), invalidation: numeric(olDraft.invalidation)}]}, `Scenario ${key} saved as My Version.`);
+  if (result && result.ok) { olEditing = null; olDraft = null; olErrors = {}; }
+  else {  // nothing was saved: each fault is shown beside its field
+    olErrors = {};
+    const prefix = `scenarioEdits.${key}.`;
+    for (const [name, problem] of Object.entries((result && result.errors) || {})) olErrors[name.startsWith(prefix) ? name.slice(prefix.length) : "edit"] = problem;
+    if (!Object.keys(olErrors).length) olErrors.edit = (result && result.error) || "not saved";
+  }
+  olScenarios(olData.outlook);
+});
+$("ol-levels-mine").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target.closest("form");
+  if (!form || !olMine) return;
+  const read = (name) => form.querySelector(`[data-ol-level="${name}"]`).value.trim();
+  const level = {price: read("price") === "" ? null : Number(read("price")), type: read("type"), note: read("note")};
+  const result = await olSave({customLevels: [...olMine.customLevels.map((l) => ({id: l.id, price: l.price, type: l.type, note: l.note})), level]}, "Level added to My Version.");
+  olLevelNote = result && result.ok ? "" : "Not added: " + Object.values((result && result.errors) || {}).concat(result && !result.errors ? [result.error] : []).filter(Boolean).slice(0, 2).join("; ");
+  renderOutlookLive(); olMineBlock(olData.outlook);
+});
+$("ol-levels-mine").addEventListener("click", async (event) => {
+  const button = event.target.closest('button[data-ol="clear-archived"]');
+  if (!button) return;
+  await olSave({clearArchived: true}, "Archived levels cleared.");
+  olMineBlock(olData.outlook);
+});
+$("ol-levels").addEventListener("click", async (event) => {
+  const button = event.target.closest('button[data-ol="drop-level"]');
+  if (!button || !olMine) return;
+  await olSave({customLevels: olMine.customLevels.filter((l) => String(l.id) !== button.dataset.id).map((l) => ({id: l.id, price: l.price, type: l.type, note: l.note}))}, "Level removed.");
+  renderOutlookLive(); olMineBlock(olData.outlook);
+});
+for (const id of ["ol-before", "ol-after"]) {
+  $(id).onchange = () => {
+    try { localStorage.setItem("hlbot-outlook-window", JSON.stringify({before: Number($("ol-before").value), after: Number($("ol-after").value)})); } catch (error) { /* this tab only */ }
+    if (olData && olData.outlook) olEvents(olData.outlook);
+  };
+}
+setInterval(olTick, 1000);
+setInterval(() => { if (!document.hidden && !folded.outlook) refreshOutlook(); }, 30000);
+
+/* ------------------------------------------------------------------ scenario outlook: history and outcome review */
+const OH_COLUMNS = ["not_triggered", "target", "invalidation", "expired_open"];
+let ohOpen = new Set(), ohLoading = false;
+function ohTable(title, rows, label, text) {
+  if (!rows.length) return "";
+  return `<div><h4>${esc(title)}</h4><div class="scroll">${table([{h: title.replace(/^By /, "").replace(/^\w/, (c) => c.toUpperCase()), f: (r) => esc(label(r.key))},
+    ...OH_COLUMNS.map((c) => ({h: text[c], num: 1, f: (r) => num(r[c], 0)})), {h: "Scenarios", num: 1, f: (r) => num(r.total, 0)}], rows, "")}</div></div>`;
+}
+function renderOutlookHistory(history, summary) {
+  const text = summary.outcomeText, sessions = {asia: "Asia", london: "London", newyork: "New York"}, names = {A: "A. Rejection", B: "B. Breakout", C: "C. Breakdown"};
+  const g = summary.generated, m = summary.mine || {total: 0, byScenario: []};
+  $("oh-summary").innerHTML = g.total
+    ? ohTable("By session", g.bySession, (k) => sessions[k] || k, text) + ohTable("By scenario", g.byScenario, (k) => names[k] || k, text) +
+      ohTable("By week", g.byWeek, (k) => "week of " + k, text) + (m.total ? ohTable("By scenario, my edited versions (tracked separately)", m.byScenario, (k) => names[k] || k, text) : "")
+    : `<div class="empty">No scenario has settled in this range yet.</div>`;
+  $("oh-count").textContent = `${history.items.length} brief${history.items.length === 1 ? "" : "s"}` + (history.items.length >= history.limit ? " (the newest; narrow the dates for older ones)" : "");
+  const chip = (s) => !s.available ? `<span class="badge quiet">${esc(s.key)} unavailable</span>` : s.outcome ? badge(`${s.key} ${text[s.outcome]}`, OL_OUTCOME[s.outcome]) : badge(`${s.key} open`, "quiet");
+  $("oh-list").innerHTML = history.items.length ? history.items.map((item) => `<details class="alert" data-brief="${esc(item.id)}"${ohOpen.has(item.id) ? " open" : ""}>
+      <summary>${CHEVRON}<span>${esc(item.sessionName)}</span>${item.bias ? badge(item.bias, OL_BIAS[item.bias] ?? "quiet") : ""}${item.status === "stale" ? "" : badge("current", "")}
+        <span class="when">${esc(olTime(item.generatedAt))}</span></summary>
+      <div class="more"><div>${item.scenarios.map(chip).join(" ")}</div>
+        ${item.mine.length ? `<div style="margin-top:8px"><span class="muted">My edited versions: </span>${item.mine.map((s) => s.outcome ? badge(`${s.key} ${text[s.outcome]}`, OL_OUTCOME[s.outcome]) : badge(`${s.key} open`, "quiet")).join(" ")}</div>` : ""}
+        <div class="muted" style="margin-top:8px">valid until ${esc(olTime(item.validUntil))}${item.trigger === "scheduled" ? "" : " · " + esc(item.trigger)}${item.lowConfidence ? " · low confidence" : ""}</div>
+        <form class="oh-note" data-note="${esc(item.id)}"><label class="muted" for="oh-note-${esc(item.id)}">Journal note (only you see it)</label>
+          <textarea id="oh-note-${esc(item.id)}" maxlength="2000" rows="2">${esc(item.journalNote)}</textarea>
+          <div class="inline"><button type="submit">Save note</button></div></form></div></details>`).join("")
+    : `<div class="empty">No outlook in this range.</div>`;
+}
+async function loadOutlookHistory() {
+  if (ohLoading) return;
+  ohLoading = true;
+  const query = new URLSearchParams();
+  for (const field of ["from", "to", "session"]) if ($("oh-" + field).value) query.set(field, $("oh-" + field).value);
+  try {
+    const [historyResponse, summaryResponse] = await Promise.all([api("/api/outlook/history?" + query), api("/api/outlook/history/summary?" + query)]);
+    const history = await historyResponse.json().catch(() => ({})), summary = await summaryResponse.json().catch(() => ({}));
+    if (!historyResponse.ok || !summaryResponse.ok) throw new Error(history.error || summary.error || "HTTP " + historyResponse.status);
+    showState("oh-state", null);
+    renderOutlookHistory(history, summary);
+  } catch (error) {
+    showState("oh-state", "error", "The history could not be loaded: " + (error.message || "no answer from the bot") + ". ", loadOutlookHistory);
+  } finally { ohLoading = false; }
+}
+$("ol-history-open").onclick = () => { openDialog("ol-history-dialog"); loadOutlookHistory(); };
+$("oh-filters").addEventListener("submit", (event) => event.preventDefault());
+$("oh-filters").addEventListener("change", loadOutlookHistory);
+$("oh-list").addEventListener("toggle", (event) => {
+  const id = event.target.dataset && event.target.dataset.brief;
+  if (id) { if (event.target.open) ohOpen.add(id); else ohOpen.delete(id); }
+}, true);
+$("oh-list").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target.closest("form[data-note]");
+  if (!form) return;
+  const result = await send(`/api/outlook/${encodeURIComponent(form.dataset.note)}/mine`, {method: "PUT", json: {journalNote: form.querySelector("textarea").value}});
+  toast(result.ok ? "Note saved." : "Not saved: " + result.error, !result.ok);
+});
+
 /* ------------------------------------------------------------------ sections that fold */
-const FOLDED_BY_DEFAULT = {analytics: false, positions: false, orders: false, signals: true, history: true};
-const FOLD_LOADERS = {analytics: refreshAnalytics, history: refreshHistory};  // a section loads its data when it is opened, not before
+const FOLDED_BY_DEFAULT = {outlook: false, analytics: false, positions: false, orders: false, signals: true, history: true};
+const FOLD_LOADERS = {outlook: refreshOutlook, analytics: refreshAnalytics, history: refreshHistory};  // a section loads its data when it is opened, not before
 const folded = {...FOLDED_BY_DEFAULT};
 try { Object.assign(folded, JSON.parse(localStorage.getItem("hlbot-folded") || "{}")); } catch (error) { /* defaults */ }
 function setFolded(id, value, remember = true) {
@@ -1598,11 +2193,18 @@ refreshVolume();
 const links = [...document.querySelectorAll('nav a[href^="#"]')];
 const sectionIds = links.map((a) => a.getAttribute("href").slice(1));
 let pinned = null, pinSettled = false, pinTimer = 0;
+const menu = document.querySelector("nav");
 function setActive(id) {
   links.forEach((a) => {
     const on = a.getAttribute("href") === "#" + id;
     a.classList.toggle("active", on);
     if (on) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    /* On a phone the menu is one row that scrolls sideways: keep the active item in sight. Only the
+       row itself is moved (never scrollIntoView, which would also interrupt the page's own scroll). */
+    if (on && menu && menu.scrollWidth > menu.clientWidth) {
+      const left = a.offsetLeft, right = left + a.offsetWidth;  // the sticky menu is the offset parent of its items
+      if (left < menu.scrollLeft + 16 || right > menu.scrollLeft + menu.clientWidth - 16) menu.scrollTo({left: Math.max(0, left - (menu.clientWidth - a.offsetWidth) / 2), behavior: "smooth"});
+    }
   });
 }
 function sectionInView() {
@@ -1639,7 +2241,7 @@ if (sectionIds.includes(location.hash.slice(1))) {
 
 /* ------------------------------------------------------------------ pop-up pages */
 function openDialog(id) { const d = $(id); if (!d.open) d.showModal(); }
-for (const id of ["alerts-dialog", "settings-dialog"]) {
+for (const id of ["alerts-dialog", "settings-dialog", "ol-history-dialog"]) {
   const d = $(id);
   d.addEventListener("click", (event) => { if (event.target === d || event.target.closest("[data-close]")) d.close(); });  // the backdrop or the close button
 }

@@ -111,6 +111,73 @@ every execution on an *Executions* sheet, and a *Summary* sheet with the
 filter and the key figures. Any signed-in role may export; each export
 is written to the audit trail.
 
+### Scenario outlook
+
+**Scenario outlook** on the dashboard is a short brief for each session
+(Asia, London, New York; Monday to Friday): context, key levels and
+three if/then scenarios (rejection, breakout, breakdown), each with a
+trigger, targets and an invalidation. It is a **scenario outlook, not
+news and not a signal**: it sends no order, the trading engine never
+reads it, and a failure in it cannot stop the bot. The full
+specification is [docs/outlook.md](docs/outlook.md).
+
+- **Validity.** Every brief shows when it was generated, how long it is
+  valid for and a status: *Fresh*, *Aging* (past 75 % of its validity)
+  or *Stale*. A stale brief is dimmed and labelled. All times are shown
+  in the outlook's zone (`OUTLOOK_TZ_NAME`, WIB by default). A
+  high-impact release (CPI, PPI, the jobs report, FOMC, a speech by the
+  Fed Chair) makes the running brief stale and a refreshed one follows a
+  few minutes later; if both major levels break, the brief is marked
+  stale. An operator can ask for a fresh brief (**Refresh outlook**,
+  once every five minutes).
+- **Sources.** Every level and claim names its sources. Levels from
+  different sources within `OUTLOOK_CONFLUENCE_TOLERANCE` are one level;
+  two or more sources make it a **confluence**, one a **single source**.
+  Sources that lean opposite ways give a **mixed** bias with both views
+  listed. An event's time is confirmed only when two sources agree. A
+  source that does not answer is listed as unavailable and the brief is
+  built from the rest ("5 of 6 sources available"); below
+  `OUTLOOK_MIN_LEVEL_SOURCES` it is marked **low confidence**. What the
+  sources did not supply is shown as *Unavailable*, never filled in.
+- **Price.** The price, the distance to each level and the nearest level
+  come from the same live quote as the market card. There is no second
+  feed.
+- **My Version.** Each user can add their own levels and edit a
+  scenario's trigger, entry zone, stop, targets and invalidation. Edits
+  pass the same checks as a generated scenario (stop and targets on the
+  right side of the entry, an invalidation present); a refused edit
+  shows the fault beside the field and saves nothing. The generated
+  brief is never changed, and **Reset** goes back to it. A user's levels
+  carry over to the next brief while they are within
+  `OUTLOOK_CARRY_DISTANCE` of price; others are archived.
+- **History.** Past briefs with each scenario's outcome (*not
+  triggered*, *triggered, hit target*, *triggered, hit invalidation*,
+  *triggered, expired open*), read from the 5-minute candles, with
+  counts by session, scenario and week and a private journal note per
+  brief. Edited scenarios are counted apart. Past outcomes do not
+  predict future results.
+
+The source registry is configuration. On by default: four technical
+readings computed from Hyperliquid's candles for the managed gold market
+(daily pivots, previous day and week range, 4H/1H swing points, 1H/4H
+moving averages) and two official calendars (BLS release schedule,
+Federal Reserve calendar). Built in but **off until you have checked
+their terms of use**: a calendar aggregator (`ff-calendar`) and a news
+feed (`investing-commodities`, headlines and links only). With only the
+official calendars, event times show as *Time unconfirmed* (each event
+has one source) and the drivers come from the calendars alone.
+
+```
+OUTLOOK_SOURCES_ENABLE=ff-calendar,investing-commodities
+OUTLOOK_SOURCES_FILE=~/.config/hlbot/outlook-sources.json   # change or add sources: [{"id": ..., "kind": ..., "url": ...}]
+```
+
+Session times are configuration too (`OUTLOOK_SESSIONS`): London and New
+York move with daylight saving, so adjust them twice a year. Every
+setting is in [.env.example](.env.example). The levels are those of the
+Hyperliquid market the bot trades, which can sit a few points from spot
+XAU/USD.
+
 Accounts are managed in **Settings → Users**, or from the bot host:
 
 ```bash
@@ -343,11 +410,11 @@ sha256 digests PyPI publishes; review the diff before committing.
 
 ```
 hlbot/
-  domain/     pure logic: parser, validator, planning, rounding, risk, state machines
+  domain/     pure logic: parser, validator, planning, rounding, risk, state machines, scenario outlook rules
   exchange/   adapter interface, Hyperliquid adapter (the only SDK import), simulator, paper adapter
-  core/       engine, signal manager, reconciler, health, action queue, notifier, app wiring
+  core/       engine, signal manager, reconciler, health, action queue, notifier, scenario outlook service, app wiring
   db/         SQLite (WAL, synchronous=FULL), forward-only migrations, append-only audit log
-  ingest/     Telegram listener (Telethon)
+  ingest/     Telegram listener (Telethon), scenario outlook source readers
   api/        local read API, metrics, dashboard
   cli.py      botctl
 tests/

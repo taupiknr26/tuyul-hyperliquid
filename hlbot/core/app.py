@@ -135,6 +135,7 @@ class BotApp:
         clock: Optional[Clock] = None,
         sender: Optional[Sender] = None,
         telegram_factory: Optional[Callable[..., Any]] = None,
+        outlook_reader: Any = None,
         fast_poll_s: float = 0.4,
         watchdog_s: float = 1.0,
         market_fresh_for_s: float = MARKET_FRESH_FOR_S,
@@ -145,6 +146,7 @@ class BotApp:
         self._adapter_override = adapter
         self._sender = sender
         self._telegram_factory = telegram_factory
+        self._outlook_reader = outlook_reader
         self._fast_poll_s = fast_poll_s
         self._watchdog_s = watchdog_s
         self._market_fresh_for_s = market_fresh_for_s
@@ -172,6 +174,7 @@ class BotApp:
         self.engine: Engine
         self.signals: SignalManager
         self.reconciler: Reconciler
+        self.outlook: Any = None  # the scenario outlook; None when it is switched off
         self.control_token: str = ""
 
     # ================================================================== start
@@ -245,6 +248,11 @@ class BotApp:
         self._spawn(self._watchdog(), "watchdog")
         if self.telegram is not None:
             self._spawn(self.telegram.run(self.stop_event), "telegram")
+        if s.outlook.enabled:
+            from hlbot.core.outlook import OutlookService
+
+            self.outlook = OutlookService(self, self._outlook_reader)
+            self._spawn(self.outlook.run(self.stop_event), "outlook")
         if s.api_enabled:
             from hlbot.api.server import ApiServer
 
@@ -444,6 +452,7 @@ class BotApp:
     async def _teardown(self) -> None:
         for step in (
             lambda: self.api.stop() if self.api else None,
+            lambda: self.outlook.close() if self.outlook else None,
             lambda: self.telegram.disconnect() if self.telegram else None,
             lambda: self.engine.stop() if hasattr(self, "engine") else None,
             lambda: self.queue.stop() if hasattr(self, "queue") else None,
