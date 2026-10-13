@@ -87,7 +87,7 @@ def test_overrides_and_blank_values():
         ({"RISK_MAX_DAILY_LOSS_PCT": "21"}, "RISK_MAX_DAILY_LOSS_PCT"),  # hard bound <= 20
         ({"RISK_MARGIN_USAGE_CAP": "0.95"}, "RISK_MARGIN_USAGE_CAP"),  # hard bound <= 0.9
         ({"RISK_LIQ_BUFFER_X": "1.0"}, "RISK_LIQ_BUFFER_X"),  # hard bound >= 1.1
-        ({"RISK_MAX_TRADES_PER_ASSET": "2"}, "RISK_MAX_TRADES_PER_ASSET"),  # fixed at 1 in v1
+        ({"RISK_MAX_TRADES_PER_ASSET": "11"}, "RISK_MAX_TRADES_PER_ASSET"),  # hard bound <= 10
         ({"EXEC_ENTRY_ATTEMPTS": "11"}, "EXEC_ENTRY_ATTEMPTS"),  # hard bound <= 10
         ({"RISK_LEVERAGE": "2.5"}, "RISK_LEVERAGE"),
         ({"RISK_SIZING_MODE": "martingale"}, "RISK_SIZING_MODE"),
@@ -290,3 +290,7 @@ def test_public_origins_are_normalised_and_anything_but_a_bare_origin_is_refused
             load({"API_PUBLIC_ORIGINS": bad})
     plain = load({"API_PUBLIC_ORIGINS": "http://bot.example.com"})
     assert plain.api_public_origins == ("http://bot.example.com",) and any("not HTTPS" in w for w in plain.warnings)
+
+
+def test_several_trades_per_asset_is_a_setting():
+    assert load({"RISK_MAX_TRADES_PER_ASSET": "3"}).risk.max_trades_per_asset == 3

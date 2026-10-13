@@ -184,6 +184,26 @@ class Engine:
         marks = ", ".join("?" for _ in TRADE_TERMINAL)
         return self.db.all(f"SELECT * FROM trades WHERE state NOT IN ({marks}) ORDER BY id", tuple(TRADE_TERMINAL))
 
+    def _coin_trades(self, coin: str, exclude: Optional[int] = None) -> list[Row]:
+        """Every open trade on ``coin``. With RISK_MAX_TRADES_PER_ASSET
+        above 1 several trades, all in the same direction, share the one
+        position the exchange keeps for the asset."""
+        return [t for t in self.open_trades() if t["coin"] == coin and t["id"] != exclude]
+
+    @staticmethod
+    def _signed(trade: Row) -> float:
+        """A trade's remaining size as a signed position (short is negative)."""
+        return (1.0 if trade["side"] == "BUY" else -1.0) * float(trade["remaining_size"] or 0.0)
+
+    def _position_moving(self, trades: Sequence[Row]) -> bool:
+        """True while one of ``trades`` is entering or being closed by the
+        bot: its fills change the shared position before they are recorded."""
+        return any(
+            t["state"] in ("ENTERING", "FLATTENING", "HALTED_MANUAL")
+            or (t["state"] == "CLOSING" and float(t["remaining_size"] or 0.0) > self._tol(t["coin"]))
+            for t in trades
+        )
+
     def _move_order(self, order_id: int, new: str, **fields: Any) -> bool:
         """Transition an order when legal; otherwise only update fields."""
         row = self.db.get("orders", order_id)
@@ -689,6 +709,13 @@ class Engine:
                 self._note_wait(signal_id, f"FOREIGN_POSITION on {coin}")
                 return
 
+            if self.s.risk.max_trades_per_asset > 1:
+                unsettled = [t for t in self._coin_trades(coin) if t["state"] not in ("PROTECTED", "REDUCING")]
+                if unsettled:
+                    # A further trade joins the shared position only once the ones before it are protected.
+                    self._note_wait(signal_id, f"ASSET_BUSY: trade {unsettled[0]['id']} on {coin} is {unsettled[0]['state']}")
+                    return
+
             dex = account.dex_account(inst.dex) if account else None
             day_row = self.day.ensure(dex.account_value if dex else None)
             entering = [t for t in self.open_trades() if t["state"] == "ENTERING"]
@@ -713,6 +740,7 @@ class Engine:
                     day_pnl=self.day.pnl(account, self.s.coins),
                     day_start_equity=day_row["start_equity"] if day_row else None,
                     fee_rate=self.fee_rate,
+                    opposite_on_asset=len([t for t in holding + entering if t["coin"] == coin and t["side"] != direction]),
                 ),
                 self.s.risk,
             )
@@ -983,8 +1011,8 @@ class Engine:
             except ExchangeError as exc:
                 self._rest_failed("resolve account", exc)
                 return "pending"
-            others = [t for t in self.holding_trades(coin) if t["id"] != order["trade_id"]]
-            if abs(account.szi(coin)) > self._tol(coin) and not others:
+            others = sum(self._signed(t) for t in self._coin_trades(coin, exclude=order["trade_id"]))
+            if abs(account.szi(coin) - others) > self._tol(coin):
                 # Position exists but neither the order nor a fill can be found: contradiction.
                 self._move_order(order["id"], "UNRECONCILED", error_text="position present without order or fill")
                 self.health.set_condition(
@@ -1027,7 +1055,8 @@ class Engine:
                     account = await self.adapter.get_account()
                 except ExchangeError:
                     return
-                if abs(account.szi(trade["coin"])) <= self._tol(trade["coin"]):
+                others = sum(self._signed(t) for t in self._coin_trades(trade["coin"], exclude=trade_id))
+                if abs(account.szi(trade["coin"]) - others) <= self._tol(trade["coin"]):
                     self.db.set_order_state(order["id"], "CANCELED", exchange_status="resolved_flat")
                     self.health.clear_condition("order_unreconciled")
                 else:
@@ -1346,24 +1375,29 @@ class Engine:
             self.db.set_trade_state(trade_id, "CLOSING")
             return
 
-        # ---- position arithmetic (§12.5 rule 6)
-        sign = 1.0 if trade["side"] == "BUY" else -1.0
+        # ---- position arithmetic (§12.5 rule 6): the exchange position is
+        # the sum of every bot trade on the asset. While another of them is
+        # entering or closing the sum is in motion and is checked next pass.
+        others = self._coin_trades(coin, exclude=trade_id)
+        expected = self._signed(trade) + sum(self._signed(t) for t in others)
         szi = view.account.szi(coin)
-        if abs(szi - sign * trade["remaining_size"]) > 2 * tol:
+        if abs(szi - expected) > 2 * tol and not self._position_moving(others):
             try:
                 await self.sync_fills()  # the stream may have missed fills
                 view = await self.view()
             except ExchangeError:
                 return
             trade = self._trade(trade_id)
+            others = self._coin_trades(coin, exclude=trade_id)
+            expected = self._signed(trade) + sum(self._signed(t) for t in others)
             szi = view.account.szi(coin)
             if trade["remaining_size"] <= tol or abs(szi) <= tol:
                 if trade["remaining_size"] > tol:
-                    self.db.audit("trade.closed_externally", {"exchange_szi": szi, "expected": sign * trade["remaining_size"]}, trade_id=trade_id)
+                    self.db.audit("trade.closed_externally", {"exchange_szi": szi, "expected": expected}, trade_id=trade_id)
                 self.db.set_trade_state(trade_id, "CLOSING", close_reason=trade["close_reason"] or "external")
                 return
-            if abs(szi - sign * trade["remaining_size"]) > 2 * tol:
-                self._mark_unreconciled(trade, f"exchange position {szi:g} differs from expected {sign * trade['remaining_size']:g}")
+            if abs(szi - expected) > 2 * tol and not self._position_moving(others):
+                self._mark_unreconciled(trade, f"exchange position {szi:g} differs from expected {expected:g}")
                 return
         if self._foreign_fills(trade_id):
             self._mark_unreconciled(trade, "position changed by an order the bot did not place")
@@ -1655,7 +1689,10 @@ class Engine:
         outcome = outcomes.classify_outcome(
             [{"role": f["role"], "liquidation": bool(f["liquidation"])} for f in closing], trade["close_reason"]
         )
-        pnl = outcomes.trade_pnl(fills, funding_total)
+        # The exchange reports closed P/L against the average entry of the
+        # whole position; a trade that shared it is measured from its own entry.
+        own_entry = (trade["avg_entry"], trade["side"]) if self._shared_position(trade) else (None, None)
+        pnl = outcomes.trade_pnl(fills, funding_total, *own_entry)
         final = "CLOSED"
         self.db.set_trade_state(trade_id, final, outcome=outcome, closed_at=self.clock.iso(), **pnl)
         for key in [k for k in self._since if k[0] == trade_id]:
@@ -1670,13 +1707,25 @@ class Engine:
             outcome=outcome, content_id=signal["content_id"] if signal else None, coin=coin, direction=trade["side"],
             channel=signal["channel_ref"] if signal else None, trade_id=trade_id,
             legs=[
-                {"role": f["role"], "level": level_by_order.get(f["order_id"]), "size": f["size"], "price": f["price"], "pnl": f["closed_pnl"] - f["fee"]}
+                {"role": f["role"], "level": level_by_order.get(f["order_id"]), "size": f["size"], "price": f["price"],
+                 "pnl": outcomes.fill_pnl(f, *own_entry) - f["fee"]}
                 for f in closing
             ],
             realized_pnl=pnl["realized_pnl"], fees=pnl["fees"], funding=pnl["funding"], net_pnl=pnl["net_pnl"],
         )
         if outcome == outcomes.LIQUIDATED:
             self.health.set_condition("liquidation", f"trade {trade_id} on {coin} was liquidated", level=HALT, auto_resume=False)
+
+    def _shared_position(self, trade: Row) -> bool:
+        """True when another trade on the same asset held a position at
+        any time while this one was open."""
+        if not trade["opened_at"]:
+            return False
+        return self.db.one(
+            "SELECT 1 FROM trades WHERE coin = ? AND id != ? AND filled_size > 0 AND opened_at IS NOT NULL "
+            "AND (closed_at IS NULL OR closed_at >= ?)",
+            (trade["coin"], trade["id"], trade["opened_at"]),
+        ) is not None
 
     async def _attribute_unmatched_fills(self, trade: Row) -> None:
         """IV-14: when a stop triggers, the fills may carry an order id
@@ -1761,6 +1810,17 @@ class Engine:
             self.wake(trade_id)
             return
         sl = self._live_order(trade_id, "SL")
+        others = self._coin_trades(coin, exclude=trade_id)
+        if others:
+            # Several trades share the position. Their stops together must
+            # cover it: none is shrunk here (a reduce-only stop that is too
+            # large is harmless) and the oldest takes up any shortfall.
+            stops = {t["id"]: self._live_order(t["id"], "SL") for t in [trade, *others]}
+            resting = {tid: o for tid, o in stops.items() if o is not None and o["state"] == "RESTING"}
+            gap = floor_size(actual - sum(float(o["size"]) for o in resting.values()), self._szd(coin))
+            if gap > self._tol(coin) and resting and min(resting) == trade_id:
+                await self.modify_sl(trade_id, size=float(resting[trade_id]["size"]) + gap, reason="unreconciled")
+            return
         target = floor_size(actual, self._szd(coin))
         if sl is not None and sl["state"] == "RESTING" and abs(sl["size"] - target) > self._tol(coin):
             self.db.update("trades", trade_id, remaining_size=target)
@@ -1929,7 +1989,8 @@ class Engine:
             return False
         trade = self._trade(trade_id)
         sign = 1.0 if trade["side"] == "BUY" else -1.0
-        actual = view.account.szi(trade["coin"]) * sign
+        others = sum(float(t["remaining_size"] or 0.0) for t in self._coin_trades(trade["coin"], exclude=trade_id))
+        actual = max(0.0, view.account.szi(trade["coin"]) * sign - others)
         foreign = self._foreign_fills(trade_id)
         if foreign:
             self.db.kv_set(f"foreign_ack:{trade_id}", max(f["tid"] for f in foreign))

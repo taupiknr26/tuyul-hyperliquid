@@ -173,6 +173,15 @@ def test_rc04_open_trades():
     assert "MAX_OPEN_TRADES" in run(state=state(open_trades_total=3)).rules()
 
 
+def test_rc04_several_trades_per_asset_same_direction_only():
+    cfg = dataclasses.replace(CFG, max_trades_per_asset=3)
+    assert run(cfg=cfg, state=state(open_trades_on_asset=2, open_trades_total=2)).approved
+    assert "POSITION_OPEN" in run(cfg=cfg, state=state(open_trades_on_asset=3, open_trades_total=3)).rules()
+    # The exchange nets positions per asset: the other way is never stacked.
+    against = run(cfg=cfg, state=state(open_trades_on_asset=1, open_trades_total=1, opposite_on_asset=1))
+    assert against.rules() == ["OPPOSITE_POSITION"] and not against.transient_only
+
+
 def test_rc05_max_exposure_fr036_example():
     """Limit 3.0x, equity 1,000, existing 2,500, new 600 -> rejected."""
     cfg = dataclasses.replace(CFG, sizing_mode="fixed", fixed_size=0.14, risk_per_trade_pct=5.0, max_trade_notional=None)
