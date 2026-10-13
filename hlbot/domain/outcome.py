@@ -44,13 +44,26 @@ def classify_outcome(closing_fills: Iterable[dict], close_reason: Optional[str] 
     return WIN_PARTIAL
 
 
-def trade_pnl(fills: Iterable[dict], funding: float = 0.0) -> dict[str, float]:
+def fill_pnl(fill: dict, entry_price: Optional[float] = None, side: Optional[str] = None) -> float:
+    """Closed P/L of one fill. The exchange measures it from the average
+    entry of the whole position; when several trades shared the position
+    pass the trade's own ``entry_price`` and ``side`` to measure a closing
+    fill from that trade's entry instead."""
+    if entry_price is None or side is None or fill.get("side") == side:
+        return float(fill.get("closed_pnl") or 0.0)
+    sign = 1.0 if side == "BUY" else -1.0
+    return sign * (float(fill["price"]) - float(entry_price)) * float(fill["size"])
+
+
+def trade_pnl(
+    fills: Iterable[dict], funding: float = 0.0, entry_price: Optional[float] = None, side: Optional[str] = None
+) -> dict[str, float]:
     """``net = realised - fees + funding`` over every fill of the trade
     (entry fills carry fees and zero closed P/L)."""
     realized = 0.0
     fees = 0.0
     for fill in fills:
-        realized += float(fill.get("closed_pnl") or 0.0)
+        realized += fill_pnl(fill, entry_price, side)
         fees += float(fill.get("fee") or 0.0)
     return {
         "realized_pnl": round(realized, 6),

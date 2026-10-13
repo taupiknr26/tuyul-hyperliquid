@@ -267,7 +267,8 @@ the size is never reduced to make a trade fit.
 |---|---|---|
 | `RISK_PER_TRADE_PCT` | 0.5 | Loss at the stop, fees and a slippage allowance included, as % of equity. Sets the size |
 | `RISK_MAX_DAILY_LOSS_PCT` | 2.0 | No new entries once the UTC day's realised + unrealised P/L reaches this loss |
-| `RISK_MAX_OPEN_TRADES` | 3 | Across all assets (one per asset, fixed) |
+| `RISK_MAX_OPEN_TRADES` | 3 | Across all assets |
+| `RISK_MAX_TRADES_PER_ASSET` | 1 | Open trades on one asset, 1 to 10. Above 1, further signals in the **same direction** join the asset's position, each with its own stop and targets; a signal the other way is rejected (`OPPOSITE_POSITION`) |
 | `RISK_MAX_EXPOSURE_X_EQUITY` | 3.0 | Total notional after entry |
 | `RISK_LEVERAGE` | 5 | Set on the exchange and verified before the first entry on an asset |
 | `RISK_MIN_RR` | 0.5 | Size-weighted reward-to-risk at the entry limit price |
@@ -310,7 +311,11 @@ risk percentage deliberately.
 **Differences from the MT5 bot that matter to you**
 
 - One position per asset, not one per take-profit. A new signal on an
-  asset with an open trade is rejected (`POSITION_OPEN`).
+  asset that already holds `RISK_MAX_TRADES_PER_ASSET` trades (default 1)
+  is rejected (`POSITION_OPEN`). Hyperliquid nets positions per asset, so
+  stacked trades are one position on the exchange: each trade's result is
+  measured from its own entry, and a stop-out of all of them loses the
+  sum of their risks.
 - Stops and trigger orders fire on Hyperliquid's **mark price**, not the
   bid/ask of a broker feed, and a stop-market can fill up to 10 % from its
   trigger in a thin book.

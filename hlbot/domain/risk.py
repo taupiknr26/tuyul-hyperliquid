@@ -192,6 +192,7 @@ class StateView:
     day_pnl: Optional[float]
     day_start_equity: Optional[float]
     fee_rate: Optional[float]
+    opposite_on_asset: int = 0  # open bot trades on the asset in the other direction
 
 
 @dataclass(frozen=True)
@@ -344,6 +345,10 @@ def assess(
     # ---- account-level gates
     if state.open_trades_on_asset >= cfg.max_trades_per_asset:  # type: ignore[operator]
         fail("POSITION_OPEN", f"{state.open_trades_on_asset} open trade(s) on {candidate.coin}")
+    elif state.opposite_on_asset:
+        # The exchange keeps one net position per asset: an entry the other
+        # way would shrink the open trades instead of opening a new one.
+        fail("OPPOSITE_POSITION", f"{state.opposite_on_asset} open trade(s) the other way on {candidate.coin}")
     if state.open_trades_total >= cfg.max_open_trades:  # type: ignore[operator]
         fail("MAX_OPEN_TRADES", f"{state.open_trades_total} open trades >= limit {cfg.max_open_trades}")
     if cfg.max_daily_loss_pct is not None and daily_loss_reached(

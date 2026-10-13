@@ -488,9 +488,8 @@ def load_settings(
     baseline = r.number("RISK_FIXED_EQUITY_BASELINE", None, minimum=0, exclusive_min=True)
     if not compound and baseline is None:
         r.errors.append("RISK_FIXED_EQUITY_BASELINE is required when RISK_COMPOUND_ENABLED=false")
-    trades_per_asset = r.integer("RISK_MAX_TRADES_PER_ASSET", 1, minimum=1)
-    if trades_per_asset != 1:
-        r.errors.append("RISK_MAX_TRADES_PER_ASSET is fixed at 1 in v1 (one net position per asset)")
+    # Above 1, same-direction trades share the asset's one net position.
+    trades_per_asset = r.integer("RISK_MAX_TRADES_PER_ASSET", 1, minimum=1, maximum=10)
     margin_mode = r.text("HL_MARGIN_MODE", "cross", ("cross", "isolated")) or "cross"
     risk = RiskConfig(
         risk_per_trade_pct=r.number("RISK_PER_TRADE_PCT", 0.5, minimum=0, exclusive_min=True, maximum=5),
@@ -501,7 +500,7 @@ def load_settings(
         max_daily_loss_pct=r.number("RISK_MAX_DAILY_LOSS_PCT", 2.0, minimum=0, exclusive_min=True, maximum=20),
         daily_target_pct=r.number("RISK_DAILY_TARGET_PCT", None, minimum=0, exclusive_min=True),
         max_open_trades=r.integer("RISK_MAX_OPEN_TRADES", 3, minimum=1),
-        max_trades_per_asset=1,
+        max_trades_per_asset=trades_per_asset,
         max_exposure_x_equity=r.number("RISK_MAX_EXPOSURE_X_EQUITY", 3.0, minimum=0, exclusive_min=True, maximum=50),
         leverage=r.integer("RISK_LEVERAGE", 5, minimum=1, maximum=50),
         min_rr=r.number("RISK_MIN_RR", 0.5, minimum=0),
