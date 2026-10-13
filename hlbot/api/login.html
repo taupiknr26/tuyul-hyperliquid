@@ -58,7 +58,19 @@
   :root[data-theme="light"] .themeicon .core { transform: scale(1); }
   :root[data-theme="light"] .themeicon .bite { transform: translate(14px, -12px); }
   :root[data-theme="light"] .themeicon .rays { transform: none; opacity: 1; }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } }
+  /* motion: the card settles in once; controls fade and give way a little; a refusal nudges */
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+  @keyframes nudge { 30% { transform: translateX(-4px); } 65% { transform: translateX(3px); } }
+  .card { animation: rise 360ms cubic-bezier(.22, 1, .36, 1) backwards; }
+  input, button { transition: background-color 150ms cubic-bezier(.4, 0, .2, 1), border-color 150ms cubic-bezier(.4, 0, .2, 1), opacity 150ms cubic-bezier(.4, 0, .2, 1),
+    filter 150ms cubic-bezier(.4, 0, .2, 1), transform 150ms cubic-bezier(.22, 1, .36, 1); }
+  button:not(:disabled):active { transform: scale(.97); }
+  @media (hover: hover) { button:not(:disabled):not(.iconbtn):hover { filter: brightness(1.07); } }
+  .msg:not(:empty) { animation: nudge 360ms cubic-bezier(.4, 0, .2, 1); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-delay: 0s !important; }
+    button:active { transform: none !important; }
+  }
 </style>
 </head>
 <body>

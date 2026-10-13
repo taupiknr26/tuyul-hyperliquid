@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark light">
 <title>Dashboard</title>
 <link rel="icon" href="/logo">
-<script>try { var t = localStorage.getItem("hlbot-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<script>try { var t = localStorage.getItem("hlbot-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; if (localStorage.getItem("hlbot-menu") === "pinned") document.documentElement.dataset.menu = "pinned"; } catch (e) {}</script>
 <style>
   :root {
     --bg: #141414;
@@ -62,7 +62,7 @@
   :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
 
   /* ---------- three columns: sidebar | main | right rail ---------- */
-  .app { display: grid; grid-template-columns: 216px minmax(0, 1fr) 332px; min-height: 100vh; }
+  .app { display: grid; grid-template-columns: var(--side, 216px) minmax(0, 1fr) 332px; min-height: 100vh; }
   .sidebar { padding: 22px 14px; display: flex; flex-direction: column; gap: 22px; position: sticky; top: 0; height: 100vh; }
   .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
   #brand-name { min-width: 0; line-height: 1.2; overflow-wrap: anywhere; }
@@ -285,7 +285,7 @@
   /* pop-up pages (settings, alerts) */
   dialog { border: 0; padding: 0; background: var(--surface); color: var(--text); border-radius: var(--radius-card);
     box-shadow: var(--shadow), var(--card-ring); width: min(720px, calc(100vw - 32px)); max-height: min(86vh, 820px); overflow: hidden; }
-  dialog[open] { display: flex; flex-direction: column; animation: pop .18s ease-out; }
+  dialog[open] { display: flex; flex-direction: column; }
   dialog::backdrop { background: rgba(0, 0, 0, .55); backdrop-filter: blur(3px); }
   @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.98); } }
   .dlg-head { display: flex; align-items: center; gap: 12px; padding: 18px 20px 14px; }
@@ -364,7 +364,7 @@
   .ol-grid.top { grid-template-columns: repeat(auto-fit, minmax(min(470px, 100%), 1fr)); }
   .ol-drivers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 8px; margin-top: 8px; }
   #ol-levels th, #ol-levels td { padding: 8px; }
-  .ol-card { background: var(--surface); border-radius: var(--radius-card); padding: 16px 18px; box-shadow: var(--card-ring); border: 2px solid transparent; min-width: 0; transition: opacity .2s ease; }
+  .ol-card { background: var(--surface); border-radius: var(--radius-card); padding: 16px 18px; box-shadow: var(--card-ring); border: 2px solid transparent; min-width: 0; }
   /* the scenario whose trigger price has met: the signature gradient as its outline */
   .ol-card.active { background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--gradient-accent) border-box; box-shadow: none; }
   .ol-card.invalid { opacity: .6; }
@@ -411,9 +411,117 @@
   .oh-note .inline { margin: 0; }
   #ol-history-dialog { width: min(860px, calc(100vw - 32px)); }
 
+  /* ---------- motion ----------
+     One small system: three durations, two curves; only transform and opacity move, colours fade.
+     Nothing animates on a routine data refresh. Entrances run once when the page opens; a chart draws
+     in only when what it shows has changed (the .draw / .grow classes, set by the script); a number
+     pulses only when its value changed. All of it is switched off by prefers-reduced-motion below. */
+  :root { --t-fast: 150ms; --t: 220ms; --t-slow: 360ms; --ease: cubic-bezier(.4, 0, .2, 1); --ease-out: cubic-bezier(.22, 1, .36, 1); }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+  @keyframes fade { from { opacity: 0; } }
+  @keyframes drop { from { opacity: 0; transform: translateY(-6px); } }
+  @keyframes nudge { 30% { transform: translateX(-4px); } 65% { transform: translateX(3px); } }
+  @keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes grow { from { transform: scaleY(0); opacity: .4; } }
+  @keyframes pulse { from { opacity: .4; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes tick-up { from { color: #c6eb72; } }
+  @keyframes tick-down { from { color: #ff9a9a; } }
+
+  /* entrances, once: the header, then each section, then the rail. "backwards" holds the first frame
+     only while an element waits its turn, so nothing is left transformed afterwards. */
+  .pagehead, main > section, .rail > * { animation: rise var(--t-slow) var(--ease-out) backwards; }
+  main > section:nth-of-type(1) { animation-delay: 40ms; } main > section:nth-of-type(2) { animation-delay: 80ms; }
+  main > section:nth-of-type(3) { animation-delay: 120ms; } main > section:nth-of-type(4) { animation-delay: 160ms; }
+  main > section:nth-of-type(n + 5) { animation-delay: 200ms; }
+  .rail > :nth-child(1) { animation-delay: 60ms; } .rail > :nth-child(2) { animation-delay: 110ms; }
+  .rail > :nth-child(3) { animation-delay: 160ms; } .rail > :nth-child(n + 4) { animation-delay: 210ms; }
+
+  /* controls: colours fade, a press gives way a little */
+  button, nav a, .side-foot a, input, select, textarea, a.src, .badge, tr.trade-row > td, details.alert summary {
+    transition: background-color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease),
+      opacity var(--t-fast) var(--ease), filter var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), transform var(--t-fast) var(--ease-out); }
+  button:not(:disabled):not(.fold-toggle):not(.linkbtn):not(.expander):active, nav a:active { transform: scale(.97); }
+  input:focus, select:focus, textarea:focus { border-color: var(--focus); }
+  .stat, .kpi, .ol-card { transition: transform var(--t) var(--ease-out), opacity var(--t) var(--ease); }
+  @media (hover: hover) {  /* a lift under the pointer; a finger gets no lingering hover */
+    .stat:hover, .kpi:hover, .ol-card:hover { transform: translateY(-2px); }
+    button.primary:not(:disabled):hover { filter: brightness(1.07); }
+  }
+  /* a control that is waiting for the bot */
+  button[aria-busy="true"] { pointer-events: none; }
+  button[aria-busy="true"]::before { content: ""; display: inline-block; width: 11px; height: 11px; margin-right: 8px; vertical-align: -1px; border-radius: 50%;
+    border: 2px solid currentColor; border-right-color: transparent; animation: spin .7s linear infinite; }
+
+  /* pop-up pages fade and settle in, and out again; the backdrop fades with them. Where a browser
+     cannot animate a closing dialog, the opening still pops as before. */
+  dialog { opacity: 0; transform: translateY(12px) scale(.98);
+    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease-out), overlay var(--t) allow-discrete, display var(--t) allow-discrete; }
+  dialog[open] { opacity: 1; transform: none; }
+  dialog::backdrop { opacity: 0; transition: opacity 220ms cubic-bezier(.4, 0, .2, 1), overlay 220ms allow-discrete, display 220ms allow-discrete; }
+  dialog[open]::backdrop { opacity: 1; }
+  @starting-style { dialog[open] { opacity: 0; transform: translateY(12px) scale(.98); } dialog[open]::backdrop { opacity: 0; } }
+  @supports not (transition-behavior: allow-discrete) { dialog[open] { animation: pop .18s ease-out; } }
+
+  /* what opens in place: a settings tab, an alert, a table view, a trade's orders, a folded section */
+  [role="tabpanel"]:not([hidden]) { animation: fade var(--t) var(--ease); }
+  details[open] > .more, details.tableview[open] > :not(summary), .detail-box { animation: drop var(--t) var(--ease-out); }
+  .fold-inner { transition: opacity var(--t) var(--ease); }
+  .fold.collapsed .fold-inner { opacity: 0; }
+
+  /* feedback: a refusal nudges, a confirmation and a notice fade in */
+  .msg.err { animation: nudge var(--t-slow) var(--ease); }
+  .msg.ok { animation: fade var(--t) var(--ease); }
+  .state:not([hidden]) { animation: drop var(--t) var(--ease-out); }
+  .stale .badge { animation: fade var(--t) var(--ease); }
+
+  /* charts draw in when their data changes: lines from the left, bars from the zero line */
+  .chart.draw > svg { animation: wipe 600ms var(--ease-out); }
+  .chart.grow .bar { transform-box: fill-box; transform-origin: 50% 100%; animation: grow 420ms var(--ease-out) backwards; }
+  .chart.grow .bar.neg { transform-origin: 50% 0; }
+  /* a figure that has just changed, and the direction of the last price move. The value shown is always
+     the real one: nothing counts up through numbers that never existed. */
+  .pulse { animation: pulse 500ms var(--ease-out); }
+  .market .hero.tick-up { animation: tick-up 800ms var(--ease); }
+  .market .hero.tick-down { animation: tick-down 800ms var(--ease); }
+  #ol-root.swap > * { animation: fade var(--t) var(--ease); }
+
+  /* ---------- the menu on a wide screen with a mouse: a narrow rail that opens under the pointer ----------
+     The rail keeps its place in the layout (68px), and the open menu lies over the page instead of pushing
+     it, so nothing shifts. The script opens it at once on hover or keyboard focus and closes it a moment
+     after the pointer has left (.open). Pinned, the sidebar is the full column it always was. A screen
+     without a mouse keeps the full sidebar too; a phone has its own row (below). */
+  #menu-pin { display: none; }
+  @media (min-width: 861px) and (hover: hover) {
+    #menu-pin { display: inline-grid; margin-left: auto; width: 30px; height: 30px; border-radius: 10px; }
+    #menu-pin svg { width: 16px; height: 16px; }
+    #menu-pin .pinmark { opacity: 0; transition: opacity var(--t-fast) var(--ease); }
+    #menu-pin[aria-pressed="true"] { color: var(--lime); border-color: var(--lime); }
+    #menu-pin[aria-pressed="true"] .pinmark { opacity: 1; }
+    .sidebar .brand { padding: 0; }  /* the logo sits over the icons, in the rail and in the open menu alike */
+    :root:not([data-menu="pinned"]) { --side: 68px; }
+    :root:not([data-menu="pinned"]) .sidebar { width: 216px; z-index: 20; background: var(--bg); clip-path: inset(0 148px 0 0);
+      transition: clip-path 180ms var(--ease), box-shadow 180ms var(--ease); }
+    :root:not([data-menu="pinned"]) .sidebar.open { clip-path: inset(0 -56px 0 0); box-shadow: 18px 0 40px rgba(0, 0, 0, .3);
+      transition: clip-path 220ms var(--ease-out), box-shadow 220ms var(--ease-out); }
+    /* each item is its icon in the rail and grows to the full row as the menu opens */
+    :root:not([data-menu="pinned"]) .sidebar nav a, :root:not([data-menu="pinned"]) .sidebar nav .navbtn { width: 40px; overflow: hidden;
+      transition: width 180ms var(--ease), background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease-out); }
+    :root:not([data-menu="pinned"]) .sidebar.open nav a, :root:not([data-menu="pinned"]) .sidebar.open nav .navbtn { width: 100%; transition-duration: 220ms, var(--t-fast), var(--t-fast), var(--t-fast); }
+    /* the words fade and slide in after the menu has started to open, and go first when it closes.
+       Labels stay readable to a screen reader in the rail; what is not a label is taken out of reach. */
+    :root:not([data-menu="pinned"]) .sidebar .lbl, :root:not([data-menu="pinned"]) .sidebar #brand-name,
+    :root:not([data-menu="pinned"]) .sidebar .envcard, :root:not([data-menu="pinned"]) .sidebar .side-foot, :root:not([data-menu="pinned"]) .sidebar #menu-pin {
+      opacity: 0; transform: translateX(-8px); transition: opacity 150ms var(--ease), transform 180ms var(--ease), visibility 0s linear 180ms; }
+    :root:not([data-menu="pinned"]) .sidebar .envcard, :root:not([data-menu="pinned"]) .sidebar .side-foot, :root:not([data-menu="pinned"]) .sidebar #menu-pin { visibility: hidden; }
+    :root:not([data-menu="pinned"]) .sidebar.open .lbl, :root:not([data-menu="pinned"]) .sidebar.open #brand-name,
+    :root:not([data-menu="pinned"]) .sidebar.open .envcard, :root:not([data-menu="pinned"]) .sidebar.open .side-foot, :root:not([data-menu="pinned"]) .sidebar.open #menu-pin {
+      opacity: 1; transform: none; visibility: visible; transition: opacity 200ms var(--ease) 50ms, transform 220ms var(--ease-out) 50ms, visibility 0s; }
+  }
+
   /* ---------- smaller screens ---------- */
   @media (max-width: 1240px) {
-    .app { grid-template-columns: 216px minmax(0, 1fr); }
+    .app { grid-template-columns: var(--side, 216px) minmax(0, 1fr); }
     .sidebar { grid-row: 1 / span 2; }
     .rail { grid-column: 2; padding: 0 22px 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: start; }
   }
@@ -443,24 +551,26 @@
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-delay: 0s !important; }
+    .stat:hover, .kpi:hover, .ol-card:hover, button:active, nav a:active { transform: none !important; }
   }
 </style>
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar">
-    <div class="brand"><img class="logo" id="logo" src="/logo" alt="" width="40" height="40"><span id="brand-name"></span></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><img class="logo" id="logo" src="/logo" alt="" width="40" height="40"><span id="brand-name"></span>
+      <button type="button" class="iconbtn" id="menu-pin" aria-pressed="false" aria-label="Keep the menu open" title="Keep the menu open"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2.5" width="12" height="11" rx="2.2"/><path d="M6.2 2.5v11"/><path class="pinmark" d="M3.9 5.4h.6M3.9 7.6h.6"/></svg></button></div>
     <nav aria-label="Sections">
-      <a href="#overview" class="active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1.2"/><rect x="9" y="2" width="5" height="5" rx="1.2"/><rect x="2" y="9" width="5" height="5" rx="1.2"/><rect x="9" y="9" width="5" height="5" rx="1.2"/></svg>Overview</a>
-      <a href="#outlook"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h12M2 11h12"/><path d="M3 13l3.5-5 3 2.5L13 3"/></svg>Outlook</a>
-      <a href="#analytics"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 13.5V9M6.2 13.5V5M9.8 13.5V7.5M13.5 13.5V2.5"/></svg>Analytics</a>
-      <a href="#positions"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 12l4-4 3 3 5-6"/></svg>Positions</a>
-      <a href="#orders"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h10M3 8h10M3 12h6"/></svg>Orders</a>
-      <a href="#signals"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 8h3l2-5 2 10 2-5h3"/></svg>Signals</a>
-      <a href="#history"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.5 1.5"/></svg>History</a>
-      <button type="button" class="navbtn" id="nav-alerts" aria-haspopup="dialog"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V7a4 4 0 018 0v4l1 1.5H3L4 11zM6.5 14h3"/></svg>Alerts</button>
-      <button type="button" class="navbtn" id="nav-settings" aria-haspopup="dialog"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 4.5h7M12.5 4.5h1M2.5 11.5h1M6.5 11.5h7"/><circle cx="11" cy="4.5" r="1.6"/><circle cx="5" cy="11.5" r="1.6"/></svg>Settings</button>
+      <a href="#overview" class="active"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1.2"/><rect x="9" y="2" width="5" height="5" rx="1.2"/><rect x="2" y="9" width="5" height="5" rx="1.2"/><rect x="9" y="9" width="5" height="5" rx="1.2"/></svg><span class="lbl">Overview</span></a>
+      <a href="#outlook"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h12M2 11h12"/><path d="M3 13l3.5-5 3 2.5L13 3"/></svg><span class="lbl">Outlook</span></a>
+      <a href="#analytics"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 13.5V9M6.2 13.5V5M9.8 13.5V7.5M13.5 13.5V2.5"/></svg><span class="lbl">Analytics</span></a>
+      <a href="#positions"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 12l4-4 3 3 5-6"/></svg><span class="lbl">Positions</span></a>
+      <a href="#orders"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h10M3 8h10M3 12h6"/></svg><span class="lbl">Orders</span></a>
+      <a href="#signals"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 8h3l2-5 2 10 2-5h3"/></svg><span class="lbl">Signals</span></a>
+      <a href="#history"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.5 1.5"/></svg><span class="lbl">History</span></a>
+      <button type="button" class="navbtn" id="nav-alerts" aria-haspopup="dialog"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V7a4 4 0 018 0v4l1 1.5H3L4 11zM6.5 14h3"/></svg><span class="lbl">Alerts</span></button>
+      <button type="button" class="navbtn" id="nav-settings" aria-haspopup="dialog"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 4.5h7M12.5 4.5h1M2.5 11.5h1M6.5 11.5h7"/><circle cx="11" cy="4.5" r="1.6"/><circle cx="5" cy="11.5" r="1.6"/></svg><span class="lbl">Settings</span></button>
     </nav>
     <div class="envcard">
       <div class="label">Environment</div>
@@ -917,6 +1027,32 @@ function table(cols, rows, empty) {
   return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
 }
 
+/* ------------------------------------------------------------------ motion: only when something really changed */
+/* The page redraws itself every few seconds. A chart gets its draw-in class only on the draw where what it
+   shows is different from last time (another range, filter or set of trades); on a routine refresh the class
+   comes off again, so the same picture is never replayed. */
+function enter(el, signature, cls) {
+  const changed = el.dataset.sig !== signature;
+  el.dataset.sig = signature;
+  el.classList.toggle(cls, changed);
+}
+/* A figure that changed since the last draw pulses once. The first value shown is not a change. */
+function pulse(el, shown) {
+  const changed = el.dataset.shown !== undefined && el.dataset.shown !== shown;
+  el.dataset.shown = shown;
+  if (!changed) return;
+  el.classList.toggle("pulse", false);
+  void el.offsetWidth;  // lets the same animation start again
+  el.classList.toggle("pulse", true);
+}
+/* Which way the price last moved, for one draw only: " tick-up", " tick-down" or nothing. */
+const lastMark = {};
+function tick(coin, mark) {
+  const before = lastMark[coin], now = isNum(mark) ? Number(mark) : null;
+  lastMark[coin] = now;
+  return before === undefined || before === null || now === null || now === before ? "" : now > before ? " tick-up" : " tick-down";
+}
+
 /* ------------------------------------------------------------------ tooltip (text only: values are data, never markup) */
 const tip = $("tip");
 function showTip(x, y, value, label, keyed) {
@@ -1136,6 +1272,7 @@ function render(d) {
   const used = dexes.reduce((s, a) => s + Number(a.margin_used || 0), 0);
   const free = dexes.reduce((s, a) => s + Number(a.withdrawable || 0), 0);
   $("equity").innerHTML = acct ? `${esc(usd(value))}<small>USDC</small>` : "–";
+  pulse($("equity"), acct ? usd(value) : "–");
   $("equity-sub").textContent = acct ? `snapshot ${num(acct.age_ms / 1000, 1)} s old` : "no exchange snapshot yet";
   ring($("ring"), acct && value > 0 ? used / value : null, "margin used");
   $("account-kv").innerHTML = acct
@@ -1145,8 +1282,10 @@ function render(d) {
   /* summary: day P/L with the latest closed trades */
   const dayPnl = Number(day.realized || 0) - Number(day.fees || 0) + Number(day.funding || 0);
   $("daypnl").innerHTML = `<span class="${signClass(dayPnl)}">${esc(money(dayPnl))}</span>`;
+  pulse($("daypnl"), money(dayPnl));
   $("day-sub").textContent = `fees ${usd(day.fees || 0)} · funding ${money(day.funding || 0)} · day start ${isNum(day.start_equity) ? usd(day.start_equity) : "–"}`;
   barChart($("bars"), stats.recent_closed);
+  enter($("bars"), (stats.recent_closed || []).map((t) => t.id).join(","), "grow");  // grows in when another trade has closed
 
   /* overview statistic */
   $("gain-total").innerHTML = `<span class="${signClass(stats.gain_total)}">${esc(money(stats.gain_total || 0))}</span>`;
@@ -1205,7 +1344,7 @@ function render(d) {
   const quotes = Object.entries(live.quotes || {});
   $("market").innerHTML = quotes.length ? quotes.map(([coin, q]) => `<div class="market">
       <div class="label" style="color:rgba(255,255,255,.72)">${esc(coin)} · mark</div>
-      <div class="hero">${num(q.mark, 4)} ${dayChange(q)}</div>
+      <div class="hero${tick(coin, q.mark)}">${num(q.mark, 4)} ${dayChange(q)}</div>
       <div class="pair"><div><span>Bid</span><b>${num(q.bid, 4)}</b></div><div><span>Ask</span><b>${num(q.ask, 4)}</b></div></div>
       ${volumeBlock(coin, q)}
       <div class="foot">oracle ${num(q.oracle, 4)} · quote ${q.age_ms == null ? "–" : num(q.age_ms / 1000, 1) + " s old"}</div></div>`).join("")
@@ -1357,6 +1496,7 @@ function renderEquity(data) {
   const points = (data && data.points) || [];
   const win = {key: data && data.range, from: data && data.from ? Date.parse(data.from) : null, to: data && data.to ? Date.parse(data.to) : null};
   lineChart($("line"), points, win);
+  enter($("line"), String(data && data.range), "draw");  // draws in for another range, not for each new point
   // Say what the chart covers, and be plain when the history is shorter than the range.
   const name = (RANGES[win.key] || {}).name || "";
   let note = name;
@@ -1639,6 +1779,11 @@ function renderAnalytics(d) {
   ];
   $("an-symbols-table").innerHTML = table(groupCols("Symbol"), d.by_symbol, "No closed trades in this selection.");
   $("an-sources-table").innerHTML = table(groupCols("Source / direction"), [...d.by_source, ...d.by_side], "No closed trades in this selection.");
+  const shownFor = filterQuery("an").toString();
+  for (const id of ["an-cumulative", "an-equity"]) enter($(id), shownFor, "draw");
+  for (const id of ["an-distribution", "an-symbols"]) enter($(id), shownFor, "grow");
+  enter($("an-periods"), shownFor + analyticsPeriod, "grow");
+  enter($("an-activity"), shownFor + analyticsPeriod + analyticsActivity, "grow");
 }
 async function refreshAnalytics() {
   if (analyticsLoading) return;
@@ -1713,6 +1858,7 @@ document.querySelectorAll("[data-preset]").forEach((button) => {
 $("export").onclick = async () => {
   const button = $("export"), label = button.textContent;
   button.disabled = true;
+  button.setAttribute("aria-busy", "true");
   button.textContent = "Preparing the file…";
   try {
     const response = await api("/api/export/trades.xlsx?" + filterQuery("hi"));
@@ -1729,7 +1875,7 @@ $("export").onclick = async () => {
     toast(rows ? `Exported ${rows} trade${rows === 1 ? "" : "s"} to ${link.download}.` : `No trades match these filters: ${link.download} has the headers only.`);
   } catch (error) {
     toast("The export failed: " + (error.message || "no answer from the bot"), true);
-  } finally { button.disabled = false; button.textContent = label; }
+  } finally { button.disabled = false; button.setAttribute("aria-busy", "false"); button.textContent = label; }
 };
 
 /* ------------------------------------------------------------------ scenario outlook */
@@ -1805,7 +1951,8 @@ function olBanners(d) {
   if (o && olStatus(o) === "stale") lines.push(["err", "Outlook expired. " + (o.stale && o.stale.kind !== "expired" ? o.stale.reason + " " : "") + (d.marketClosed ? "" : `Next brief: ${d.nextBrief.sessionName}, ${olTime(d.nextBrief.at)}.`)]);
   if (o && o.flags.lowConfidence) lines.push(["warnline", `Low confidence: only ${o.levelSourcesAvailable} level source${o.levelSourcesAvailable === 1 ? " was" : "s were"} available (minimum ${o.settings.minLevelSources}).`]);
   if (o && o.flags.thinLiquidity) lines.push(["warnline", "Holiday / thin liquidity: moves can be erratic and levels less reliable."]);
-  $("ol-banners").innerHTML = lines.map(([cls, text]) => `<div class="state ${cls}" role="status">${esc(text)}</div>`).join("");
+  const html = lines.map(([cls, text]) => `<div class="state ${cls}" role="status">${esc(text)}</div>`).join("");
+  if ($("ol-banners").innerHTML !== html) $("ol-banners").innerHTML = html;  // an unchanged notice is left in place: it does not fade in again
 }
 
 function olContext(o) {
@@ -1959,6 +2106,7 @@ function renderOutlook() {
   }
   showState("ol-state", null);
   $("ol-root").hidden = false;
+  enter($("ol-root"), olVersion + ":" + o.id, "swap");  // fades when the version or the brief changes
   $("ol-title").textContent = "Scenario Outlook: " + d.display;
   $("ol-session").textContent = o.sessionName;
   $("ol-label").textContent = o.label;
@@ -2037,9 +2185,11 @@ $("ol-show-mine").onclick = () => olSetVersion("mine");
 $("ol-refresh").onclick = async () => {
   const button = $("ol-refresh"), label = button.textContent;
   button.disabled = true;
+  button.setAttribute("aria-busy", "true");
   button.textContent = "Reading the sources…";
   const result = await send("/api/outlook/refresh", {method: "POST"});
   button.disabled = false;
+  button.setAttribute("aria-busy", "false");
   button.textContent = label;
   toast(result.ok ? "A fresh outlook was published." : "Not refreshed: " + result.error, !result.ok);
   refreshOutlook();
@@ -2185,6 +2335,46 @@ setInterval(() => { if (!document.hidden && !folded.analytics) refreshAnalytics(
 setInterval(() => { if (!document.hidden && !folded.history) refreshHistory(); }, 15000);
 setInterval(() => { if (!document.hidden) refreshVolume(); }, 30000);
 refreshVolume();
+
+/* ------------------------------------------------------------------ the menu: opens under the pointer, closes by itself */
+/* Wide screens with a mouse (the styles decide where this applies). Opening is immediate. Closing waits a
+   moment after the pointer has left, so brushing past the edge or cutting a corner does not shut it; coming
+   back in cancels it. It never closes under a keyboard user: while focus that came from the keyboard is
+   inside, it stays open, and Escape closes it. A touch does not open it by hovering; a tap on the logo
+   opens and closes it instead. Pinned, it is the full sidebar and none of this applies. */
+const sidebar = $("sidebar"), MENU_CLOSE_DELAY_MS = 200;
+let menuTimer = 0;
+const menuPinned = () => document.documentElement.dataset.menu === "pinned";
+function setMenu(open) {
+  clearTimeout(menuTimer);
+  menuTimer = 0;
+  sidebar.classList.toggle("open", Boolean(open) && !menuPinned());
+}
+function closeMenuSoon() {
+  clearTimeout(menuTimer);
+  menuTimer = setTimeout(() => { if (!sidebar.querySelector(":focus-visible")) setMenu(false); }, MENU_CLOSE_DELAY_MS);
+}
+sidebar.addEventListener("pointerenter", (event) => { if (event.pointerType !== "touch") setMenu(true); });
+sidebar.addEventListener("pointerleave", (event) => { if (event.pointerType !== "touch") closeMenuSoon(); });
+sidebar.addEventListener("focusin", (event) => { if (event.target.matches(":focus-visible")) setMenu(true); });
+sidebar.addEventListener("focusout", (event) => { if (!sidebar.contains(event.relatedTarget) && !sidebar.matches(":hover")) closeMenuSoon(); });
+document.addEventListener("keydown", (event) => { if (event.key === "Escape" && sidebar.classList.contains("open")) setMenu(false); });
+/* touch on a screen that also has a mouse: the logo is the switch, and a tap elsewhere closes */
+$("logo").addEventListener("click", (event) => { if (event.pointerType === "touch" || event.pointerType === "pen") setMenu(!sidebar.classList.contains("open")); });
+document.addEventListener("pointerdown", (event) => { if (event.pointerType === "touch" && !sidebar.contains(event.target)) setMenu(false); });
+function setMenuPinned(pinned, remember = true) {
+  if (pinned) document.documentElement.dataset.menu = "pinned"; else delete document.documentElement.dataset.menu;
+  const label = pinned ? "Let the menu close by itself" : "Keep the menu open";
+  $("menu-pin").setAttribute("aria-pressed", String(Boolean(pinned)));
+  $("menu-pin").setAttribute("aria-label", label);
+  $("menu-pin").title = label;
+  if (!remember) return;
+  try { localStorage.setItem("hlbot-menu", pinned ? "pinned" : "auto"); } catch (error) { /* this tab only */ }
+  setMenu(!pinned && Boolean(sidebar.matches(":hover") || sidebar.querySelector(":focus-visible")));  // unpinned under the pointer or the keyboard: open until that leaves
+  window.dispatchEvent(new Event("resize"));  // the page is wider or narrower now: the charts redraw to fit
+}
+$("menu-pin").onclick = () => setMenuPinned(!menuPinned());
+setMenuPinned(menuPinned(), false);
 
 /* ------------------------------------------------------------------ the active menu item */
 /* A clicked item is active at once and stays so until the reader scrolls again; otherwise the item
